@@ -1,6 +1,9 @@
 # HiBench Suite
-## The bigdata micro benchmark suite ##
 
+## The bigdata micro benchmark suite ##
+Updated to work with Pytnon 3.7 o higher and Spark 2.4.8
+
+## The bigdata micro benchmark suite ##
 
 * Current version: 7.1.1
 * Homepage: https://github.com/intel-hadoop/HiBench
