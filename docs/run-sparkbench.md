@@ -1,12 +1,18 @@
 ### 1. Setup ###
 
- * Python 2.x(>=2.6) is required.
+ * Python 3.x(>=3.7) is required.
  
  * `bc` is required to generate the HiBench report.
+ 
+   ```
+   sudo apt install bc	#Debian/Ubuntu
+   sudo yum install bc	#RHEL/CentOS
+   sudo dnf install bc	#Fedora 22+
+   ```
 
- * Supported Hadoop version: Apache Hadoop 2.x, 3.0.x, 3.1.x, 3.2.x
+ * Supported Hadoop version: Apache Hadoop 2.7.7, 3.0.x, 3.1.x, 3.2.x
 
- * Supported Spark version: 2.4.x, 3.0.x
+ * Supported Spark version: 2.4.8, 3.0.x
 
  * Build HiBench according to [build HiBench](build-hibench.md).
 
