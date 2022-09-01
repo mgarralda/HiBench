@@ -2,6 +2,9 @@
 
 ## The bigdata micro benchmark suite ##
 Updated to work with Pytnon 3.7 o higher and Spark 2.4.8
+**You can test on Yarn-Spark Docker cluster**
+
+https://github.com/mgarralda/hadoop-spark-cluster
 
 ## The bigdata micro benchmark suite ##
 
