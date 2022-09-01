@@ -86,6 +86,7 @@ function gen_report() {		# dump the result to report file
     which bc > /dev/null 2>&1
     if [ $? -eq 1 ]; then
 	assert 0 "\"bc\" utility missing. Please install it to generate proper report."
+		echo "BC"
         return 1
     fi
     local duration=$(echo "scale=3;($end-$start)/1000"|bc)
@@ -93,6 +94,7 @@ function gen_report() {		# dump the result to report file
 #    local nodes=`cat ${SPARK_HOME}/conf/slaves 2>/dev/null | grep -v '^\s*$' | sed "/^#/ d" | wc -l`
     local nodes=`echo ${SLAVES} | wc -w`
     nodes=${nodes:-1}
+	#echo "Nodes: " $nodes
     
     if [ $nodes -eq 0 ]; then nodes=1; fi
     local tput_node=`echo "$tput/$nodes"|bc`
@@ -103,7 +105,7 @@ function gen_report() {		# dump the result to report file
     fi
 
     REPORT_LINE=$(printf "${REPORT_COLUMN_FORMATS}" ${HIBENCH_CUR_WORKLOAD_NAME} $(date +%F) $(date +%T) $size $duration $tput $tput_node)
-    echo "${REPORT_LINE}" >> ${HIBENCH_REPORT}/${HIBENCH_REPORT_NAME}
+	echo "${REPORT_LINE}" >> ${HIBENCH_REPORT}/${HIBENCH_REPORT_NAME}
     echo "# ${REPORT_TITLE}" >> ${HIBENCH_WORKLOAD_CONF}
     echo "# ${REPORT_LINE}" >> ${HIBENCH_WORKLOAD_CONF}
 }
@@ -215,9 +217,9 @@ function run_spark_job() {
     fi
     if [[ "$CLS" == *.py ]]; then 
         LIB_JARS="$LIB_JARS --jars ${SPARKBENCH_JAR}"
-        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --properties-file ${SPARK_PROP_CONF} --master ${SPARK_MASTER} ${YARN_OPTS} ${CLS} $@"
+        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --properties-file ${SPARK_PROP_CONF} --master ${SPARK_MASTER} --deploy-mode client ${YARN_OPTS} ${CLS} $@"
     else
-        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --properties-file ${SPARK_PROP_CONF} --class ${CLS} --master ${SPARK_MASTER} ${YARN_OPTS} ${SPARKBENCH_JAR} $@"
+        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --properties-file ${SPARK_PROP_CONF} --class ${CLS} --master ${SPARK_MASTER} --deploy-mode client ${YARN_OPTS} ${SPARKBENCH_JAR} $@"
     fi
     echo -e "${BGreen}Submit Spark job: ${Green}${SUBMIT_CMD}${Color_Off}"
     MONITOR_PID=`start_monitor`

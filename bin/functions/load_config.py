@@ -25,6 +25,9 @@ from contextlib import closing
 from collections import defaultdict
 from hibench_prop_env_mapping import HiBenchEnvPropMappingMandatory, HiBenchEnvPropMapping
 
+import warnings 
+warnings.filterwarnings(action= 'ignore')
+
 HibenchConf = {}
 HibenchConfRef = {}
 
@@ -56,7 +59,7 @@ def nonBlockRead(output):
     fl = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
     try:
-        return output.read()
+        return output.read().decode('utf-8')
     except:
         return ''
 
@@ -87,7 +90,6 @@ def execute_cmd(cmdline, timeout):
             seconds_passed < timeout or timeout == 0):  # Monitor process
         time.sleep(0.1)  # Wait a little
         seconds_passed = time.time() - t_begin
-
         stdout += nonBlockRead(p.stdout)
         stderr += nonBlockRead(p.stderr)
 
@@ -170,7 +172,8 @@ def parse_conf(conf_root, workload_config_file):
 
 def override_conf_from_environment():
     # override values from os environment variable settings
-    for env_name, prop_name in HiBenchEnvPropMappingMandatory.items() + HiBenchEnvPropMapping.items():
+    #for env_name, prop_name in HiBenchEnvPropMappingMandatory.items() + HiBenchEnvPropMapping.items():
+    for env_name, prop_name in HiBenchEnvPropMappingMandatory.items() | HiBenchEnvPropMapping.items():
         # The overrides from environments has 2 premises, the second one is either
         # the prop_name is not set in advance by config files or the conf line
         # itself set an env variable to a hibench conf
@@ -221,7 +224,7 @@ def load_config(conf_root, workload_config_file, workload_folder, patching_confi
     check_config()
     #import pdb;pdb.set_trace()
     # Export config to file, let bash script to import as local variables.
-    print export_config(workload_name, framework_name)
+    print (export_config(workload_name, framework_name))
 
 
 def check_config():             # check configures
@@ -230,7 +233,7 @@ def check_config():             # check configures
         assert HibenchConf.get(
             prop_name, None) is not None, "Mandatory configure missing: %s" % prop_name
     # Ensure all ref values in configure has been expanded
-    for _, prop_name in HiBenchEnvPropMappingMandatory.items() + HiBenchEnvPropMapping.items():
+    for _, prop_name in HiBenchEnvPropMappingMandatory.items() | HiBenchEnvPropMapping.items():
         assert "${" not in HibenchConf.get(prop_name, ""), "Unsolved ref key: %s. \n    Defined at %s:\n    Unsolved value:%s\n" % (
             prop_name, HibenchConfRef.get(prop_name, "unknown"), HibenchConf.get(prop_name, "unknown"))
 
@@ -631,7 +634,7 @@ def export_config(workload_name, framework_name):
 
     # generate configure for hibench
     sources = defaultdict(list)
-    for env_name, prop_name in HiBenchEnvPropMappingMandatory.items() + HiBenchEnvPropMapping.items():
+    for env_name, prop_name in HiBenchEnvPropMappingMandatory.items() | HiBenchEnvPropMapping.items():
         source = HibenchConfRef.get(prop_name, 'None')
         sources[source].append('%s=%s' % (env_name, HibenchConf.get(prop_name, '')))
 
