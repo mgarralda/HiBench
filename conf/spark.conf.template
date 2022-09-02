@@ -10,6 +10,17 @@ hibench.spark.master    yarn-client
 hibench.yarn.executor.num     2
 hibench.yarn.executor.cores   4
 
+# History Server Logs
+#spark.history.fs.logDirectory                   hdfs://dsn_name_or_ip:9000/shared/spark-logs
+#spark.yarn.historyServer.address                dsn_name_or_ip:18080
+#spark.eventLog.enabled                          true
+#spark.eventLog.dir                              hdfs://dsn_name_or_ip:9000/shared/spark-logs
+
+# Added custom benchmark properties to identify test executions
+spark.app.benchmark.group.id
+spark.app.benchmark.workload
+spark.app.benchmark.data.size
+
 # executor and driver memory in standalone & YARN mode
 spark.executor.memory  4g
 spark.driver.memory    4g
