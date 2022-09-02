@@ -616,7 +616,6 @@ def generate_optional_value():
     probe_masters_slaves_hostnames()
     probe_java_opts()
 
-
 def export_config(workload_name, framework_name):
     join = os.path.join
     report_dir = HibenchConf['hibench.report.dir']
@@ -631,6 +630,9 @@ def export_config(workload_name, framework_name):
         os.makedirs(spark_conf_dir)
     if not os.path.exists(conf_dir):
         os.makedirs(conf_dir)
+        
+    ##### Add custom
+    add_custom_properties(workload_name, framework_name)   
 
     # generate configure for hibench
     sources = defaultdict(list)
@@ -675,6 +677,25 @@ def export_config(workload_name, framework_name):
                 f.write("\n\n")
 
     return conf_filename
+
+
+
+def add_custom_properties(workload_name, framework_name):
+    """
+    Add custom spark properties in order to identify benchmark executions
+    """
+      
+    if HibenchConf.get('spark.app.benchmark.group.id', '') == '':
+        sabgi = f"{HibenchConf.get('hibench.yarn.executor.num', '')} | {HibenchConf.get('hibench.yarn.executor.cores', '')} | "\
+                f"{HibenchConf.get('spark.driver.memory', '')} | {HibenchConf.get('spark.driver.memory', '')}"    
+        HibenchConf['spark.app.benchmark.group.id'] = sabgi
+    
+    if HibenchConf.get('spark.app.benchmark.workload', '') == '':
+        HibenchConf['spark.app.benchmark.workload'] = workload_name
+    
+    if HibenchConf.get('spark.app.benchmark.data.size', '') == '':
+        HibenchConf['spark.app.benchmark.data.size'] = HibenchConf.get('hibench.scale.profile', '')
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
