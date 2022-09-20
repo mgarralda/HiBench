@@ -278,7 +278,7 @@ function run_hadoop_job(){
         echo -e "${BRed}ERROR${Color_Off}: Hadoop job ${BYellow}${job_jar} ${job_name}${Color_Off} failed to run successfully."
         echo -e "${BBlue}Hint${Color_Off}: You can goto ${BYellow}${WORKLOAD_RESULT_FOLDER}/bench.log${Color_Off} to check for detailed log.\nOpening log tail for you:\n"
         tail ${WORKLOAD_RESULT_FOLDER}/bench.log
-        exit $result
+        #exit $result
     fi
 }
 
