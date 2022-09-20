@@ -1,15 +1,17 @@
+skip.prepare.data
+
 micro.sleep
 micro.sort
 micro.terasort
 micro.wordcount
 micro.repartition
-micro.dfsioe
+##micro.dfsioe 
 
 sql.aggregation
 sql.join
 sql.scan
 
-websearch.nutchindexing
+##websearch.nutchindexing
 websearch.pagerank
 
 ml.bayes
