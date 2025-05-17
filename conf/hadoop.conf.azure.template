@@ -1,0 +1,20 @@
+# Hadoop Home (HDInsight uses current client symlink)
+hibench.hadoop.home     /usr/hdp/current/hadoop-client
+
+# Path to hadoop executable
+hibench.hadoop.executable     ${hibench.hadoop.home}/bin/hadoop
+
+# Hadoop configuration directory
+hibench.hadoop.configure.dir  /etc/hadoop/conf
+
+# Root HDFS path
+hibench.hdfs.master           hdfs://mycluster
+
+# Hadoop release
+hibench.hadoop.release        apache
+
+# Hadoop Examples Jar (required for some workloads like Wordcount, Sleep, etc.)
+hibench.hadoop.examples.jar       /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar
+hibench.hadoop.examples.test.jar  /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar
+
+

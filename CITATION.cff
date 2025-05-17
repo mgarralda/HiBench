@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it as below."
+title: "HiBench for Apache Spark 3.3 (Scala-based)"
+authors:
+  - family-names: Garralda
+    given-names: Mariano
+    affiliation: University of A Coruña (UDC)
+date-released: 2025-05-02
+version: 1.0.0
+repository-code: https://github.com/mgarralda/hibench
+license: Apache-2.0
+keywords:
+  - benchmarking
+  - spark
+  - big data
+  - hibench
+  - scala
+  - performance evaluation
+type: software
+abstract: >
+  This repository provides a modified version of Intel's HiBench benchmark suite,
+  adapted to support Apache Spark 3.3 and Scala-based environments. It includes
+  updated compatibility, improved configuration scripts, and validation for research use.

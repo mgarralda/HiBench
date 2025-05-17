@@ -1,0 +1,16 @@
+target/
+*.iml
+.idea/
+.idea_modules/
+*.swp
+*~
+.emacs.desktop*
+*.pyc
+*.png
+*.report
+derby.log
+metastore_db/
+report/
+.classpath
+.project
+.settings/

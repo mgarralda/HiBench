@@ -1,0 +1,59 @@
+# Spark Home (Azure HDInsight uses current client symlink)
+hibench.spark.home  /usr/hdp/current/spark3-client
+
+# Spark master standalone mode: spark://xxx:7077
+# YARN mode: yarn
+hibench.spark.master    yarn
+# client | cluster
+hibench.yarn.deploy.mode  client
+
+# Executor settings
+hibench.yarn.executor.num     3
+hibench.yarn.executor.cores   4
+spark.executor.memory         5g
+
+# Driver settings
+spark.driver.cores           1
+spark.driver.memory          4g
+
+# Parallelism
+spark.task.cpus              1
+
+# Added custom benchmark properties to identify test
+spark.app.benchmark.group.id	own
+spark.app.benchmark.workload
+spark.app.benchmark.data.size
+
+# Parallelism settings
+spark.default.parallelism     ${hibench.default.map.parallelism}
+spark.sql.shuffle.partitions  ${hibench.default.shuffle.parallelism}
+
+spark.dynamicAllocation.enabled false
+spark.sql.adaptive.enabled false
+
+# to prevent error with nweight workload
+#spark.network.timeout  300000s
+#spark.executor.heartbeatInterval 200000s
+
+#spark.executor.extraJavaOptions -XX:+UseG1GC
+# Optional: Tune Spark dynamic allocation if needed (commented by default)
+#spark.shuffle.service.enabled true
+# spark.dynamicAllocation.enabled   true
+# spark.dynamicAllocation.minExecutors 2
+# spark.dynamicAllocation.maxExecutors 10
+
+# Enable event log
+spark.eventLog.enabled                           true
+
+# Use Azure Blob Storage (wasbs) for event logs
+spark.eventLog.dir                                wasbs://hdp/spark3-events
+# History Server reads logs from the same wasbs location
+spark.history.fs.logDirectory                     wasbs://hdp/spark3-events
+
+# Directory to store event logs in Azure HDInsight
+# Using HDFS:
+#spark.eventLog.dir                               hdfs:///hdp/spark3-events
+#spark.history.fs.logDirectory                    hdfs:///hdp/spark3-events
+
+#spark.executorEnv.SPARKBENCH_PROPERTIES_FILES /home/sshuser/HiBench/report/wordcount/spark/conf/sparkbench/sparkbench.conf
+#spark.yarn.appMasterEnv.SPARKBENCH_PROPERTIES_FILES /home/sshuser/HiBench/report/wordcount/spark/conf/sparkbench/sparkbench.conf

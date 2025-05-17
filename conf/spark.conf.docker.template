@@ -1,0 +1,54 @@
+# Spark home (docker)
+hibench.spark.home      /home/sparker/spark-3.3.2-bin-hadoop3
+
+# Spark master standalone mode: spark://xxx:7077
+# YARN mode: yarn
+hibench.spark.master    yarn
+# client | cluster
+hibench.yarn.deploy.mode  client
+
+# Executor settings
+hibench.yarn.executor.num     3
+hibench.yarn.executor.cores   4
+spark.executor.memory         5g
+
+# Driver settings
+spark.driver.cores           1
+spark.driver.memory          4g
+
+# Parallelism
+spark.task.cpus              1
+
+# Added custom benchmark properties to identify test
+spark.app.benchmark.group.id	own
+spark.app.benchmark.workload
+spark.app.benchmark.data.size
+
+# Parallelism settings
+spark.default.parallelism     ${hibench.default.map.parallelism}
+spark.sql.shuffle.partitions  ${hibench.default.shuffle.parallelism}
+
+spark.dynamicAllocation.enabled false
+spark.sql.adaptive.enabled false
+
+# to prevent error with nweight workload
+#spark.network.timeout  300000s
+#spark.executor.heartbeatInterval 200000s
+
+#spark.executor.extraJavaOptions -XX:+UseG1GC
+# Optional: Tune Spark dynamic allocation if needed (commented by default)
+#spark.shuffle.service.enabled true
+# spark.dynamicAllocation.enabled   true
+# spark.dynamicAllocation.minExecutors 2
+# spark.dynamicAllocation.maxExecutors 10
+
+# Enable event log
+spark.eventLog.enabled                           true
+
+# History Server Logs (docker version)
+spark.history.fs.logDirectory                   hdfs://172.18.0.20:9000/shared/spark-logs
+spark.yarn.historyServer.address                spark-cluster-master:18080
+spark.eventLog.dir                              hdfs://172.18.0.20:9000/shared/spark-logs
+
+#spark.executorEnv.SPARKBENCH_PROPERTIES_FILES /home/sshuser/HiBench/report/wordcount/spark/conf/sparkbench/sparkbench.conf
+#spark.yarn.appMasterEnv.SPARKBENCH_PROPERTIES_FILES /home/sshuser/HiBench/report/wordcount/spark/conf/sparkbench/sparkbench.conf

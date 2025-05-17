@@ -1,0 +1,199 @@
+// to set *.sh execution permisions
+find . -name "*.sh" -exec chmod +x {} \;
+
+// to give execute permission to all Python files at once:
+chmod +x /home/sshuser/HiBench/bin/functions/*.py
+
+
+
+
+Search in to override de default core-site.xml in HDI that points to Dfs.defaultFS 
+/etc/hadoop/conf/hdfs-site.xml
+<property>
+  <name>dfs.nameservices</name>
+  <value>mycluster</value>
+</property>
+
+
+Importantly before launch the workloads
+export HADOOP_CONF_DIR=/etc/hadoop/conf
+export HADOOP_CLIENT_OPTS="-Dfs.defaultFS=hdfs://mycluster"
+
+
+./bin/workloads/micro/wordcount/prepare/prepare.sh
+
+// To see 
+hdfs dfs -ls hdfs://mycluster/HiBench/Wordcount/Input/small
+
+ hdfs dfs -rm -r  hdfs://mycluster/HiBench/Aggregation
+
+
+To list everything recursively:
+hdfs dfs -fs hdfs://mycluster -ls -R /HiBench
+
+Situation | Correct way to list
+Azure Blob Storage default (wasbs://) | hdfs dfs -ls /HiBench (normal)
+
+Native HDFS (hdfs://mycluster) manually configured by HiBench | 
+hdfs dfs -fs hdfs://mycluster -ls /HiBench
+
+
+
+Important:
+To avoid issues related to workers node ssh conmunication executing datagenerator workloads
+test-cluster/config-ssh-azure-hdi.sh o tes-cluster --> config-shh.sh
+
+There was another 2 commands to avoid this problem
+
+
+Permissions
+sudo -u sshuser hdfs dfs -chmod -R 777 wasbs:///hdp/HiBench/Scan
+sudo -u sshuser hdfs dfs -chown -R hive:supergroup wasbs:///hdp/HiBench/Scan
+
+
+
+
+
+
+Cluster config
+{
+    "id": "/subscriptions/71ec2aba-8861-4589-8439-6d1afd08b372/resourceGroups/it.s30.rg.devequipova.lab/providers/Microsoft.HDInsight/clusters/hibench1",
+    "name": "hibench1",
+    "type": "Microsoft.HDInsight/clusters",
+    "location": "Spain Central",
+    "etag": "4a9ec645-9205-4b5f-bea7-5e28c878414b",
+    "tags": {},
+    "properties": {
+        "clusterVersion": "5.1.3000.0",
+        "clusterHdpVersion": "5.1.7.7",
+        "osType": "Linux",
+        "clusterDefinition": {
+            "blueprint": "https://blueprints.azurehdinsight.net/spark-5.1.3000.0.2501080039.json",
+            "kind": "SPARK",
+            "componentVersion": {
+                "Spark": "3.3"
+            }
+        },
+        "clusterId": "e3f17955488644b19875222152c6b8c2",
+        "computeProfile": {
+            "roles": [
+                {
+                    "name": "headnode",
+                    "targetInstanceCount": 2,
+                    "hardwareProfile": {
+                        "vmSize": "standard_e8_v3"
+                    },
+                    "osProfile": {
+                        "linuxOperatingSystemProfile": {
+                            "username": "sshuser"
+                        }
+                    },
+                    "encryptDataDisks": false
+                },
+                {
+                    "name": "workernode",
+                    "targetInstanceCount": 2,
+                    "hardwareProfile": {
+                        "vmSize": "standard_e8_v3"
+                    },
+                    "osProfile": {
+                        "linuxOperatingSystemProfile": {
+                            "username": "sshuser"
+                        }
+                    },
+                    "encryptDataDisks": false
+                },
+                {
+                    "name": "zookeepernode",
+                    "targetInstanceCount": 3,
+                    "hardwareProfile": {
+                        "vmSize": "standard_a2_v2"
+                    },
+                    "osProfile": {
+                        "linuxOperatingSystemProfile": {
+                            "username": "sshuser"
+                        }
+                    },
+                    "encryptDataDisks": false
+                }
+            ]
+        },
+        "provisioningState": "Succeeded",
+        "clusterState": "Running",
+        "createdDate": "2025-04-21T15:17:10.21",
+        "quotaInfo": {
+            "coresUsed": 32
+        },
+        "connectivityEndpoints": [
+            {
+                "name": "SSH",
+                "protocol": "TCP",
+                "location": "hibench1-ssh.azurehdinsight.net",
+                "port": 22
+            },
+            {
+                "name": "HTTPS",
+                "protocol": "TCP",
+                "location": "hibench1.azurehdinsight.net",
+                "port": 443
+            }
+        ],
+        "tier": "standard",
+        "encryptionInTransitProperties": {
+            "isEncryptionInTransitEnabled": false
+        },
+        "storageProfile": {
+            "storageaccounts": [
+                {
+                    "name": "hibench1hdistorage.blob.core.windows.net",
+                    "resourceId": "",
+                    "msiResourceId": null,
+                    "key": null,
+                    "fileSystem": null,
+                    "container": "hibench1-2025-04-21t15-11-51-643z",
+                    "saskey": null,
+                    "isDefault": true,
+                    "enableSecureChannel": true,
+                    "fileshare": null
+                }
+            ]
+        },
+        "minSupportedTlsVersion": "1.2",
+        "excludedServicesConfig": {
+            "excludedServicesConfigId": "default",
+            "excludedServicesList": ""
+        },
+        "computeIsolationProperties": {
+            "enableComputeIsolation": false,
+            "hostSku": null
+        }
+    },
+    "apiVersion": "2023-04-15-preview"
+}
+
+
+
+
+
+
+
+
+ SPARKBENCH_BASENAME=$(basename "$SPARKBENCH_PROPERTIES_FILES")
+
+    # Compose --files with only basenames to be accessible in cluster mode
+    FILES="$SPARKBENCH_BASENAME"
+    if [[ -n "$HIVEBENCH_SQL_FILE" ]]; then
+        HIVEBENCH_SQL_BASENAME=$(basename "$HIVEBENCH_SQL_FILE")
+        FILES="${FILES},${HIVEBENCH_SQL_BASENAME}"
+    fi
+
+    # Use full path in client mode; basename in cluster mode
+    if [[ "$SPARK_YARN_DEPLOY_MODE" == "client" && -n "$HIVEBENCH_SQL_FILE" ]]; then
+        FINAL_ARGS="$SQL_WORKLOAD $HIVEBENCH_SQL_FILE"
+    elif [[ -n "$HIVEBENCH_SQL_FILE" ]]; then
+        FINAL_ARGS="$SQL_WORKLOAD $HIVEBENCH_SQL_BASENAME"
+    else
+        FINAL_ARGS="$@"
+    fi
+	
+	

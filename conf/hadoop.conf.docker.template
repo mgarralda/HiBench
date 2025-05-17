@@ -1,0 +1,20 @@
+# Hadoop home docker
+hibench.hadoop.home     /home/sparker/hadoop-3.3.2
+
+# Path to hadoop executable
+hibench.hadoop.executable     ${hibench.hadoop.home}/bin/hadoop
+
+# Hadoop configuration directory Docker
+hibench.hadoop.configure.dir  ${hibench.hadoop.home}/etc/hadoop
+
+# The root HDFS path to store HiBench data
+### Modified: original: hdfs://localhost:8020 *** hadoop/etc/hadoop/core-site.xml --> <value>hdfs://172.18.0.20:9000</value>
+hibench.hdfs.master       hdfs://172.18.0.20:9000
+
+# Hadoop release
+hibench.hadoop.release        apache
+
+# Hadoop Examples Jar (required for some workloads like Wordcount, Sleep, etc.) Docker
+hibench.hadoop.examples.jar       ${hibench.hadoop.home}/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.2.jar
+hibench.hadoop.examples.test.jar  ${hibench.hadoop.home}/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.2.jar
+
