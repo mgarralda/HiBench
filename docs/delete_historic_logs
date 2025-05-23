@@ -1,0 +1,10 @@
+Spark:
+hdfs dfs -rm -r -skipTrash /shared/spark-logs/\*
+
+
+Hadoop:
+hdfs dfs -rm -r -skipTrash /tmp/\*
+
+
+Get logs yarn
+yarn logs -applicationId application_XXXXXXXXXXXX_XXXX

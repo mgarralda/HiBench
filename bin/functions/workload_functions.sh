@@ -78,36 +78,63 @@ function get_field_name() {	# print report column header
     printf "${REPORT_COLUMN_FORMATS}" App_id Workload Scale Date Time Input_data_size "Duration(s)" "Throughput(bytes/s)" Throughput/node
 }
 
-function gen_report() {		# dump the result to report file
-    assert ${HIBENCH_CUR_WORKLOAD_NAME} "HIBENCH_CUR_WORKLOAD_NAME not specified."
+function gen_report() {  # Dump the result to report file
+    assert "${HIBENCH_CUR_WORKLOAD_NAME:-}" "HIBENCH_CUR_WORKLOAD_NAME not specified."
+    assert "${APPLICATION_ID:-}" "APPLICATION_ID not specified."
+    assert "${HIBENCH_REPORT:-}" "HIBENCH_REPORT directory not specified."
+    assert "${HIBENCH_REPORT_NAME:-}" "HIBENCH_REPORT_NAME not specified."
+    assert "${HIBENCH_WORKLOAD_CONF:-}" "HIBENCH_WORKLOAD_CONF not specified."
+    assert "${REPORT_COLUMN_FORMATS:-}" "REPORT_COLUMN_FORMATS format string missing."
+
     local start=$1
     local end=$2
     local size=$3
-    which bc > /dev/null 2>&1
-    if [ $? -eq 1 ]; then
-	assert 0 "\"bc\" utility missing. Please install it to generate proper report."
-	      echo "BC utility missing. Please install it to generate proper report."
+
+    # Validate numeric input
+    if ! [[ "$start" =~ ^[0-9]+$ && "$end" =~ ^[0-9]+$ && "$size" =~ ^[0-9]+$ ]]; then
+        echo "Invalid input: start=$start, end=$end, size=$size" >&2
         return 1
     fi
-    local duration=$(echo "scale=3;($end-$start)/1000"|bc)
-    local tput=`echo "$size/$duration"|bc`
-#    local nodes=`cat ${SPARK_HOME}/conf/slaves 2>/dev/null | grep -v '^\s*$' | sed "/^#/ d" | wc -l`
-    local nodes=`echo ${SLAVES} | wc -w`
-    nodes=${nodes:-1}
-    
-    if [ $nodes -eq 0 ]; then nodes=1; fi
-    local tput_node=`echo "$tput/$nodes"|bc`
 
-    REPORT_TITLE=`get_field_name`
-    if [ ! -f ${HIBENCH_REPORT}/${HIBENCH_REPORT_NAME} ] ; then
-        echo "${REPORT_TITLE}" > ${HIBENCH_REPORT}/${HIBENCH_REPORT_NAME}
+    # Check bc utility
+    if ! command -v bc > /dev/null 2>&1; then
+        echo "\"bc\" utility missing. Please install it to generate proper report." >&2
+        return 1
     fi
 
-    REPORT_LINE=$(printf "${REPORT_COLUMN_FORMATS}" $APPLICATION_ID ${HIBENCH_CUR_WORKLOAD_NAME} ${SCALE_PROFILE} $(date +%F) $(date +%T) $size $duration $tput $tput_node)
-    echo "${REPORT_LINE}" >> ${HIBENCH_REPORT}/${HIBENCH_REPORT_NAME}
-    echo "# ${REPORT_TITLE}" >> ${HIBENCH_WORKLOAD_CONF}
-    echo "# ${REPORT_LINE}" >> ${HIBENCH_WORKLOAD_CONF}
+    local duration=$(echo "scale=3; ($end - $start)/1000" | bc)
+    local tput=$(echo "$size / $duration" | bc)
 
+    local nodes=$(echo "${SLAVES:-}" | wc -w)
+    nodes=${nodes:-1}
+    if [ "$nodes" -eq 0 ]; then nodes=1; fi
+
+    local tput_node=$(echo "$tput / $nodes" | bc)
+
+    # Ensure report file exists
+    local report_file="${HIBENCH_REPORT}/${HIBENCH_REPORT_NAME}"
+    REPORT_TITLE=$(get_field_name)
+    if [ ! -f "$report_file" ]; then
+        echo "$REPORT_TITLE" > "$report_file"
+    fi
+
+    # Format line
+    REPORT_LINE=$(printf "${REPORT_COLUMN_FORMATS}" \
+        "$APPLICATION_ID" \
+        "$HIBENCH_CUR_WORKLOAD_NAME" \
+        "$SCALE_PROFILE" \
+        "$(date +%F)" \
+        "$(date +%T)" \
+        "$size" \
+        "$duration" \
+        "$tput" \
+        "$tput_node")
+
+    echo "$REPORT_LINE" >> "$report_file"
+    echo "# $REPORT_TITLE" >> "$HIBENCH_WORKLOAD_CONF"
+    echo "# $REPORT_LINE" >> "$HIBENCH_WORKLOAD_CONF"
+
+    echo "Report saved to: $report_file"
 }
 
 function rmr_hdfs(){		# rm -r for hdfs
@@ -285,6 +312,34 @@ function run_spark_job() {
         fi
     fi
 
+
+# TODO: check if the following options are correct for standalone mode
+#    --master spark://spark-cluster-master:7077 \
+#      --deploy-mode cluster \
+#      --total-executor-cores 6 \ instea d of --num-executors
+#YARN options can't be used in standalone
+#A right example:
+#/home/sparker/spark-3.3.2-bin-hadoop3/bin/spark-submit \
+#  --master spark://spark-cluster-master:7077 \
+#  --deploy-mode client \
+#  --total-executor-cores 6 \
+#  --executor-cores 2 \
+#  --executor-memory 3G \
+#  --files /home/sparker/shared/HiBench2/report/correlation/spark/conf/sparkbench/sparkbench.conf \
+#  --properties-file /home/sparker/shared/HiBench2/report/correlation/spark/conf/sparkbench/spark.conf \
+#  --conf spark.executorEnv.SPARKBENCH_PROPERTIES_FILES=sparkbench.conf \
+#  --class com.intel.hibench.sparkbench.ml.CorrelationExample \
+#  /home/sparker/shared/HiBench2/sparkbench/assembly/target/sparkbench-assembly-8.0-SNAPSHOT-dist.jar \
+#  --corrType pearson \
+#  hdfs://172.18.0.20:9000/HiBench/Correlation/Input/tiny
+#
+
+#To take into account: using standalone the application is style-named: app-20250518071539-0005
+#in yarn it is sytle-named: application_1684380980000_0001
+
+#Important: Exception in thread "main" org.apache.spark.SparkException: Cluster deploy mode is currently not supported for python applications on standalone clusters.
+# In mode standalone, java/scala applications are supported in cluster mode, but python applications are only supported in client mode.
+
     if [[ "$CLS" == *.py ]]; then
         LIB_JARS="$LIB_JARS --jars ${SPARKBENCH_JAR}"
         SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} \
@@ -310,8 +365,8 @@ function run_spark_job() {
     execute_withlog ${SUBMIT_CMD}
     result=$?
 
-    if [ -f /tmp/application_id.txt ]; then
-        APPLICATION_ID=$(cat /tmp/application_id.txt)
+    if [ -f /home/sparker/application_id.txt ]; then
+        APPLICATION_ID=$(cat /home/sparker/application_id.txt)
         # Export it for global use
         export APPLICATION_ID
         echo "Extracted application ID: $APPLICATION_ID"

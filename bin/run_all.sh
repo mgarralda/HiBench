@@ -13,15 +13,34 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 set -u
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/
+export HADOOP_HOME=/home/sparker/hadoop-3.3.2
+export PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:$PATH
+
+SKIP_PREPARE_IF_EXISTS=false
+
+# Parse arguments
+for arg in "$@"; do
+    if [[ "$arg" == "--skip-if-exists" ]]; then
+        SKIP_PREPARE_IF_EXISTS=true
+    fi
+done
+
 
 current_dir=`dirname "$0"`
 root_dir=`cd "${current_dir}/.."; pwd`
+
+echo ${current_dir}
+echo ${root_dir}
 
 . ${root_dir}/bin/functions/color.sh
 
 prepare_data=true
 workloads_run=true
+datasize="$(grep '^hibench.scale.profile' "$root_dir/conf/hibench.conf" | awk '{print $2}' | tr -d '\r\n')"
 
 for benchmark in `cat $root_dir/conf/benchmarks.lst`; do
 	if [[ $benchmark == \#* ]]; then
@@ -35,12 +54,12 @@ for benchmark in `cat $root_dir/conf/benchmarks.lst`; do
 		continue
 	fi
 
-  # Must be at top of the file
-  if [[ $benchmark == \skip.workloads.run ]]; then
-    workloads_run=false
-    echo -e "${UYellow}${BYellow}*** Skipping Spark running workloads ***${BYellow}${Color_Off}"
-    continue
-  fi
+    # Must be at top of the file
+    if [[ $benchmark == \skip.workloads.run ]]; then
+      workloads_run=false
+      echo -e "${UYellow}${BYellow}*** Skipping Spark running workloads ***${BYellow}${Color_Off}"
+      continue
+    fi
 
     benchmark="${benchmark/.//}"
     WORKLOAD=$root_dir/bin/workloads/${benchmark}
@@ -48,13 +67,44 @@ for benchmark in `cat $root_dir/conf/benchmarks.lst`; do
 	if $prepare_data; then
 		echo -e "${UYellow}${BYellow}Prepare ${Yellow}${UYellow}${benchmark} ${BYellow}...${Color_Off}"
 		echo -e "${BCyan}Exec script: ${Cyan}${WORKLOAD}/prepare/prepare.sh${Color_Off}"
-		"${WORKLOAD}/prepare/prepare.sh"
 
-		result=$?
-		if [ $result -ne 0 ]
-		then
-			echo "ERROR: ${benchmark} prepare failed!"
-				exit $result
+    name=${benchmark##*/}  # Extract workload name (e.g., "als" or "wordcount")
+    echo "Workload: $name"
+
+    if [ ${#name} -le 3 ]; then
+        name_capitalized=$(echo "$name" | tr '[:lower:]' '[:upper:]')
+    else
+        name_capitalized="${name^}"
+    fi
+
+    hdfs_path="/HiBench/${name_capitalized}/Input/${datasize}"
+    echo "Checking HDFS path: $hdfs_path"
+
+		if hdfs dfs -test -d $hdfs_path; then
+
+			if $SKIP_PREPARE_IF_EXISTS; then
+				echo "HDFS input directory exists: $hdfs_path"
+				echo "Skipping preparation as --skip-if-exists was passed."
+			else
+				echo "Re-preparing input data as --skip-if-exists not passed."
+				"${WORKLOAD}/prepare/prepare.sh"
+				result=$?
+				if [ $result -ne 0 ]
+				then
+					echo "ERROR: ${benchmark} prepare failed!"
+						exit $result
+				fi
+			fi
+		else
+			echo "HDFS input directory does not exist!"
+			"${WORKLOAD}/prepare/prepare.sh"
+
+			result=$?
+			if [ $result -ne 0 ]
+			then
+				echo "ERROR: ${benchmark} prepare failed!"
+					exit $result
+			fi
 		fi
 	fi
 

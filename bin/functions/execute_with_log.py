@@ -93,6 +93,7 @@ def execute(workload_result_file, command_lines):
 
         try:
             line = line.rstrip()
+            # line = line.decode('utf-8').rstrip()
             log_file.write(line+"\n")
             log_file.flush()
         except KeyboardInterrupt:
@@ -175,7 +176,7 @@ if __name__ == "__main__":
     code, app_id = execute(workload_result_file=sys.argv[1],
                            command_lines=sys.argv[2:])
     if app_id:
-        with open("/tmp/application_id.txt", "w") as f:
+        with open("/home/sparker/application_id.txt", "w") as f:
             f.write(app_id + "\n")
 
     sys.exit(code)
