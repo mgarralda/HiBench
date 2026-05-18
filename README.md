@@ -54,31 +54,46 @@ See the [NOTICE](NOTICE) file for attribution.
 
 ## 📄 Citation
 
-If you use this work in academic or research contexts, please cite:
+If you use this work, the benchmarking environment, workloads, datasets, experimental infrastructure, or derived components in research, benchmarking studies, technical documentation, or derivative works, please cite the associated publications and/or doctoral thesis.
 
-> Garralda, M. (2025). *Extended benchmarking analysis based on HiBench for Spark 3.3 workloads*.
->
-> Garralda-Barrio, M., Eiras-Franco, C., & Bolón-Canedo, V. (2024).  
-> *A novel framework for generic Spark workload characterization and similar pattern recognition using machine learning*.  
-> *Journal of Parallel and Distributed Computing*, 189, 104881. https://doi.org/10.1016/j.jpdc.2024.104881
+### References
+
+- Garralda-Barrio, M., Eiras-Franco, C., & Bolón-Canedo, V. (2024).  
+  *A novel framework for generic Spark workload characterization and similar pattern recognition using machine learning*.  
+  *Journal of Parallel and Distributed Computing*, 189, 104881.  
+  https://doi.org/10.1016/j.jpdc.2024.104881
+
+- Garralda Barrio, M. (2026).  
+  *AI-Driven Optimization in Distributed Computing Systems: A Self-Tuning Framework*.  
+  Doctoral Thesis, University of Coruña.  
+  https://hdl.handle.net/2183/48114
 
 <details>
     <summary>📚 Citation (BibTeX)</summary>
 
 ```bibtex
 @article{garralda2024novel,
-  title={A novel framework for generic Spark workload characterization and similar pattern recognition using machine learning},
-  author={Garralda-Barrio, Mariano and Eiras-Franco, Carlos and Bol{\'o}n-Canedo, Ver{\'o}nica},
-  journal={Journal of Parallel and Distributed Computing},
-  volume={189},
-  pages={104881},
-  year={2024},
-  doi = {10.1016/j.jpdc.2024.104881},
-  publisher={Elsevier}
+  title        = {A novel framework for generic Spark workload characterization and similar pattern recognition using machine learning},
+  author       = {Garralda-Barrio, Mariano and Eiras-Franco, Carlos and Bol{\'o}n-Canedo, Ver{\'o}nica},
+  journal      = {Journal of Parallel and Distributed Computing},
+  volume       = {189},
+  pages        = {104881},
+  year         = {2024},
+  doi          = {10.1016/j.jpdc.2024.104881},
+  publisher    = {Elsevier}
+}
+
+@phdthesis{GarraldaBarrio2026,
+  author       = {Mariano Garralda Barrio},
+  title        = {AI-Driven Optimization in Distributed Computing Systems: A Self-Tuning Framework},
+  school       = {University of Coruña},
+  year         = {2026},
+  type         = {Doctoral Thesis},
+  url          = {https://hdl.handle.net/2183/48114}
 }
 ```
-</details> 
----
+
+</details>
 
 ## 🐳 Spark Cluster for Local Testing
 
