@@ -2,7 +2,7 @@
 
 This repository provides an updated version of [Intel's HiBench](https://github.com/Intel-bigdata/HiBench), adapted to support **Apache Spark 3.3.x**, **Scala 2.12**, and modern DataFrame APIs.
 
-> ⚠️ This is a derivative work for internal research and benchmarking. It is not an official release.
+> ⚠️ This repository provides a research-oriented extension of Intel HiBench for modern Spark environments. It is not an official release.
 
 ---
 
