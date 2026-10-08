@@ -2,6 +2,7 @@ target/
 *.iml
 .idea/
 .idea_modules/
+.github/
 *.swp
 *~
 .emacs.desktop*
