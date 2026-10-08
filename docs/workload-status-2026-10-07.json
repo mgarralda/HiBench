@@ -1,0 +1,810 @@
+{
+  "scope": "Batch benchmark implementations only; generator code excluded. Reader dependencies inside benchmarks are included.",
+  "date": "2026-10-07",
+  "counts": {
+    "dataframe": 1,
+    "sql": 3,
+    "hybrid": 9,
+    "rdd": 11
+  },
+  "workloads": [
+    {
+      "id": "micro.wordcount",
+      "classification": "hybrid",
+      "implementation": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaWordCount.scala",
+      "sha256": "b8fdf9a5428854d722d1428f78a5949bdfe25a3f53548c0e2b43540ca80d9dcc",
+      "detail": "DataFrame explode/groupBy/count; explicit SparkContext and IOCommon",
+      "next_step": "Use SparkSession-only I/O; remove Sequence RDD fallback",
+      "evidence": [
+        {
+          "line": 22,
+          "text": "import org.apache.spark.{SparkConf, SparkContext}"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 24,
+          "text": "import org.apache.spark.sql.functions._"
+        },
+        {
+          "line": 33,
+          "text": "val sc = new SparkContext(sparkConf)"
+        },
+        {
+          "line": 44,
+          "text": ".groupBy(\"word\")"
+        }
+      ],
+      "smoke_verified": true
+    },
+    {
+      "id": "micro.sort",
+      "classification": "hybrid",
+      "implementation": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaSort.scala",
+      "sha256": "8297493522ed97b63d7529fde6423562692455bc339096b7e62c96b73f15c632",
+      "detail": "DataFrame orderBy; explicit SparkContext and IOCommon",
+      "next_step": "Use SparkSession-only I/O; preserve global ordering semantics",
+      "evidence": [
+        {
+          "line": 21,
+          "text": "import org.apache.spark.{SparkConf, SparkContext}"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.sql.functions._"
+        },
+        {
+          "line": 30,
+          "text": "val sc   = new SparkContext(conf)"
+        },
+        {
+          "line": 48,
+          "text": "val sorted = df.orderBy(col(\"value\"))"
+        }
+      ],
+      "smoke_verified": true
+    },
+    {
+      "id": "micro.repartition",
+      "classification": "hybrid",
+      "implementation": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaRepartition.scala",
+      "sha256": "630d9633f1adb7d0cfd82a00954baca94844ea08a849a3cea94a6a0a14fc2d5b",
+      "detail": "DataFrame repartition; TeraInputFormat RDD input and TeraOutputFormat RDD output",
+      "next_step": "Define a SQL/Parquet variant separately from fixed-width Tera compatibility",
+      "evidence": [
+        {
+          "line": 6,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 15,
+          "text": "val input = spark.sparkContext.newAPIHadoopFile[Text, Text, TeraInputFormat](args(0))"
+        },
+        {
+          "line": 23,
+          "text": ".map(_.toInt).getOrElse(spark.conf.get(\"spark.sql.shuffle.partitions\").toInt)"
+        },
+        {
+          "line": 28,
+          "text": "shuffled.foreachPartition { rows: Iterator[org.apache.spark.sql.Row] =>"
+        },
+        {
+          "line": 36,
+          "text": "shuffled.rdd.map(row => (new Text(row.getAs[Array[Byte]](\"key\")),"
+        }
+      ],
+      "smoke_verified": true
+    },
+    {
+      "id": "micro.terasort",
+      "classification": "rdd",
+      "implementation": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaTeraSort.scala",
+      "sha256": "c605fca0dcd8220c4c7ef5cdecd965298e5337128fbcfd3989f8c9a718ae2fb7",
+      "detail": "RDD sorting and custom range partitioner; Hadoop Tera formats",
+      "next_step": "Preserve legacy benchmark or define a new SQL sort with an explicit format contract",
+      "evidence": [
+        {
+          "line": 24,
+          "text": "import org.apache.spark.rdd._"
+        },
+        {
+          "line": 44,
+          "text": "val sc = new SparkContext(sparkConf)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "micro.sleep",
+      "classification": "rdd",
+      "implementation": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaSleep.scala",
+      "sha256": "c70b3f01def1850d760f4fe6cbc41776e907c26c722f716a4f50c1be594ab06d",
+      "detail": "SparkContext parallelize/map sleeping tasks",
+      "next_step": "Define scheduling benchmark semantics before replacing tasks with SQL",
+      "evidence": [
+        {
+          "line": 20,
+          "text": "import org.apache.spark.{SparkConf, SparkContext}"
+        },
+        {
+          "line": 31,
+          "text": "val sc = new SparkContext(sparkConf)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "sql.scan",
+      "classification": "sql",
+      "implementation": "sparkbench/sql/src/main/scala/com/intel/hibench/sparkbench/sql/ScalaSparkSQLBench.scala",
+      "sha256": "d1e2efe227bd8779db2c9f9e6b9691667f8514fc0ababc50450353bb343fd0fe",
+      "detail": "SparkSession SQL; Hive/SequenceFile tables and distributed SQL script",
+      "next_step": "Modernize table/storage/catalog contract; no explicit RDD algorithm",
+      "evidence": [
+        {
+          "line": 25,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 54,
+          "text": ".foreach(spark.sql)"
+        }
+      ],
+      "smoke_verified": true
+    },
+    {
+      "id": "sql.aggregation",
+      "classification": "sql",
+      "implementation": "sparkbench/sql/src/main/scala/com/intel/hibench/sparkbench/sql/ScalaSparkSQLBench.scala",
+      "sha256": "d1e2efe227bd8779db2c9f9e6b9691667f8514fc0ababc50450353bb343fd0fe",
+      "detail": "SparkSession SQL; shared SQL launcher",
+      "next_step": "Same catalog/storage migration; runtime validation pending",
+      "evidence": [
+        {
+          "line": 25,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 54,
+          "text": ".foreach(spark.sql)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "sql.join",
+      "classification": "sql",
+      "implementation": "sparkbench/sql/src/main/scala/com/intel/hibench/sparkbench/sql/ScalaSparkSQLBench.scala",
+      "sha256": "d1e2efe227bd8779db2c9f9e6b9691667f8514fc0ababc50450353bb343fd0fe",
+      "detail": "SparkSession SQL; shared SQL launcher",
+      "next_step": "Same catalog/storage migration; runtime validation pending",
+      "evidence": [
+        {
+          "line": 25,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 54,
+          "text": ".foreach(spark.sql)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "websearch.pagerank",
+      "classification": "rdd",
+      "implementation": "sparkbench/websearch/src/main/scala/org/apache/spark/examples/SparkPageRank.scala",
+      "sha256": "9968970d59ac792c08aeb5c08a70db6a0b301794dbb5b62bd7994a0516e56f41",
+      "detail": "Iterative RDD joins/reductions; cache",
+      "next_step": "Choose DataFrame joins or a separately versioned graph implementation",
+      "evidence": [
+        {
+          "line": 28,
+          "text": "import org.apache.spark.SparkContext._"
+        },
+        {
+          "line": 29,
+          "text": "import org.apache.spark.{SparkConf, SparkContext}"
+        },
+        {
+          "line": 50,
+          "text": "val ctx = new SparkContext(sparkConf)"
+        },
+        {
+          "line": 58,
+          "text": "}.distinct().groupByKey().cache()"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.bayes",
+      "classification": "dataframe",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/NaiveBayesExample.scala",
+      "sha256": "add0a8d73a6900d2e72c9d85a079a35d5d87ec94e6e1796285ca5f53e8c7656d",
+      "detail": "spark.ml NaiveBayes and evaluator; reads Parquet",
+      "next_step": "Already DataFrame throughout the benchmark; validate metrics and runtime",
+      "evidence": [
+        {
+          "line": 23,
+          "text": "import org.apache.spark.ml.classification.NaiveBayes"
+        },
+        {
+          "line": 24,
+          "text": "import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator"
+        },
+        {
+          "line": 25,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 61,
+          "text": "val df = spark.read.parquet(params.input)"
+        },
+        {
+          "line": 67,
+          "text": "val model = new NaiveBayes().fit(trainingData)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.kmeans",
+      "classification": "hybrid",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/DenseKMeans.scala",
+      "sha256": "edb536d801b653857cf4abb6de813be3812d4b835873c9fc0497e64e727c8ede",
+      "detail": "spark.ml KMeans; sequenceFile and Mahout VectorWritable input",
+      "next_step": "Replace benchmark reader with features Parquet; remove Mahout from benchmark module",
+      "evidence": [
+        {
+          "line": 21,
+          "text": "import org.apache.mahout.math.VectorWritable"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.ml.clustering.KMeans"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.ml.linalg.Vectors"
+        },
+        {
+          "line": 24,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 83,
+          "text": "val sc = spark.sparkContext"
+        },
+        {
+          "line": 87,
+          "text": "val data = sc.sequenceFile[LongWritable, VectorWritable](params.input)"
+        },
+        {
+          "line": 114,
+          "text": ".fit(examples)"
+        }
+      ],
+      "smoke_verified": true
+    },
+    {
+      "id": "ml.gmm",
+      "classification": "hybrid",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/GaussianMixtureModel.scala",
+      "sha256": "ed22e19ecfdf455084223cd5897b3665d9f32424a6b00fb184445f805dac8795",
+      "detail": "spark.ml GaussianMixture; sequenceFile and Mahout VectorWritable",
+      "next_step": "Replace benchmark reader with features Parquet; remove Mahout",
+      "evidence": [
+        {
+          "line": 21,
+          "text": "import org.apache.mahout.math.VectorWritable"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.ml.clustering.GaussianMixture"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.ml.linalg.Vectors"
+        },
+        {
+          "line": 24,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 69,
+          "text": "val sc = spark.sparkContext"
+        },
+        {
+          "line": 76,
+          "text": "val data = sc.sequenceFile[LongWritable, VectorWritable](params.input)"
+        },
+        {
+          "line": 97,
+          "text": "val model = gmm.fit(examples)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.als",
+      "classification": "hybrid",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/ALSExample.scala",
+      "sha256": "6b6276b977862fd1b86875a5856f3246c784913ad1e06e7b1e86aeb70a26bff3",
+      "detail": "spark.ml ALS; objectFile of Rating followed by toDF",
+      "next_step": "Read typed user/item/rating columns; no objectFile",
+      "evidence": [
+        {
+          "line": 20,
+          "text": "import org.apache.spark.ml.evaluation.RegressionEvaluator"
+        },
+        {
+          "line": 21,
+          "text": "import org.apache.spark.ml.recommendation.ALS"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.ml.recommendation.ALS.Rating"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 76,
+          "text": "val sc = spark.sparkContext"
+        },
+        {
+          "line": 80,
+          "text": "val ratings = sc.objectFile[Rating[Int]](params.dataPath).toDF()"
+        },
+        {
+          "line": 95,
+          "text": "val model = als.fit(training)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.pca",
+      "classification": "hybrid",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/PCAExample.scala",
+      "sha256": "8a4a3c573a13574631df41b50bf3fb02298c0fe1a67fde5a7c52b1f3bd1c97f8",
+      "detail": "spark.ml PCA; objectFile of spark.ml LabeledPoint",
+      "next_step": "Read features via DataFrame; remove RDD loading",
+      "evidence": [
+        {
+          "line": 20,
+          "text": "import org.apache.spark.ml.feature.{LabeledPoint, PCA}"
+        },
+        {
+          "line": 21,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 62,
+          "text": "val data: RDD[LabeledPoint] = spark.sparkContext.objectFile(params.dataPath)"
+        },
+        {
+          "line": 71,
+          "text": ".fit(df)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.linear",
+      "classification": "hybrid",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/LinearRegressionWithElasticNet.scala",
+      "sha256": "783320ac59cab5a71432854b060af0ff82f59485b5df1c352fd8c80b0395cdde",
+      "detail": "spark.ml LinearRegression; objectFile of spark.ml LabeledPoint",
+      "next_step": "Read features/label DataFrame; remove RDD loading",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "import org.apache.spark.ml.feature.LabeledPoint"
+        },
+        {
+          "line": 4,
+          "text": "import org.apache.spark.ml.linalg.Vector"
+        },
+        {
+          "line": 5,
+          "text": "import org.apache.spark.ml.regression.LinearRegression"
+        },
+        {
+          "line": 6,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 7,
+          "text": "import org.apache.spark.sql.{DataFrame, SparkSession}"
+        },
+        {
+          "line": 80,
+          "text": "val lrModel = lr.fit(training)"
+        },
+        {
+          "line": 104,
+          "text": "val data: RDD[LabeledPoint] = spark.sparkContext.objectFile(input)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.correlation",
+      "classification": "hybrid",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/CorrelationExample.scala",
+      "sha256": "a47601ba2b36a41d50785974fa313eb35e2630a9dc433ec3ea3f02c1f0812dbd",
+      "detail": "spark.ml.stat.Correlation; objectFile and DataFrame cache",
+      "next_step": "Read features DataFrame; review result collection/cache restrictions separately",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "import org.apache.spark.ml.feature.LabeledPoint"
+        },
+        {
+          "line": 4,
+          "text": "import org.apache.spark.ml.linalg.{Matrix, Vector}"
+        },
+        {
+          "line": 5,
+          "text": "import org.apache.spark.ml.stat.Correlation"
+        },
+        {
+          "line": 6,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 7,
+          "text": "import org.apache.spark.sql.{Row, SparkSession}"
+        },
+        {
+          "line": 44,
+          "text": "val data: RDD[LabeledPoint] = spark.sparkContext.objectFile(params.input)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.lr",
+      "classification": "rdd",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/LogisticRegression.scala",
+      "sha256": "49fd4f414719936f9f6cbf59a9b6f4e4b4027372892ff2f2ee351f4dbc63646c",
+      "detail": "mllib LogisticRegressionWithLBFGS and old LabeledPoint",
+      "next_step": "Migrate to spark.ml LogisticRegression; optimizer/regularization equivalence must be measured",
+      "evidence": [
+        {
+          "line": 20,
+          "text": "import org.apache.spark.mllib.classification.LogisticRegressionWithLBFGS"
+        },
+        {
+          "line": 21,
+          "text": "import org.apache.spark.mllib.regression.LabeledPoint"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.{SparkConf, SparkContext}"
+        },
+        {
+          "line": 36,
+          "text": "val sc = new SparkContext(conf)"
+        },
+        {
+          "line": 40,
+          "text": "val data: RDD[LabeledPoint] = sc.objectFile(inputPath)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.gbt",
+      "classification": "rdd",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/GradientBoostedTree.scala",
+      "sha256": "9b5d7b6c85136585069f92ce9bdf1dfee5cc9b5a726a6befe6b8a30eab0983b6",
+      "detail": "mllib GradientBoostedTrees and BoostingStrategy",
+      "next_step": "Migrate to spark.ml GBTClassifier/GBTRegressor matching actual task",
+      "evidence": [
+        {
+          "line": 20,
+          "text": "import org.apache.spark.{SparkConf, SparkContext}"
+        },
+        {
+          "line": 21,
+          "text": "import org.apache.spark.mllib.tree.GradientBoostedTrees"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.mllib.tree.configuration.BoostingStrategy"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel"
+        },
+        {
+          "line": 24,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 25,
+          "text": "import org.apache.spark.mllib.regression.LabeledPoint"
+        },
+        {
+          "line": 73,
+          "text": "val sc = new SparkContext(conf)"
+        },
+        {
+          "line": 83,
+          "text": "val data: RDD[LabeledPoint] = sc.objectFile(dataPath)"
+        },
+        {
+          "line": 99,
+          "text": "val model = GradientBoostedTrees.train(trainingData, boostingStrategy)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.rf",
+      "classification": "rdd",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/RandomForestClassification.scala",
+      "sha256": "3b03e36eae70234541ec771f98693e24db76cb42c149b5f4a76a9523849d0f2f",
+      "detail": "mllib RandomForest and old LabeledPoint",
+      "next_step": "Migrate to spark.ml RandomForestClassifier; preserve split and feature settings",
+      "evidence": [
+        {
+          "line": 21,
+          "text": "import org.apache.spark.{SparkConf, SparkContext}"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.mllib.tree.RandomForest"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.mllib.tree.model.RandomForestModel"
+        },
+        {
+          "line": 24,
+          "text": "import org.apache.spark.mllib.util.MLUtils"
+        },
+        {
+          "line": 25,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 26,
+          "text": "import org.apache.spark.mllib.regression.LabeledPoint"
+        },
+        {
+          "line": 74,
+          "text": "val sc = new SparkContext(conf)"
+        },
+        {
+          "line": 78,
+          "text": "val data: RDD[LabeledPoint] = sc.objectFile(params.inputPath)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.lda",
+      "classification": "rdd",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/LDAExample.scala",
+      "sha256": "a7d541098fea8452f7254b9817f7513173f15c3a2f8bf9fd0fc9e44f93c55ced",
+      "detail": "mllib LDA and distributed/local models",
+      "next_step": "Migrate to spark.ml LDA with explicit optimizer and model-output semantics",
+      "evidence": [
+        {
+          "line": 20,
+          "text": "import org.apache.spark.{SparkConf, SparkContext}"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.mllib.clustering.{LDA, DistributedLDAModel, LocalLDAModel}"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.mllib.linalg.{Vector, Vectors}"
+        },
+        {
+          "line": 24,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 72,
+          "text": "val sc = new SparkContext(conf)"
+        },
+        {
+          "line": 74,
+          "text": "val corpus: RDD[(Long, Vector)] = sc.objectFile(params.inputPath)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.svm",
+      "classification": "rdd",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/SVMWithSGDExample.scala",
+      "sha256": "388244079d2a6f20cd4a66ec17b5c57d9107a84e7933c9480358bd05cb00b0e9",
+      "detail": "mllib SVMWithSGD and BinaryClassificationMetrics",
+      "next_step": "Evaluate spark.ml LinearSVC; different optimizer, not a drop-in benchmark replacement",
+      "evidence": [
+        {
+          "line": 20,
+          "text": "import org.apache.spark.{SparkConf, SparkContext}"
+        },
+        {
+          "line": 21,
+          "text": "import org.apache.spark.mllib.classification.{SVMModel, SVMWithSGD}"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 24,
+          "text": "import org.apache.spark.mllib.regression.LabeledPoint"
+        },
+        {
+          "line": 70,
+          "text": "val sc = new SparkContext(conf)"
+        },
+        {
+          "line": 78,
+          "text": "val data: RDD[LabeledPoint] = sc.objectFile(dataPath)"
+        },
+        {
+          "line": 86,
+          "text": "val model = SVMWithSGD.train(training, numIterations, stepSize, regParam)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.summarizer",
+      "classification": "rdd",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/SummarizerExample.scala",
+      "sha256": "8ddeb841bb411bd4e805e10ee4ee8ea4b879940effebdce57aa876f4b83cecf6",
+      "detail": "mllib Statistics.colStats on RDD Vector",
+      "next_step": "Migrate to spark.ml.stat.Summarizer and document requested statistics",
+      "evidence": [
+        {
+          "line": 20,
+          "text": "import org.apache.spark.mllib.linalg.Vector"
+        },
+        {
+          "line": 21,
+          "text": "import org.apache.spark.mllib.stat.{MultivariateStatisticalSummary, Statistics}"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.sql.SparkSession"
+        },
+        {
+          "line": 56,
+          "text": "val sc = spark.sparkContext"
+        },
+        {
+          "line": 57,
+          "text": "val training:RDD[Vector] = sc.objectFile(params.input)"
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "ml.svd",
+      "classification": "rdd",
+      "implementation": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/SVDExample.scala",
+      "sha256": "29a4d29e89b0728f9703fd3617edfb43b8e47113fcb44d2426351a7f72fea693",
+      "detail": "mllib RowMatrix.computeSVD",
+      "next_step": "No drop-in DataFrame migration; retain classic-only or design a separate numerical benchmark",
+      "evidence": [
+        {
+          "line": 21,
+          "text": "import org.apache.spark.SparkContext"
+        },
+        {
+          "line": 22,
+          "text": "import org.apache.spark.mllib.linalg.Matrix"
+        },
+        {
+          "line": 23,
+          "text": "import org.apache.spark.mllib.linalg.SingularValueDecomposition"
+        },
+        {
+          "line": 24,
+          "text": "import org.apache.spark.mllib.linalg.Vector"
+        },
+        {
+          "line": 25,
+          "text": "import org.apache.spark.mllib.linalg.distributed.RowMatrix"
+        },
+        {
+          "line": 26,
+          "text": "import org.apache.spark.rdd.RDD"
+        },
+        {
+          "line": 72,
+          "text": "val sc = new SparkContext(conf)"
+        },
+        {
+          "line": 79,
+          "text": "val data: RDD[Vector] = sc.objectFile(dataPath)"
+        },
+        {
+          "line": 80,
+          "text": "val mat: RowMatrix = new RowMatrix(data)"
+        },
+        {
+          "line": 82,
+          "text": "val svd: SingularValueDecomposition[RowMatrix, Matrix] = mat.computeSVD(numSingularValues, computeU)"
+        },
+        {
+          "line": 83,
+          "text": "val U: RowMatrix = svd.U  // The U factor is a RowMatrix."
+        }
+      ],
+      "smoke_verified": false
+    },
+    {
+      "id": "graph.nweight",
+      "classification": "rdd",
+      "implementation": "sparkbench/graph/src/main/scala/com/intel/hibench/sparkbench/graph/nweight/Driver.scala",
+      "sha256": "156470e41f4517820b43da50c32c9e9dafbab94bd0b4a1856bd2c62de29402f9",
+      "detail": "GraphX/Pregel NWeight; GraphImpl implementation APIs and RDD output",
+      "next_step": "Classic graph workload; redesign graph implementation and preserve algorithm semantics",
+      "evidence": [
+        {
+          "line": 20,
+          "text": "import org.apache.spark.{SparkContext, SparkConf}"
+        },
+        {
+          "line": 79,
+          "text": "val sc = new SparkContext(sparkConf)"
+        }
+      ],
+      "smoke_verified": false
+    }
+  ],
+  "additional_sources": [
+    {
+      "id": "ml.xgboost",
+      "detail": "Optional profile; excluded from normal build/catalog. XGBoost 1.0.0, RDD ObjectFile bridge and spark.ml estimator. Upgrade dependency/JNI matrix and reader before enabling."
+    },
+    {
+      "id": "dal.kmeans",
+      "detail": "Outside default build/catalog. Intel DAAL 2019.3.199, Mahout and RDD/mllib. Native legacy workload; retire or isolate as optional."
+    },
+    {
+      "id": "graph.pagerank",
+      "detail": "Launcher and GraphXPageRank source remain outside the controller catalog. SparkContext + GraphX; classic-only."
+    },
+    {
+      "id": "micro.inmemrepartition",
+      "detail": "ScalaInMemRepartition source remains in compiled micro module, without maintained controller entry. MemoryDataRDD/ShuffledRDD/custom internals; classic-only."
+    },
+    {
+      "id": "micro.dfsioe",
+      "detail": "ScalaDFSIOE source remains in compiled micro module, without maintained controller entry. SparkContext and Hadoop Input/OutputFormats; classic-only."
+    }
+  ]
+}

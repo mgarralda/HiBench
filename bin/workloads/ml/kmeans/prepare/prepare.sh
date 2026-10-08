@@ -20,15 +20,14 @@ root_dir=${current_dir}/../../../../../
 workload_config=${root_dir}/conf/workloads/ml/kmeans.conf
 . "${root_dir}/bin/functions/load_bench_config.sh"
 
-enter_bench HadoopPrepareKmeans ${workload_config} ${current_dir}
+enter_bench SparkPrepareKmeans ${workload_config} ${current_dir}
 show_bannar start
 
 rmr_hdfs $INPUT_HDFS || true
 
 START_TIME=`timestamp`
 
-OPTION="-sampleDir ${INPUT_SAMPLE} -clusterDir ${INPUT_CLUSTER} -numClusters ${NUM_OF_CLUSTERS} -numSamples ${NUM_OF_SAMPLES} -samplesPerFile ${SAMPLES_PER_INPUTFILE} -sampleDimension ${DIMENSIONS}"
-run_hadoop_job ${DATATOOLS} org.apache.mahout.clustering.kmeans.GenKMeansDataset -D hadoop.job.history.user.location=${INPUT_SAMPLE} ${OPTION}
+run_spark_job org.hibench.sparkbench.ml.GaussianDataGenerator "$INPUT_SAMPLE" "$INPUT_CLUSTER" "$NUM_OF_SAMPLES" "$NUM_OF_CLUSTERS" "$DIMENSIONS" "$SAMPLES_PER_INPUTFILE" "$NUM_MAPS" "$KMEANS_SEED" "$KMEANS_MEAN_MIN" "$KMEANS_MEAN_MAX" "$KMEANS_STD_MIN" "$KMEANS_STD_MAX"
 END_TIME=`timestamp`
 
 show_bannar finish

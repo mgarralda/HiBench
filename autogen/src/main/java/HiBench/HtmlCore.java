@@ -148,13 +148,6 @@ public class HtmlCore {
 		}
 		return ulen;
 	}
-
-	public void nextUrlJoinBytesInt(JoinBytesInt item) {
-		item.ulen = (byte) nextUrlLength();
-		for (int i=0; i<item.ulen; i++) {
-			item.url[i] = (byte) (randUrl.nextInt(26) + 'a');
-		}
-	}
 	
 	public byte[] nextUrlBytes() {
 		int ulen = nextUrlLength();

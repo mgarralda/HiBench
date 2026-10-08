@@ -17,7 +17,7 @@ public class DataOptions {
 	private static final int NUM_LINUX_DICT_WORD = 479623;
 
 	public static enum DataType {
-		HIVE, PAGERANK, BAYES, NUTCH, NONE
+		PAGERANK, BAYES, NUTCH, NONE
 	}
 	private DataType type;
 
@@ -50,10 +50,7 @@ public class DataOptions {
 		}
 
 		if ("-t".equals(args[0])) {
-			if ("hive".equalsIgnoreCase(args[1])) {
-				type = DataType.HIVE;
-				dname = "hive";
-			} else if ("pagerank".equalsIgnoreCase(args[1])) {
+			if ("pagerank".equalsIgnoreCase(args[1])) {
 				type = DataType.PAGERANK;
 				dname = "pagerank";
 			} else if ("bayes".equalsIgnoreCase(args[1])) {
@@ -105,11 +102,6 @@ public class DataOptions {
 	private void checkOptions() {
 		
 		switch (type) {
-		case HIVE:
-			if (pages<=0) {
-				System.exit(printUsage("Error: pages of hive data should be larger than 0!!!"));
-			}
-			break;
 		case PAGERANK:
 			if (pages<=0) {
 				System.exit(printUsage("Error: pages of pagerank data should be larger than 0!!!"));
@@ -144,11 +136,6 @@ public class DataOptions {
 			System.out.println(msg);
 			System.out.println();
 		}
-		
-		System.out.println("generate -t hive -p <pages> -v <visits> "
-				+ "[-b <base path>] [-n <data name>] "
-				+ "[-m <num maps>] [-r <num reduces>] "
-				+ "[-o sequence] [-c <codec>] [-d <delimiter>]");
 		
 		System.out.println("generate -t pagerank -p <pages> "
 				+ "[-b <base path>] [-n <data name>] "

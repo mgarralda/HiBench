@@ -1,0 +1,157 @@
+{
+  "run_id": "f899ff8d-fd8d-4e46-b140-dcd5bc94672a",
+  "state": "succeeded",
+  "spec": {
+    "mode": "prepare_and_run",
+    "name": "text-micro-v1-validation",
+    "repetitions": 1,
+    "resources": {
+      "driver_memory": "1g",
+      "executor_cores": 1,
+      "executor_instances": 1,
+      "executor_memory": "1g",
+      "map_partitions": 2,
+      "shuffle_partitions": 2
+    },
+    "scale": "tiny",
+    "schema_version": 1,
+    "spark_conf": {
+      "spark.dynamicAllocation.enabled": false,
+      "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+      "spark.sql.adaptive.enabled": false,
+      "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+    },
+    "target": {
+      "container": "spark-cluster-master",
+      "deploy_mode": "client",
+      "hadoop_home": "/home/sparker/hadoop-3.3.6",
+      "hdfs_uri": "hdfs://spark-cluster-master:9000",
+      "kind": "docker",
+      "master": "yarn",
+      "spark_home": "/usr/local/spark",
+      "workers": [
+        "spark-cluster-slave-1",
+        "spark-cluster-slave-2",
+        "spark-cluster-slave-3"
+      ],
+      "workspace": "/home/sparker/HiBench"
+    },
+    "timeout_s": 1800,
+    "workloads": [
+      {
+        "id": "micro.wordcount",
+        "parameters": {
+          "datasize": 32000,
+          "seed": 43
+        }
+      },
+      {
+        "id": "micro.sort",
+        "parameters": {
+          "datasize": 32000,
+          "seed": 44
+        }
+      }
+    ]
+  },
+  "generator": "randomtextwriter-compatible-v2",
+  "python_tests": 19,
+  "java_tests": 2,
+  "applications": [
+    {
+      "at": 1791392004.7137277,
+      "kind": "application",
+      "id": "application_1791359074600_0038",
+      "status": "2026-10-07 16:53:24,280 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 16:53:24,532 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 16:53:24,532 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0038\n\tApplication-Name : HiBench RandomTextWriter-compatible generator v2\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791391975996\n\tFinish-Time : 1791392001908\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0038/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.11\n\tAggregate Resource Allocation : 69391 MB-seconds, 45 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : SUCCEEDED\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+    },
+    {
+      "at": 1791392039.787692,
+      "kind": "application",
+      "id": "application_1791359074600_0039",
+      "status": "2026-10-07 16:53:58,916 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 16:53:59,595 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 16:53:59,595 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0039\n\tApplication-Name : ScalaWordCount\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791392022224\n\tFinish-Time : 1791392037275\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0039/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.13\n\tAggregate Resource Allocation : 36962 MB-seconds, 25 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+    },
+    {
+      "at": 1791392066.1906984,
+      "kind": "application",
+      "id": "application_1791359074600_0040",
+      "status": "2026-10-07 16:54:25,182 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 16:54:25,896 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 16:54:25,896 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0040\n\tApplication-Name : HiBench RandomTextWriter-compatible generator v2\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791392052132\n\tFinish-Time : 1791392063195\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0040/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.12\n\tAggregate Resource Allocation : 28024 MB-seconds, 18 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : SUCCEEDED\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+    },
+    {
+      "at": 1791392098.6829584,
+      "kind": "application",
+      "id": "application_1791359074600_0041",
+      "status": "2026-10-07 16:54:58,174 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 16:54:58,501 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 16:54:58,501 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0041\n\tApplication-Name : ScalaSort\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791392083319\n\tFinish-Time : 1791392096655\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0041/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.12\n\tAggregate Resource Allocation : 33141 MB-seconds, 22 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : RUNNING\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+    }
+  ],
+  "metrics": [
+    {
+      "application_id": "application_1791359074600_0039",
+      "duration_s": 22.467,
+      "finished_at_ms": 1791392037309,
+      "input_bytes": 33674,
+      "run_id": "f899ff8d-fd8d-4e46-b140-dcd5bc94672a",
+      "scale": "tiny",
+      "schema_version": 2,
+      "started_at_ms": 1791392014842,
+      "throughput_bytes_s": 1498.8204922775628,
+      "workload": "ScalaSparkWordcount"
+    },
+    {
+      "application_id": "application_1791359074600_0041",
+      "duration_s": 20.489,
+      "finished_at_ms": 1791392096699,
+      "input_bytes": 33065,
+      "run_id": "f899ff8d-fd8d-4e46-b140-dcd5bc94672a",
+      "scale": "tiny",
+      "schema_version": 2,
+      "started_at_ms": 1791392076210,
+      "throughput_bytes_s": 1613.7927668505051,
+      "workload": "ScalaSparkSort"
+    }
+  ],
+  "original_reference": "hdfs://spark-cluster-master:9000/HiBench-Control/reference/randomtextwriter-500a626071ac46778a3fab77438df6e4",
+  "profile_comparison": {
+    "original": {
+      "logical_bytes": 32425,
+      "physical_bytes": 32517,
+      "records": 46,
+      "words": 3042,
+      "vocabulary_seen": 957,
+      "partitions": 2
+    },
+    "wordcount": {
+      "logical_bytes": 33564,
+      "physical_bytes": 33674,
+      "records": 55,
+      "words": 3161,
+      "vocabulary_seen": 960,
+      "partitions": 2
+    },
+    "sort": {
+      "logical_bytes": 32955,
+      "physical_bytes": 33065,
+      "records": 55,
+      "words": 3106,
+      "vocabulary_seen": 948,
+      "partitions": 2
+    }
+  },
+  "correctness": {
+    "wordcount": true,
+    "sort": true,
+    "words": 3161,
+    "sort_rows": 55
+  },
+  "mapper_reference_checks": [
+    "HIBENCH_ORIGINAL_MATCH bytes=32000 partitions=2 seed=42 records=50",
+    "HIBENCH_ORIGINAL_MATCH bytes=320000 partitions=4 seed=43 records=491",
+    "HIBENCH_ORIGINAL_MATCH bytes=257 partitions=2 seed=44 records=2",
+    "HIBENCH_ORIGINAL_MATCH bytes=2 partitions=2 seed=42 records=2"
+  ],
+  "artifact_sha256": "8e86f4c9787c09a5b82d7ee3285725acae6953927c0397238db6c1093747f962",
+  "limits": [
+    "Small-data/reference checks, not scalability certification",
+    "Text storage differs from historical SequenceFile container",
+    "Original seed was nondeterministic; replacement seed is explicit"
+  ]
+}

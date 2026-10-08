@@ -20,18 +20,14 @@ root_dir=${current_dir}/../../../../../
 workload_config=${root_dir}/conf/workloads/micro/sort.conf
 . "${root_dir}/bin/functions/load_bench_config.sh"
 
-enter_bench HadoopPrepareSort ${workload_config} ${current_dir}
+enter_bench SparkPrepareSort ${workload_config} ${current_dir}
 show_bannar start
 
 rmr_hdfs $INPUT_HDFS || true
 START_TIME=`timestamp`
 
-run_hadoop_job ${HADOOP_EXAMPLES_JAR} randomtextwriter \
-    -D mapreduce.randomtextwriter.totalbytes=${DATASIZE} \
-    -D mapreduce.randomtextwriter.bytespermap=$(( ${DATASIZE} / ${NUM_MAPS} )) \
-    -D mapreduce.job.maps=${NUM_MAPS} \
-    -D mapreduce.job.reduces=${NUM_REDS} \
-    ${INPUT_HDFS}
+SEED="${TEXT_SEED:-42}"
+run_spark_job org.hibench.sparkbench.micro.TextDataGenerator "$INPUT_HDFS" "$DATASIZE" "$NUM_MAPS" "$SEED"
 END_TIME=`timestamp`
 show_bannar finish
 leave_bench

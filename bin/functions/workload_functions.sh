@@ -15,6 +15,8 @@
 # limitations under the License.
 
 set -u
+export HIBENCH_PYTHON=${HIBENCH_PYTHON:-python3}
+export HIBENCH_MONITOR_ENABLED=${HIBENCH_MONITOR_ENABLED:-0}
 
 export HIBENCH_PRINTFULLLOG=0
 this="${BASH_SOURCE-$0}"
@@ -34,8 +36,10 @@ function enter_bench(){		# declare the entrance of a workload
     shift 3
     patching_args=$@
     echo "patching args=$patching_args"
-    local CONF_FILE=`${workload_func_bin}/load_config.py ${HIBENCH_CONF_FOLDER} $workload_config_file $workload_folder $patching_args`
-    . $CONF_FILE
+    local CONF_FILE
+    CONF_FILE=$("$HIBENCH_PYTHON" "${workload_func_bin}/load_config.py" "$HIBENCH_CONF_FOLDER" "$workload_config_file" "$workload_folder" "$patching_args") || return $?
+    . "$CONF_FILE"
+    echo "HIBENCH_INPUT_PATH=$INPUT_HDFS"
 }
 
 function leave_bench(){		# declare the workload is finished
@@ -61,85 +65,30 @@ function timestamp(){		# get current timestamp
     echo `expr $tmp + $msec`
 }
 
-function start_monitor(){
-    MONITOR_PID=`${workload_func_bin}/monitor.py ${HIBENCH_CUR_WORKLOAD_NAME} $$ ${WORKLOAD_RESULT_FOLDER}/monitor.log ${WORKLOAD_RESULT_FOLDER}/bench.log ${WORKLOAD_RESULT_FOLDER}/monitor.html ${SLAVES} &`
-#    echo "start monitor, got child pid:${MONITOR_PID}" > /dev/stderr
-    echo ${MONITOR_PID}
+function start_monitor() {
+    if [[ "$HIBENCH_MONITOR_ENABLED" == 1 ]]; then
+        "$HIBENCH_PYTHON" "${workload_func_bin}/monitor.py" "$HIBENCH_CUR_WORKLOAD_NAME" "$$" "${WORKLOAD_RESULT_FOLDER}/monitor.log" "${WORKLOAD_RESULT_FOLDER}/bench.log" "${WORKLOAD_RESULT_FOLDER}/monitor.html" ${SLAVES}
+    fi
+    return 0
 }
 
-function stop_monitor(){
-    MONITOR_PID=$1
-    assert $1 "monitor pid missing"
-#    echo "stop monitor, kill ${MONITOR_PID}" > /dev/stderr
-    kill ${MONITOR_PID}
+function stop_monitor() {
+    if [[ -n "${1:-}" ]]; then kill "$1" 2>/dev/null || true; fi
 }
 
 function get_field_name() {	# print report column header
     printf "${REPORT_COLUMN_FORMATS}" App_id Workload Scale Date Time Input_data_size "Duration(s)" "Throughput(bytes/s)" Throughput/node
 }
 
-function gen_report() {  # Dump the result to report file
-    assert "${HIBENCH_CUR_WORKLOAD_NAME:-}" "HIBENCH_CUR_WORKLOAD_NAME not specified."
-    assert "${APPLICATION_ID:-}" "APPLICATION_ID not specified."
-    assert "${HIBENCH_REPORT:-}" "HIBENCH_REPORT directory not specified."
-    assert "${HIBENCH_REPORT_NAME:-}" "HIBENCH_REPORT_NAME not specified."
-    assert "${HIBENCH_WORKLOAD_CONF:-}" "HIBENCH_WORKLOAD_CONF not specified."
-    assert "${REPORT_COLUMN_FORMATS:-}" "REPORT_COLUMN_FORMATS format string missing."
-
-    local start=$1
-    local end=$2
-    local size=$3
-
-    # Validate numeric input
-    if ! [[ "$start" =~ ^[0-9]+$ && "$end" =~ ^[0-9]+$ && "$size" =~ ^[0-9]+$ ]]; then
-        echo "Invalid input: start=$start, end=$end, size=$size" >&2
-        return 1
-    fi
-
-    # Check bc utility
-    if ! command -v bc > /dev/null 2>&1; then
-        echo "\"bc\" utility missing. Please install it to generate proper report." >&2
-        return 1
-    fi
-
-    local duration=$(echo "scale=3; ($end - $start)/1000" | bc)
-    local tput=$(echo "$size / $duration" | bc)
-
-    local nodes=$(echo "${SLAVES:-}" | wc -w)
-    nodes=${nodes:-1}
-    if [ "$nodes" -eq 0 ]; then nodes=1; fi
-
-    local tput_node=$(echo "$tput / $nodes" | bc)
-
-    # Ensure report file exists
-    local report_file="${HIBENCH_REPORT}/${HIBENCH_REPORT_NAME}"
-    REPORT_TITLE=$(get_field_name)
-    if [ ! -f "$report_file" ]; then
-        echo "$REPORT_TITLE" > "$report_file"
-    fi
-
-    # Format line
-    REPORT_LINE=$(printf "${REPORT_COLUMN_FORMATS}" \
-        "$APPLICATION_ID" \
-        "$HIBENCH_CUR_WORKLOAD_NAME" \
-        "$SCALE_PROFILE" \
-        "$(date +%F)" \
-        "$(date +%T)" \
-        "$size" \
-        "$duration" \
-        "$tput" \
-        "$tput_node")
-
-    echo "$REPORT_LINE" >> "$report_file"
-    echo "# $REPORT_TITLE" >> "$HIBENCH_WORKLOAD_CONF"
-    echo "# $REPORT_LINE" >> "$HIBENCH_WORKLOAD_CONF"
-
-    echo "Report saved to: $report_file"
+function gen_report() {
+    "$HIBENCH_PYTHON" "${workload_func_bin}/write_report.py" \
+      "${HIBENCH_REPORT}/${HIBENCH_REPORT_NAME}" "$HIBENCH_CUR_WORKLOAD_NAME" \
+      "$SCALE_PROFILE" "$1" "$2" "$3" "${APPLICATION_ID:-}" "${HIBENCH_RUN_ID:-}"
 }
 
 function rmr_hdfs(){		# rm -r for hdfs
     assert $1 "dir parameter missing"
-    RMDIR_CMD="fs -rm -r -skipTrash"
+    RMDIR_CMD="fs -rm -r -f -skipTrash"
     local CMD="$HADOOP_EXECUTABLE --config $HADOOP_CONF_DIR $RMDIR_CMD $1"
     echo -e "${BCyan}hdfs rm -r: ${Cyan}${CMD}${Color_Off}" 1>&2
     execute_withlog ${CMD}
@@ -151,29 +100,12 @@ function check_input_data_path(){
     # Check if the path exists
     local CHECK_CMD="$HADOOP_EXECUTABLE --config $HADOOP_CONF_DIR fs -test -e $INPUT_DATA_PATH"
     echo -e "${BCyan}Checking if input data path exists: ${Cyan}${CHECK_CMD}${Color_Off}" 1>&2
-    execute_withlog "${CHECK_CMD}" || {
+    execute_withlog ${CHECK_CMD} || {
         echo -e "${BRed}ERROR: Input data does not exist for this workload: $INPUT_DATA_PATH${Color_Off}"
         exit 1
     }
 }
 
-function grant_hive_permissions_wasbs() {
-    assert $1 "WASBS path parameter missing"
-    local WASBS_PATH="$1"
-
-    # Extract the workload-level path: e.g., from /hdp/HiBench/Aggregation/Input/tiny → /hdp/HiBench/Aggregation
-    local TARGET_PATH=$(dirname "$(dirname "$WASBS_PATH")")
-
-    local CURRENT_USER="${SUDO_USER:-$USER}"
-
-    local CHMOD_CMD="sudo -u $CURRENT_USER $HADOOP_EXECUTABLE --config $HADOOP_CONF_DIR fs -chmod -R 777 $TARGET_PATH"
-    echo -e "${BCyan}Setting world-writable permissions: ${Cyan}${CHMOD_CMD}${Color_Off}" 1>&2
-    execute_withlog "${CHMOD_CMD}"
-
-#    local CHOWN_CMD="sudo -u $CURRENT_USER $HADOOP_EXECUTABLE --config $HADOOP_CONF_DIR fs -chown -R hive:supergroup $TARGET_PATH"
-#    echo -e "${BCyan}Changing owner to hive: ${Cyan}${CHOWN_CMD}${Color_Off}" 1>&2
-#    execute_withlog "${CHOWN_CMD}"
-}
 
 function upload_to_hdfs(){
     assert $1 "local parameter missing"
@@ -232,12 +164,8 @@ function check_dir() {                # ensure dir is created
     fi
 }
 
-function dir_size() {                
-    for item in $(dus_hdfs $1); do
-        if [[ $item =~ ^[0-9]+$ ]]; then
-            echo $item
-        fi
-    done
+function dir_size() {
+    "$HADOOP_EXECUTABLE" --config "$HADOOP_CONF_DIR" fs -du -s "$1" | awk 'NR==1 {print $1}'
 }
 
 function run_spark_job() {
@@ -256,18 +184,12 @@ function run_spark_job() {
     ARGS=${3:-""} # default to empty string if not provided
     shift
 
-    # To compatibility SQL workload with yarn-cluster mode
-    HIVEBENCH_SQL_FILE=""
-    if [[ "$CLS" == "com.intel.hibench.sparkbench.sql.ScalaSparkSQLBench" ]]; then
-        HIVEBENCH_SQL_FILE="$ARGS"
-    fi
-
     export_withlog SPARKBENCH_PROPERTIES_FILES
 
     YARN_OPTS=""
     if [[ "$SPARK_MASTER" == yarn-* ]] || [[ "$SPARK_MASTER" == yarn ]]; then
         export_withlog HADOOP_CONF_DIR
-        
+
         YARN_OPTS="--num-executors ${YARN_NUM_EXECUTORS}"
         if [[ -n "${YARN_EXECUTOR_CORES:-}" ]]; then
             YARN_OPTS="${YARN_OPTS} --executor-cores ${YARN_EXECUTOR_CORES}"
@@ -291,19 +213,8 @@ function run_spark_job() {
     FILES="$SPARKBENCH_PROPERTIES_FILES"
     FINAL_ARGS="$@"
 
-    # Custom Compose --files according to the deploy mode for running SQL workloads
-    if [[ -n "$HIVEBENCH_SQL_FILE" ]]; then
-        if [[ "$SPARK_YARN_DEPLOY_MODE" == "cluster" ]]; then
-          FILES="${FILES},${HIVEBENCH_SQL_FILE}"
-          HIVEBENCH_SQL_BASENAME=$(basename "$HIVEBENCH_SQL_FILE")
-          FINAL_ARGS="$WORKLOAD $HIVEBENCH_SQL_BASENAME"
-        else
-          FINAL_ARGS="$WORKLOAD $HIVEBENCH_SQL_FILE"
-        fi
-    fi
-
     # Custom Compose --files according to the deploy mode for NWeight DataGenerator workload
-    if [[ "$CLS" == "com.intel.hibench.sparkbench.graph.nweight.NWeightDataGenerator" ]]; then
+    if [[ "$CLS" == "org.hibench.sparkbench.graph.nweight.NWeightDataGenerator" ]]; then
         if [[ "$SPARK_YARN_DEPLOY_MODE" == "cluster" ]]; then
           FILES="${FILES},${WORKLOAD}"
           WORKLOAD_BASENAME=$(basename "$WORKLOAD")
@@ -328,7 +239,7 @@ function run_spark_job() {
 #  --files /home/sparker/shared/HiBench2/report/correlation/spark/conf/sparkbench/sparkbench.conf \
 #  --properties-file /home/sparker/shared/HiBench2/report/correlation/spark/conf/sparkbench/spark.conf \
 #  --conf spark.executorEnv.SPARKBENCH_PROPERTIES_FILES=sparkbench.conf \
-#  --class com.intel.hibench.sparkbench.ml.CorrelationExample \
+#  --class org.hibench.sparkbench.ml.CorrelationExample \
 #  /home/sparker/shared/HiBench2/sparkbench/assembly/target/sparkbench-assembly-8.0-SNAPSHOT-dist.jar \
 #  --corrType pearson \
 #  hdfs://172.18.0.20:9000/HiBench/Correlation/Input/tiny
@@ -343,8 +254,9 @@ function run_spark_job() {
     if [[ "$CLS" == *.py ]]; then
         LIB_JARS="$LIB_JARS --jars ${SPARKBENCH_JAR}"
         SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} \
-          --files ${FILES} \ \
+          --files ${FILES} \
           --properties-file ${SPARK_PROP_CONF} \
+          --conf spark.extraListeners=org.hibench.sparkbench.common.BenchmarkListener \
           --conf spark.executorEnv.SPARKBENCH_PROPERTIES_FILES=${SPARKBENCH_BASENAME} \
           --conf spark.yarn.appMasterEnv.SPARKBENCH_PROPERTIES_FILES=${SPARKBENCH_BASENAME} \
           --master ${SPARK_MASTER} ${YARN_OPTS} ${CLS} ${FINAL_ARGS}"
@@ -352,6 +264,7 @@ function run_spark_job() {
         SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} \
           --files ${FILES} \
           --properties-file ${SPARK_PROP_CONF} \
+          --conf spark.extraListeners=org.hibench.sparkbench.common.BenchmarkListener \
           --conf spark.executorEnv.SPARKBENCH_PROPERTIES_FILES=${SPARKBENCH_BASENAME} \
           --conf spark.yarn.appMasterEnv.SPARKBENCH_PROPERTIES_FILES=${SPARKBENCH_BASENAME} \
           --class ${CLS} \
@@ -365,23 +278,8 @@ function run_spark_job() {
     execute_withlog ${SUBMIT_CMD}
     result=$?
 
-    if [ -f /home/sparker/application_id.txt ]; then
-        APPLICATION_ID=$(cat /home/sparker/application_id.txt)
-        # Export it for global use
-        export APPLICATION_ID
-        echo "Extracted application ID: $APPLICATION_ID"
-    fi
-
-#    # Capture output
-#    EXEC_OUTPUT=$(execute_withlog ${SUBMIT_CMD})
-#    result=$?
-#
-#    # Extract application ID from the output
-#    APPLICATION_ID=$(echo "$EXEC_OUTPUT" | grep -oE 'application_[0-9]+_[0-9]+' | tail -1)
-#
-#    # Export it for global use
-#    export APPLICATION_ID
-#    echo "application_id ${APPLICATION_ID}"
+    APPLICATION_ID=$("$HIBENCH_PYTHON" -c 'import json,sys; print(json.load(open(sys.argv[1])).get("application_id") or "")' "${WORKLOAD_RESULT_FOLDER}/bench.log.execution.json")
+    export APPLICATION_ID
 
     stop_monitor ${MONITOR_PID}
 
@@ -392,24 +290,6 @@ function run_spark_job() {
         tail ${WORKLOAD_RESULT_FOLDER}/bench.log
         exit $result
     fi
-}
-
-function run_storm_job(){
-    CMD="${STORM_HOME}/bin/storm jar ${STREAMBENCH_STORM_JAR} $@"
-    echo -e "${BGreen}Submit Storm Job: ${Green}$CMD${Color_Off}"
-    execute_withlog $CMD
-}
-
-function run_gearpump_app(){
-    CMD="${GEARPUMP_HOME}/bin/gear app -executors ${STREAMBENCH_GEARPUMP_EXECUTORS} -jar ${STREAMBENCH_GEARPUMP_JAR} $@"
-    echo -e "${BGreen}Submit Gearpump Application: ${Green}$CMD${Color_Off}"
-    execute_withlog $CMD
-}
-
-function run_flink_job(){
-    CMD="${FLINK_HOME}/bin/flink run -p ${STREAMBENCH_FLINK_PARALLELISM} -m ${HIBENCH_FLINK_MASTER} $@ ${STREAMBENCH_FLINK_JAR} ${SPARKBENCH_PROPERTIES_FILES}"
-    echo -e "${BGreen}Submit Flink Job: ${Green}$CMD${Color_Off}"
-    execute_withlog $CMD
 }
 
 function run_hadoop_job(){
@@ -423,7 +303,9 @@ function run_hadoop_job(){
     local job_name=$1
     shift
     local tail_arguments=$@
-    local CMD="${HADOOP_EXECUTABLE} --config ${HADOOP_CONF_DIR} jar $job_jar $job_name $tail_arguments"
+    local TAG_OPTS=""
+    if [[ -n "${HIBENCH_RUN_ID:-}" ]]; then TAG_OPTS="-D mapreduce.job.tags=hibench-${HIBENCH_RUN_ID}"; fi
+    local CMD="${HADOOP_EXECUTABLE} --config ${HADOOP_CONF_DIR} jar $job_jar $job_name $TAG_OPTS $tail_arguments"
     echo -e "${BGreen}Submit MapReduce Job: ${Green}$CMD${Color_Off}"
     if [ ${ENABLE_MONITOR} = 1 ]; then
         MONITOR_PID=`start_monitor`
@@ -438,22 +320,10 @@ function run_hadoop_job(){
         echo -e "${BBlue}Hint${Color_Off}: You can goto ${BYellow}${WORKLOAD_RESULT_FOLDER}/bench.log${Color_Off} to check for detailed log.\nOpening log tail for you:\n"
         tail ${WORKLOAD_RESULT_FOLDER}/bench.log
         # commented to avoid exit and continuous the processing
-        # exit $result
+        return $result
     fi
 }
 
-function ensure_hivebench_release(){
-    if [ ! -e ${HIBENCH_HOME}"/hadoopbench/sql/target/"$HIVE_RELEASE".tar.gz" ]; then
-        assert 0 "Error: The hive bin file hasn't be downloaded by maven, please check!"
-        exit
-    fi
-
-    cd ${HIBENCH_HOME}"/hadoopbench/sql/target"
-    if [ ! -d $HIVE_HOME ]; then
-        tar zxf $HIVE_RELEASE".tar.gz"
-    fi
-    export_withlog HADOOP_EXECUTABLE
-}
 
 function ensure_mahout_release (){
     if [ ! -e ${HIBENCH_HOME}"/hadoopbench/mahout/target/"$MAHOUT_RELEASE".tar.gz" ]; then
@@ -467,7 +337,7 @@ function ensure_mahout_release (){
     fi
     export_withlog HADOOP_EXECUTABLE
     export_withlog HADOOP_HOME
-    export_withlog HADOOP_CONF_DIR    
+    export_withlog HADOOP_CONF_DIR
 }
 
 function execute () {
@@ -481,12 +351,7 @@ function printFullLog(){
 }
 
 function execute_withlog () {
-    CMD="$@"
-    if [ -t 1 ] ; then          # Terminal, beautify the output.
-        ${workload_func_bin}/execute_with_log.py ${WORKLOAD_RESULT_FOLDER}/bench.log $CMD
-    else                        # pipe, do nothing.
-        $CMD
-    fi
+    "$HIBENCH_PYTHON" "${workload_func_bin}/execute_with_log.py" "${WORKLOAD_RESULT_FOLDER}/bench.log" "$@"
 }
 
 function export_withlog () {
@@ -499,12 +364,12 @@ function export_withlog () {
 
 function command_exist () {
     result=$(which $1)
-    if [ $? -eq 0 ] 
+    if [ $? -eq 0 ]
     then
         return 0
     else
         return 1
-    fi  
+    fi
 }
 
 function ensure_nutchindexing_release () {
@@ -539,72 +404,4 @@ function ensure_nutchindexing_release () {
     rm -rf $NUTCH_HOME_WORKLOAD/temp
 
     echo $NUTCH_HOME_WORKLOAD
-}
-
-function prepare_sql_aggregation () {
-    assert $1 "SQL file path not exist"
-    HIVEBENCH_SQL_FILE=$1
-
-    find . -name "metastore_db" -exec rm -rf "{}" \; 2>/dev/null
-
-    cat <<EOF > ${HIVEBENCH_SQL_FILE}
-USE DEFAULT;
-set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
-set ${MAP_CONFIG_NAME}=$NUM_MAPS;
-set ${REDUCER_CONFIG_NAME}=$NUM_REDS;
-set hive.stats.autogather=false;
-
-DROP TABLE IF EXISTS uservisits;
-CREATE EXTERNAL TABLE uservisits (sourceIP STRING,destURL STRING,visitDate STRING,adRevenue DOUBLE,userAgent STRING,countryCode STRING,languageCode STRING,searchWord STRING,duration INT ) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde' STORED AS  SEQUENCEFILE LOCATION '$INPUT_HDFS/uservisits';
-DROP TABLE IF EXISTS uservisits_aggre;
-CREATE EXTERNAL TABLE uservisits_aggre ( sourceIP STRING, sumAdRevenue DOUBLE) STORED AS  SEQUENCEFILE LOCATION '$OUTPUT_HDFS/uservisits_aggre';
-INSERT OVERWRITE TABLE uservisits_aggre SELECT sourceIP, SUM(adRevenue) FROM uservisits GROUP BY sourceIP;
-EOF
-}
-
-function prepare_sql_join () {
-    assert $1 "SQL file path not exist"
-    HIVEBENCH_SQL_FILE=$1
-
-    find . -name "metastore_db" -exec rm -rf "{}" \; 2>/dev/null
-
-    cat <<EOF > ${HIVEBENCH_SQL_FILE}
-USE DEFAULT;
-set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
-set ${MAP_CONFIG_NAME}=$NUM_MAPS;
-set ${REDUCER_CONFIG_NAME}=$NUM_REDS;
-set hive.stats.autogather=false;
-
-
-DROP TABLE IF EXISTS rankings;
-CREATE EXTERNAL TABLE rankings (pageURL STRING, pageRank INT, avgDuration INT) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde' STORED AS  SEQUENCEFILE LOCATION '$INPUT_HDFS/rankings';
-DROP TABLE IF EXISTS uservisits_copy;
-CREATE EXTERNAL TABLE uservisits_copy (sourceIP STRING,destURL STRING,visitDate STRING,adRevenue DOUBLE,userAgent STRING,countryCode STRING,languageCode STRING,searchWord STRING,duration INT ) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde' STORED AS  SEQUENCEFILE LOCATION '$INPUT_HDFS/uservisits';
-DROP TABLE IF EXISTS rankings_uservisits_join;
-CREATE EXTERNAL TABLE rankings_uservisits_join ( sourceIP STRING, avgPageRank DOUBLE, totalRevenue DOUBLE) STORED AS  SEQUENCEFILE LOCATION '$OUTPUT_HDFS/rankings_uservisits_join';
-INSERT OVERWRITE TABLE rankings_uservisits_join SELECT sourceIP, avg(pageRank), sum(adRevenue) as totalRevenue FROM rankings R JOIN (SELECT sourceIP, destURL, adRevenue FROM uservisits_copy UV WHERE (datediff(UV.visitDate, '1999-01-01')>=0 AND datediff(UV.visitDate, '2000-01-01')<=0)) NUV ON (R.pageURL = NUV.destURL) group by sourceIP order by totalRevenue DESC;
-EOF
-}
-
-function prepare_sql_scan () {
-    assert $1 "SQL file path not exist"
-    HIVEBENCH_SQL_FILE=$1
-
-    find . -name "metastore_db" -exec rm -rf "{}" \; 2>/dev/null
-
-    cat <<EOF > ${HIVEBENCH_SQL_FILE}
-USE DEFAULT;
-set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
-set ${MAP_CONFIG_NAME}=$NUM_MAPS;
-set ${REDUCER_CONFIG_NAME}=$NUM_REDS;
-set hive.stats.autogather=false;
-
-
-DROP TABLE IF EXISTS uservisits;
-CREATE EXTERNAL TABLE uservisits (sourceIP STRING,destURL STRING,visitDate STRING,adRevenue DOUBLE,userAgent STRING,countryCode STRING,languageCode STRING,searchWord STRING,duration INT ) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde' STORED AS  SEQUENCEFILE LOCATION '$INPUT_HDFS/uservisits';
-DROP TABLE IF EXISTS uservisits_copy;
-CREATE EXTERNAL TABLE uservisits_copy (sourceIP STRING,destURL STRING,visitDate STRING,adRevenue DOUBLE,userAgent STRING,countryCode STRING,languageCode STRING,searchWord STRING,duration INT ) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde' STORED AS  SEQUENCEFILE LOCATION '$OUTPUT_HDFS/uservisits_copy';
-INSERT OVERWRITE TABLE uservisits_copy SELECT * FROM uservisits;
-EOF
-
 }

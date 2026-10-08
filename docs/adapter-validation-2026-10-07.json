@@ -1,0 +1,154 @@
+{
+  "tests": 13,
+  "runs": [
+    {
+      "id": "ad7f8e4d-164b-4155-8782-951e47e47273",
+      "state": "succeeded",
+      "spec": {
+        "mode": "run",
+        "name": "Adapter refactor smoke",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "micro.sleep",
+            "parameters": {
+              "mapper.seconds": 1,
+              "reducer.seconds": 1
+            }
+          }
+        ]
+      },
+      "applications": [
+        {
+          "at": 1791386051.6603022,
+          "kind": "application",
+          "id": "application_1791359074600_0028",
+          "status": "2026-10-07 15:14:11,102 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 15:14:11,500 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 15:14:11,501 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0028\n\tApplication-Name : ScalaSleep\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791386034751\n\tFinish-Time : 1791386049316\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0028/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.11\n\tAggregate Resource Allocation : 32486 MB-seconds, 22 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        }
+      ],
+      "metrics": [
+        {
+          "application_id": "application_1791359074600_0028",
+          "duration_s": 31.786,
+          "finished_at_ms": 1791386049403,
+          "input_bytes": 0,
+          "run_id": "ad7f8e4d-164b-4155-8782-951e47e47273",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791386017617,
+          "throughput_bytes_s": 0.0,
+          "workload": "ScalaSparkSleep"
+        }
+      ]
+    },
+    {
+      "id": "66334371-2235-4e3d-858b-8efca6fcd5e7",
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "Adapter preparation smoke",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "micro.wordcount",
+            "parameters": {
+              "datasize": 1024
+            }
+          }
+        ]
+      },
+      "applications": [
+        {
+          "at": 1791386134.126004,
+          "kind": "application",
+          "id": "application_1791359074600_0029",
+          "status": "2026-10-07 15:15:33,501 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 15:15:33,932 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 15:15:33,932 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0029\n\tApplication-Name : random-text-writer\n\tApplication-Type : MAPREDUCE\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791386120800\n\tFinish-Time : 1791386129726\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : http://spark-cluster-slave-2:19888/jobhistory/job/job_1791359074600_0029\n\tRPC Port : 32879\n\tAM Host : spark-cluster-slave-2\n\tAggregate Resource Allocation : 33097 MB-seconds, 18 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791386180.6353662,
+          "kind": "application",
+          "id": "application_1791359074600_0030",
+          "status": "2026-10-07 15:16:19,902 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 15:16:20,491 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 15:16:20,492 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0030\n\tApplication-Name : ScalaWordCount\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791386158835\n\tFinish-Time : 1791386178281\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0030/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.12\n\tAggregate Resource Allocation : 50832 MB-seconds, 34 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        }
+      ],
+      "metrics": [
+        {
+          "application_id": "application_1791359074600_0030",
+          "duration_s": 28.607,
+          "finished_at_ms": 1791386178325,
+          "input_bytes": 1439,
+          "run_id": "66334371-2235-4e3d-858b-8efca6fcd5e7",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791386149718,
+          "throughput_bytes_s": 50.30237354493656,
+          "workload": "ScalaSparkWordcount"
+        }
+      ]
+    }
+  ]
+}

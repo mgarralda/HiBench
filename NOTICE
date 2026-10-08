@@ -10,3 +10,6 @@ Modifications and extensions made by:
 
 Licensed under the Apache License, Version 2.0.
 See LICENSE file for details.
+
+Tera record generation includes adapted code from Apache Hadoop 3.3.6
+(GenSort, Random16 and Unsigned16), developed by the Apache Software Foundation.

@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-08",
+  "runtime": {
+    "spark": "3.5.9",
+    "java": "11",
+    "hadoop": "3.3.6",
+    "master": "YARN",
+    "deploy_mode": "client"
+  },
+  "run_id": "135b7a2e-39d0-4265-92ab-eba5ac23e976",
+  "state": "succeeded",
+  "application_ids": [
+    "application_1791359074600_0062",
+    "application_1791359074600_0063",
+    "application_1791359074600_0064",
+    "application_1791359074600_0065",
+    "application_1791359074600_0066",
+    "application_1791359074600_0067"
+  ],
+  "results": [
+    {
+      "application_id": "application_1791359074600_0063",
+      "duration_s": 25.152,
+      "finished_at_ms": 1791440997708,
+      "input_bytes": 80168,
+      "run_id": "135b7a2e-39d0-4265-92ab-eba5ac23e976",
+      "scale": "tiny",
+      "schema_version": 2,
+      "started_at_ms": 1791440972556,
+      "throughput_bytes_s": 3187.3409669211196,
+      "workload": "ScalaSparkScan"
+    },
+    {
+      "application_id": "application_1791359074600_0065",
+      "duration_s": 22.148,
+      "finished_at_ms": 1791441065497,
+      "input_bytes": 80168,
+      "run_id": "135b7a2e-39d0-4265-92ab-eba5ac23e976",
+      "scale": "tiny",
+      "schema_version": 2,
+      "started_at_ms": 1791441043349,
+      "throughput_bytes_s": 3619.64962976341,
+      "workload": "ScalaSparkAggregation"
+    },
+    {
+      "application_id": "application_1791359074600_0067",
+      "duration_s": 26.211,
+      "finished_at_ms": 1791441140404,
+      "input_bytes": 80168,
+      "run_id": "135b7a2e-39d0-4265-92ab-eba5ac23e976",
+      "scale": "tiny",
+      "schema_version": 2,
+      "started_at_ms": 1791441114193,
+      "throughput_bytes_s": 3058.5631986570525,
+      "workload": "ScalaSparkJoin"
+    }
+  ],
+  "checks": {
+    "maven_modules": 11,
+    "maven_tests": 2,
+    "python_tests": 27,
+    "tiny_full_record_comparison": {
+      "rankings": 120,
+      "uservisits": 1000
+    },
+    "query_output_rows": {
+      "scan": 1000,
+      "aggregation": 1000,
+      "join": 21
+    },
+    "zipf_preset_counts": 8,
+    "zipf_matching_draws": 480000,
+    "query_boundary_cases": "passed",
+    "legacy_sql_generator_removed_from_jar": true,
+    "doctor": "passed",
+    "streamlit_health": "ok"
+  },
+  "data_profile": {
+    "rankings": {
+      "rows": 120,
+      "url_lengths": {
+        "min": 10,
+        "max": 100
+      },
+      "incoming_links_total": 4738
+    },
+    "uservisits": {
+      "rows": 1000,
+      "distinct_source_ips": 1000,
+      "date_min": "1970-01-04",
+      "date_max": "2012-04-11",
+      "original_value_utf8_bytes": 170778
+    },
+    "storage_bytes": {
+      "legacy_sequencefile": 194847,
+      "new_uncompressed_parquet": 80168
+    },
+    "note": "All typed fields and original keys match. Storage-container bytes differ; preset counts and logical content are preserved."
+  },
+  "artifacts": {
+    "autogen/target/autogen-8.0-SNAPSHOT-jar-with-dependencies.jar": {
+      "sha256": "479cc5f23e0645941206ee0b193a6e103b6268dfb3f468713d73a875d7151892",
+      "bytes": 20181568
+    },
+    "sparkbench/assembly/target/sparkbench-assembly-8.0-SNAPSHOT-dist.jar": {
+      "sha256": "e775f55aa5a54fb8d1b4ce6d9accf8ad05604e0ef181b39350b9ec63261fef3c",
+      "bytes": 38736042
+    }
+  },
+  "source_sha256": {
+    "sparkbench/sql/src/main/java/org/hibench/sparkbench/sql/datagen/SqlPageGenerator.java": "f69e3078737a235bf0e71f7c27c12529f0c592af9e7345aa4f3497480d0048ae",
+    "sparkbench/sql/src/main/java/org/hibench/sparkbench/sql/datagen/SqlVisitGenerator.java": "eb69bc29e4f88356d67f0ffb8a3554019b247c18b7018c3269bafd4effd45277",
+    "sparkbench/sql/src/main/java/org/hibench/sparkbench/sql/datagen/SqlVocabulary.java": "71f78cec6d71ef694acaf2f19ba090940d296b6b9dac3bc6a92fc4041b75ce2d",
+    "sparkbench/sql/src/main/java/org/hibench/sparkbench/sql/datagen/SqlZipfCore.java": "cf6a548363142c1216598dd0125307a57b1f569155418366a7796daa56a9d74a",
+    "sparkbench/sql/src/main/java/org/hibench/sparkbench/sql/datagen/SqlZipfian.java": "f58833f68793eeb74b7386dda6ab85fd3da117022d4bddcc40bfa4929388ef4b",
+    "sparkbench/sql/src/main/resources/org/hibench/sql/country_codes": "f1cdb5c7e5e82132e242ebc5cac58b9d243c3a472c719a594728f77b273e5019",
+    "sparkbench/sql/src/main/resources/org/hibench/sql/search_keys": "2b453d5231b303ce44123f45bac2cd05d512277571d4db78c91e2bccf8562faa",
+    "sparkbench/sql/src/main/resources/org/hibench/sql/user_agents": "41a59c11da86baad90b13ebf53eb9b87020fea77465d9a7238ee6a658a06939e",
+    "sparkbench/sql/src/main/scala/org/hibench/sparkbench/sql/ScalaSparkSQLBench.scala": "e51ae65bd88c5ed057de338e5f833970fcc6108581fb2d151127eeece62c59ad",
+    "sparkbench/sql/src/main/scala/org/hibench/sparkbench/sql/SqlDataGenerator.scala": "98a0ac94339890820efccfb0e5e4bf30309ccfc74b60fe59b812a21288aae1e4",
+    "sparkbench/sql/pom.xml": "109fbcd12b782fe709784ef6cd441cbd7a61120eafe58b1d321c016a2743301e"
+  },
+  "limits": [
+    "Full datasets at large/huge/gigantic/bigdata were not materialized.",
+    "Cloud, Spark Connect and Databricks serverless were not certified.",
+    "SequenceFile and Parquet physical bytes and decoding cost differ."
+  ],
+  "logs": [
+    "report/sql-retired-build.log",
+    "report/sql-python-tests-final.log",
+    "report/sql-input-verification.log",
+    "report/sql-zipf-verification.log",
+    "report/sql-controller-verification.log",
+    "report/sql-doctor.log"
+  ]
+}

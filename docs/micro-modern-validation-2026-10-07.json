@@ -1,0 +1,493 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-07",
+  "git_baseline": "3dd2c97c068ad614df3d0d9e89e617183b12a020",
+  "runtime": "Spark 3.5.9 / Scala 2.12.18 / Java 11 / Hadoop 3.3.6 / Docker-YARN",
+  "build": {
+    "modules": 11,
+    "state": "SUCCESS",
+    "java_tests": 2,
+    "log": "report/micro-modern-build-final.log"
+  },
+  "python_tests": 24,
+  "runs": [
+    {
+      "id": "fec123a5-f061-4aff-a9f0-d3b53181c864",
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "micro-modern-validation",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "micro.wordcount",
+            "parameters": {
+              "datasize": 32000,
+              "seed": 43
+            }
+          },
+          {
+            "id": "micro.sort",
+            "parameters": {
+              "datasize": 32000,
+              "seed": 44
+            }
+          },
+          {
+            "id": "micro.repartition",
+            "parameters": {
+              "cacheinmemory": true,
+              "datasize": 3200,
+              "disableoutput": false
+            }
+          },
+          {
+            "id": "micro.terasort",
+            "parameters": {
+              "datasize": 32000
+            }
+          },
+          {
+            "id": "micro.sleep",
+            "parameters": {
+              "mapper.seconds": 3
+            }
+          }
+        ]
+      },
+      "application_ids": [
+        "application_1791359074600_0046",
+        "application_1791359074600_0047",
+        "application_1791359074600_0048",
+        "application_1791359074600_0049",
+        "application_1791359074600_0050",
+        "application_1791359074600_0051",
+        "application_1791359074600_0052",
+        "application_1791359074600_0053",
+        "application_1791359074600_0054"
+      ],
+      "metrics": [
+        {
+          "application_id": "application_1791359074600_0047",
+          "duration_s": 46.953,
+          "finished_at_ms": 1791408064333,
+          "input_bytes": 33674,
+          "run_id": "fec123a5-f061-4aff-a9f0-d3b53181c864",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791408017380,
+          "throughput_bytes_s": 717.1852703767597,
+          "workload": "ScalaSparkWordcount"
+        },
+        {
+          "application_id": "application_1791359074600_0049",
+          "duration_s": 20.51,
+          "finished_at_ms": 1791408136288,
+          "input_bytes": 33065,
+          "run_id": "fec123a5-f061-4aff-a9f0-d3b53181c864",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791408115778,
+          "throughput_bytes_s": 1612.1404193076546,
+          "workload": "ScalaSparkSort"
+        },
+        {
+          "application_id": "application_1791359074600_0051",
+          "duration_s": 29.026,
+          "finished_at_ms": 1791408216261,
+          "input_bytes": 347605,
+          "run_id": "fec123a5-f061-4aff-a9f0-d3b53181c864",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791408187235,
+          "throughput_bytes_s": 11975.642527389236,
+          "workload": "ScalaRepartition"
+        },
+        {
+          "application_id": "application_1791359074600_0053",
+          "duration_s": 32.919,
+          "finished_at_ms": 1791408293050,
+          "input_bytes": 3458400,
+          "run_id": "fec123a5-f061-4aff-a9f0-d3b53181c864",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791408260131,
+          "throughput_bytes_s": 105057.86931559283,
+          "workload": "ScalaSparkTerasort"
+        },
+        {
+          "application_id": "application_1791359074600_0054",
+          "duration_s": 27.937,
+          "finished_at_ms": 1791408324638,
+          "input_bytes": 0,
+          "run_id": "fec123a5-f061-4aff-a9f0-d3b53181c864",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791408296701,
+          "throughput_bytes_s": 0.0,
+          "workload": "ScalaSparkSleep"
+        }
+      ]
+    },
+    {
+      "id": "3f797c3c-1fba-4680-885c-34621c9fb74f",
+      "state": "succeeded",
+      "spec": {
+        "mode": "run",
+        "name": "micro-in-memory-validation",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "micro.repartition",
+            "parameters": {
+              "cacheinmemory": false,
+              "datasize": 17,
+              "disableoutput": false,
+              "fromhdfs": false
+            }
+          }
+        ]
+      },
+      "application_ids": [
+        "application_1791359074600_0057"
+      ],
+      "metrics": [
+        {
+          "application_id": "application_1791359074600_0057",
+          "duration_s": 23.592,
+          "finished_at_ms": 1791408454444,
+          "input_bytes": 6800,
+          "run_id": "3f797c3c-1fba-4680-885c-34621c9fb74f",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791408430852,
+          "throughput_bytes_s": 288.2332994235334,
+          "workload": "ScalaRepartition"
+        }
+      ]
+    },
+    {
+      "id": "caafa77c-b065-4016-b62d-33b5cc0b8c95",
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "micro-noop-validation",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "micro.repartition",
+            "parameters": {
+              "cacheinmemory": false,
+              "datasize": 17,
+              "disableoutput": true
+            }
+          }
+        ]
+      },
+      "application_ids": [
+        "application_1791359074600_0055",
+        "application_1791359074600_0056"
+      ],
+      "metrics": [
+        {
+          "application_id": "application_1791359074600_0056",
+          "duration_s": 41.676,
+          "finished_at_ms": 1791408413141,
+          "input_bytes": 3788,
+          "run_id": "caafa77c-b065-4016-b62d-33b5cc0b8c95",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791408371465,
+          "throughput_bytes_s": 90.89164027257894,
+          "workload": "ScalaRepartition"
+        }
+      ]
+    },
+    {
+      "id": "36c92e79-e04a-4ef2-ac17-dbe2dde5e03c",
+      "state": "succeeded",
+      "spec": {
+        "mode": "run",
+        "name": "micro-final-runtime",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "micro.repartition",
+            "parameters": {
+              "cacheinmemory": true,
+              "datasize": 17,
+              "disableoutput": true,
+              "fromhdfs": false
+            }
+          },
+          {
+            "id": "micro.sleep",
+            "parameters": {
+              "mapper.seconds": 1
+            }
+          }
+        ]
+      },
+      "application_ids": [
+        "application_1791359074600_0058",
+        "application_1791359074600_0059"
+      ],
+      "metrics": [
+        {
+          "application_id": "application_1791359074600_0058",
+          "duration_s": 49.014,
+          "finished_at_ms": 1791408692927,
+          "input_bytes": 6800,
+          "run_id": "36c92e79-e04a-4ef2-ac17-dbe2dde5e03c",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791408643913,
+          "throughput_bytes_s": 138.7358713836863,
+          "workload": "ScalaRepartition"
+        },
+        {
+          "application_id": "application_1791359074600_0059",
+          "duration_s": 37.128,
+          "finished_at_ms": 1791408735329,
+          "input_bytes": 0,
+          "run_id": "36c92e79-e04a-4ef2-ac17-dbe2dde5e03c",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791408698201,
+          "throughput_bytes_s": 0.0,
+          "workload": "ScalaSparkSleep"
+        }
+      ]
+    }
+  ],
+  "checks": {
+    "text": {
+      "wordcount": true,
+      "sort": true,
+      "words": 3161,
+      "sort_rows": 55
+    },
+    "repartition": {
+      "records": 3200,
+      "logical_bytes": 320000,
+      "physical_parquet_bytes": 347605,
+      "original_payload": true,
+      "preserved": true,
+      "sorted": false
+    },
+    "terasort": {
+      "records": 32000,
+      "logical_bytes": 3200000,
+      "physical_parquet_bytes": 3458400,
+      "original_payload": true,
+      "preserved": true,
+      "sorted": true
+    },
+    "in_memory": {
+      "records": 34,
+      "record_bytes": 200,
+      "logical_bytes": 6800
+    },
+    "original_jar_integration": "passed",
+    "original_tera_cases": [
+      {
+        "records": 1,
+        "partitions": 4,
+        "logical_bytes": 100
+      },
+      {
+        "records": 257,
+        "partitions": 3,
+        "logical_bytes": 25700
+      },
+      {
+        "records": 3200,
+        "partitions": 2,
+        "logical_bytes": 320000
+      },
+      {
+        "records": 32000,
+        "partitions": 4,
+        "logical_bytes": 3200000
+      }
+    ],
+    "large_record_id_samples": [
+      3200000000,
+      6000000000,
+      92233720368547758
+    ],
+    "final_micro_class_comparison": {
+      "identical": true,
+      "changed": [],
+      "classes": 28
+    },
+    "final_doctor": "passed; runtime scripts/configs/JARs match host checkout"
+  },
+  "final_assembly_sha256": "4d6ea68da9cca24ccfc611ab2a9bde70807b34311df2876c382a11c8001c45cd",
+  "complete_family_yarn_assembly_sha256": "aaffa9af16d03c8c4aaf11d522d4d189d53db00e55a5fef16601857b814e62ea",
+  "source_sha256": {
+    "sparkbench/micro/src/main/java/org/hibench/sparkbench/micro/terasort/Random16.java": "de1a667f699e9b83a9de52a2b1c732d33c17774025e1e52a5def73db1dfc4386",
+    "sparkbench/micro/src/main/java/org/hibench/sparkbench/micro/terasort/TeraRecordGenerator.java": "0853c3a1114c9e6509ab1824a1507b7162a0f927daccd7553e3ab2c0c71d9521",
+    "sparkbench/micro/src/main/java/org/hibench/sparkbench/micro/terasort/Unsigned16.java": "e2f586a07b972d341eab3cb8d1e151e781280fc26f99964960ae063e39a62dba",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/MicroDataFrameIO.scala": "a58b2e2ff85017fd31bd51c5335a2a24fb5a430bd581f6f8e2da9a6389d2c67d",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/OriginalTextVocabulary.scala": "3640460f23c5edbb6d5a7bf746215e8151baf40cdb09e6ded3936d01860b549b",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaInMemRepartition.scala": "0df022f9d08b4651414c6842856ced9ee3b5facfba8b543a081637e09d55f70c",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaRepartition.scala": "89c791b8d96cf32967a57c8bdb9bcf8ccb0b797ecc5e6a7a2bfa9e7604b185e5",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaSleep.scala": "1849b7fd53bd7a6d9dd0f37af5a0e17cca2d09bb0d35ad2e898511aa6431e4b2",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaSort.scala": "a2f9b5ccd3aea0c77b4f6ddb7ffd40ec4646f23dafe6c07264ba7f72e4fa3b7a",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaTeraSort.scala": "91dd3c22d819ee1daaa24dbcd2ec49af5944a9302ccfef6044a6dcad927f568c",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaWordCount.scala": "bdc6e48d4cb2d9dcf06d4d470609b96dbc8eb2ca83643c9250bca11d579a918a",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/TeraDataGenerator.scala": "dca733fc59d727ce9209de0393fcdd53ed8739a9c2c914050a991566ff4a76ba",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/TextDataFrameIO.scala": "1adb8d8ab7a0fb3555b9f0b63e545796e88e7043e7e2c9db7c5bff0c852c5d68",
+    "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/TextDataGenerator.scala": "aded525f07df61b010ca4ceb43221dafa9f0b4018d6ea3678b07ac268f6fbc39"
+  },
+  "original_source_sha256": {
+    "TeraGen.java": "6bfe3b5a696d4f37444dc631f2a605983394fb476820ddb5e9751200d5129dae",
+    "GenSort.java": "4813929c366e423cb2372bab1a18b9180608b4521d1d37da063a31d2b95c3ea0",
+    "Random16.java": "a10a1dbd7540ab8b6ad9967984e8045c5bfb4f2e29bcd9502f6866f6470ec076",
+    "Unsigned16.java": "a520a7354ca47867fa9f4787e81c26e6955bfcd83bbc59e5c8243d05b7fae01a"
+  },
+  "removed": [
+    "Spark distribution Hadoop Examples classes (RandomTextWriter, TeraGen and others)",
+    "Hadoop Examples/test JAR probes and launch configuration",
+    "Direct micro hadoop-client and scala-java8-compat dependencies",
+    "Spark-internal RDD helpers and MemoryDataRDD",
+    "Orphan Spark DFSIOE entry point and configuration",
+    "Unused Sleep reducer duration"
+  ],
+  "limits": [
+    "Storage formats establish a HiBench Next baseline; historical I/O costs are not preserved",
+    "Large presets are frozen and algorithm samples checked; all large datasets were not materialized",
+    "Classic Spark runtime verified; Spark Connect and Databricks serverless not certified",
+    "Original Hadoop JAR is an integration fixture only, not an execution dependency",
+    "Other workload families and their generators remain outside this migration"
+  ]
+}

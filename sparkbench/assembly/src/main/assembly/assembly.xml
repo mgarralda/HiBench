@@ -10,6 +10,13 @@
       <useProjectArtifact>false</useProjectArtifact>
       <useTransitiveDependencies>true</useTransitiveDependencies>
       <unpack>true</unpack>
+      <excludes>
+        <exclude>org.apache.spark:*</exclude>
+        <exclude>org.apache.hadoop:*</exclude>
+        <exclude>org.scala-lang:*</exclude>
+        <exclude>org.slf4j:*</exclude>
+        <exclude>log4j:*</exclude>
+      </excludes>
     </dependencySet>
-  </dependencySets>
+</dependencySets>
 </assembly>

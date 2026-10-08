@@ -26,7 +26,7 @@ show_bannar start
 rmr_hdfs $INPUT_HDFS || true
 START_TIME=`timestamp`
 
-run_spark_job com.intel.hibench.sparkbench.ml.SVDDataGenerator $INPUT_HDFS $NUM_EXAMPLES_SVD $NUM_FEATURES_SVD
+run_spark_job org.hibench.sparkbench.ml.SVDDataGenerator $INPUT_HDFS $NUM_EXAMPLES_SVD $NUM_FEATURES_SVD
 
 END_TIME=`timestamp`
 

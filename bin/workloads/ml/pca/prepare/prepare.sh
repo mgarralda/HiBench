@@ -26,7 +26,7 @@ show_bannar start
 rmr_hdfs $INPUT_HDFS || true
 START_TIME=`timestamp`
 
-run_spark_job com.intel.hibench.sparkbench.ml.PCADataGenerator $INPUT_HDFS $NUM_EXAMPLES_PCA $NUM_FEATURES_PCA
+run_spark_job org.hibench.sparkbench.ml.PCADataGenerator $INPUT_HDFS $NUM_EXAMPLES_PCA $NUM_FEATURES_PCA
 
 END_TIME=`timestamp`
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -22,7 +22,6 @@ HiBenchEnvPropMappingMandatory=dict(
     HADOOP_HOME="hibench.hadoop.home",
     HDFS_MASTER="hibench.hdfs.master",
     HADOOP_RELEASE="hibench.hadoop.release",
-    HADOOP_EXAMPLES_JAR="hibench.hadoop.examples.jar",
     HADOOP_EXECUTABLE="hibench.hadoop.executable",
     HADOOP_CONF_DIR="hibench.hadoop.configure.dir",
     HIBENCH_HOME="hibench.home",
@@ -44,13 +43,11 @@ HiBenchEnvPropMappingMandatory=dict(
     )
 
 HiBenchEnvPropMapping=dict(
+    TEXT_SEED="hibench.text.seed",
     SPARK_HOME="hibench.spark.home",
     SPARK_MASTER="hibench.spark.master",
     SPARK_EXAMPLES_JAR="hibench.spark.examples.jar",
 
-    HIVE_HOME="hibench.hive.home",
-    HIVE_RELEASE="hibench.hive.release",
-    HIVEBENCH_TEMPLATE="hibench.hivebench.template.dir",
     MAHOUT_HOME="hibench.mahout.home",
     MAHOUT_RELEASE="hibench.mahout.release",
     NUTCH_HOME="hibench.nutch.home",
@@ -70,8 +67,6 @@ HiBenchEnvPropMapping=dict(
     DATA_HDFS="hibench.hdfs.data.dir",
     # For Sleep workload
     MAP_SLEEP_TIME="hibench.sleep.mapper.seconds",
-    RED_SLEEP_TIME="hibench.sleep.reducer.seconds",
-    HADOOP_SLEEP_JAR="hibench.sleep.job.jar",
     # For Sort, Terasort, Wordcount, Repartition
     DATASIZE="hibench.workload.datasize",
     # For repartition
@@ -79,11 +74,9 @@ HiBenchEnvPropMapping=dict(
     DISABLE_OUTPUT="hibench.repartition.disableoutput",
     FROM_HDFS="hibench.repartition.fromhdfs",
 
-    # For hive related workload, data scale
+    # SQL workload data scale
     PAGES="hibench.workload.pages",
     USERVISITS="hibench.workload.uservisits",
-    HIVE_INPUT="hibench.workload.dir.name.input",
-    HIVE_BASE_HDFS="hibench.hive.base.hdfs",
     # For bayes
     CLASSES="hibench.workload.classes",
     BAYES_INPUT="hibench.bayes.dir.name.input",
@@ -94,6 +87,11 @@ HiBenchEnvPropMapping=dict(
     BAYES_DENSE_EXAMPLES="hibench.bayes.dense.examples",
     BAYES_DENSE_FEATURES="hibench.bayes.dense.features",
     # For kmeans
+    KMEANS_SEED="hibench.kmeans.seed",
+    KMEANS_MEAN_MIN="hibench.kmeans.mean_min",
+    KMEANS_MEAN_MAX="hibench.kmeans.mean_max",
+    KMEANS_STD_MIN="hibench.kmeans.std_min",
+    KMEANS_STD_MAX="hibench.kmeans.std_max",
     INPUT_SAMPLE="hibench.kmeans.input.sample",
     INPUT_CLUSTER="hibench.kmeans.input.cluster",
     NUM_OF_CLUSTERS="hibench.kmeans.num_of_clusters",
@@ -105,6 +103,11 @@ HiBenchEnvPropMapping=dict(
     K_STORAGE_LEVEL="hibench.kmeans.storage.level",
     K_INIT_MODE="hibench.kmeans.initializationmode",
     # For gmm
+    GMM_SEED="hibench.gmm.seed",
+    GMM_MEAN_MIN="hibench.gmm.mean_min",
+    GMM_MEAN_MAX="hibench.gmm.mean_max",
+    GMM_STD_MIN="hibench.gmm.std_min",
+    GMM_STD_MAX="hibench.gmm.std_max",
     INPUT_SAMPLE_GMM="hibench.gmm.input.sample",
     INPUT_CLUSTER_GMM="hibench.gmm.input.cluster",
     NUM_OF_CLUSTERS_GMM="hibench.gmm.num_of_clusters",
@@ -219,5 +222,5 @@ HiBenchEnvPropMapping=dict(
 
     )
 
-HiBenchPropEnvMapping=dict([(v,k) for k, v in HiBenchEnvPropMapping.items()])
-HiBenchPropEnvMappingMandatory=dict([(v,k) for k, v in HiBenchEnvPropMappingMandatory.items()])
+HiBenchPropEnvMapping=dict([(v,k) for k, v in list(HiBenchEnvPropMapping.items())])
+HiBenchPropEnvMappingMandatory=dict([(v,k) for k, v in list(HiBenchEnvPropMappingMandatory.items())])

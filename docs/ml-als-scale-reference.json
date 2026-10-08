@@ -1,0 +1,38 @@
+{
+  "tiny": {
+    "users": "100",
+    "products": "100",
+    "ratings": "200",
+    "implicitprefs": "true"
+  },
+  "small": {
+    "users": "1000",
+    "products": "1000",
+    "ratings": "2000",
+    "implicitprefs": "true"
+  },
+  "large": {
+    "users": "10000",
+    "products": "10000",
+    "ratings": "20000",
+    "implicitprefs": "true"
+  },
+  "huge": {
+    "users": "20000",
+    "products": "20000",
+    "ratings": "40000",
+    "implicitprefs": "true"
+  },
+  "gigantic": {
+    "users": "40000",
+    "products": "40000",
+    "ratings": "80000",
+    "implicitprefs": "true"
+  },
+  "bigdata": {
+    "users": "100000",
+    "products": "100000",
+    "ratings": "200000",
+    "implicitprefs": "true"
+  }
+}

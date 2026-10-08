@@ -1,0 +1,418 @@
+{
+  "date": "2026-10-07",
+  "runtime": {
+    "spark": "3.5.9",
+    "scala": "2.12.18",
+    "java": "11.0.32.1",
+    "python_target": "3.10.12",
+    "hadoop_cluster": "3.3.6",
+    "spark_hadoop_client": "3.3.4"
+  },
+  "build": {
+    "jdk": 11,
+    "maven": "3.9.9",
+    "full_reactor": "11 modules, clean package passed",
+    "generator_rebuild": "passed after exact-count fix"
+  },
+  "tests": {
+    "python_controller": 8,
+    "java_generator": 2
+  },
+  "runs": {
+    "6adea43f-b5dd-400d-8732-fd32528394f4": {
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "docker-yarn-tiny",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "micro.wordcount",
+            "parameters": {}
+          },
+          {
+            "id": "micro.sort",
+            "parameters": {}
+          }
+        ]
+      },
+      "metrics": [
+        {
+          "application_id": "application_1791359074600_0015",
+          "duration_s": 26.751,
+          "finished_at_ms": 1791368725158,
+          "input_bytes": 32768,
+          "run_id": "6adea43f-b5dd-400d-8732-fd32528394f4",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791368698407,
+          "throughput_bytes_s": 1224.9261709842622,
+          "workload": "ScalaSparkWordcount"
+        },
+        {
+          "application_id": "application_1791359074600_0017",
+          "duration_s": 29.914,
+          "finished_at_ms": 1791368783877,
+          "input_bytes": 32572,
+          "run_id": "6adea43f-b5dd-400d-8732-fd32528394f4",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791368753963,
+          "throughput_bytes_s": 1088.8547168549842,
+          "workload": "ScalaSparkSort"
+        }
+      ],
+      "applications": [
+        {
+          "at": 1791368689.5574813,
+          "kind": "application",
+          "id": "application_1791359074600_0014",
+          "status": "2026-10-07 10:24:49,048 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:24:49,377 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:24:49,378 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0014\n\tApplication-Name : random-text-writer\n\tApplication-Type : MAPREDUCE\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368676986\n\tFinish-Time : 1791368685347\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : http://spark-cluster-slave-3:19888/jobhistory/job/job_1791359074600_0014\n\tRPC Port : 34341\n\tAM Host : spark-cluster-slave-3\n\tAggregate Resource Allocation : 32438 MB-seconds, 19 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791368727.3456063,
+          "kind": "application",
+          "id": "application_1791359074600_0015",
+          "status": "2026-10-07 10:25:26,771 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:25:27,169 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:25:27,170 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0015\n\tApplication-Name : ScalaWordCount\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368708583\n\tFinish-Time : 1791368725116\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0015/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.13\n\tAggregate Resource Allocation : 42349 MB-seconds, 28 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : RUNNING\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791368744.998538,
+          "kind": "application",
+          "id": "application_1791359074600_0016",
+          "status": "2026-10-07 10:25:44,055 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:25:44,858 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:25:44,858 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0016\n\tApplication-Name : random-text-writer\n\tApplication-Type : MAPREDUCE\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368732952\n\tFinish-Time : 1791368741077\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : http://spark-cluster-slave-3:19888/jobhistory/job/job_1791359074600_0016\n\tRPC Port : 35995\n\tAM Host : spark-cluster-slave-3\n\tAggregate Resource Allocation : 28609 MB-seconds, 15 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791368785.975107,
+          "kind": "application",
+          "id": "application_1791359074600_0017",
+          "status": "2026-10-07 10:26:25,466 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:26:25,833 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:26:25,833 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0017\n\tApplication-Name : ScalaSort\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368764572\n\tFinish-Time : 1791368783829\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0017/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.12\n\tAggregate Resource Allocation : 53198 MB-seconds, 35 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : RUNNING\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        }
+      ]
+    },
+    "e158aded-b1e6-4c4a-9a23-69d5119eccd4": {
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "batch-smoke-extended",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "micro.repartition",
+            "parameters": {
+              "datasize": 100,
+              "disableoutput": false
+            }
+          },
+          {
+            "id": "ml.kmeans",
+            "parameters": {
+              "k": 3,
+              "max_iteration": 2,
+              "num_of_samples": 100,
+              "samples_per_inputfile": 50
+            }
+          },
+          {
+            "id": "sql.scan",
+            "parameters": {
+              "pages": 100,
+              "uservisits": 100
+            }
+          }
+        ]
+      },
+      "metrics": [
+        {
+          "application_id": "application_1791359074600_0019",
+          "duration_s": 25.303,
+          "finished_at_ms": 1791368848883,
+          "input_bytes": 10000,
+          "run_id": "e158aded-b1e6-4c4a-9a23-69d5119eccd4",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791368823580,
+          "throughput_bytes_s": 395.2100541437774,
+          "workload": "ScalaRepartition"
+        },
+        {
+          "application_id": "application_1791359074600_0021",
+          "duration_s": 35.012,
+          "finished_at_ms": 1791368920575,
+          "input_bytes": 14101,
+          "run_id": "e158aded-b1e6-4c4a-9a23-69d5119eccd4",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791368885563,
+          "throughput_bytes_s": 402.7476293842111,
+          "workload": "ScalaSparkKmeans"
+        },
+        {
+          "application_id": "application_1791359074600_0024",
+          "duration_s": 33.399,
+          "finished_at_ms": 1791369013160,
+          "input_bytes": 23222,
+          "run_id": "e158aded-b1e6-4c4a-9a23-69d5119eccd4",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791368979761,
+          "throughput_bytes_s": 695.2902781520405,
+          "workload": "ScalaSparkScan"
+        }
+      ],
+      "applications": [
+        {
+          "at": 1791368813.193558,
+          "kind": "application",
+          "id": "application_1791359074600_0018",
+          "status": "2026-10-07 10:26:52,730 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:26:53,054 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:26:53,055 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0018\n\tApplication-Name : TeraGen\n\tApplication-Type : MAPREDUCE\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368800478\n\tFinish-Time : 1791368808899\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : http://spark-cluster-slave-3:19888/jobhistory/job/job_1791359074600_0018\n\tRPC Port : 40187\n\tAM Host : spark-cluster-slave-3\n\tAggregate Resource Allocation : 31403 MB-seconds, 17 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791368851.0889373,
+          "kind": "application",
+          "id": "application_1791359074600_0019",
+          "status": "2026-10-07 10:27:30,635 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:27:30,944 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:27:30,944 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0019\n\tApplication-Name : ScalaRepartition\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368831114\n\tFinish-Time : 1791368848826\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0019/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.13\n\tAggregate Resource Allocation : 46945 MB-seconds, 30 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : RUNNING\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791368876.469135,
+          "kind": "application",
+          "id": "application_1791359074600_0020",
+          "status": "2026-10-07 10:27:55,956 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:27:56,328 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:27:56,328 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0020\n\tApplication-Name : autogen-8.0-SNAPSHOT-jar-with-dependencies.jar\n\tApplication-Type : MAPREDUCE\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368861964\n\tFinish-Time : 1791368871754\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : http://spark-cluster-slave-3:19888/jobhistory/job/job_1791359074600_0020\n\tRPC Port : 36361\n\tAM Host : spark-cluster-slave-3\n\tAggregate Resource Allocation : 51420 MB-seconds, 33 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791368922.2587879,
+          "kind": "application",
+          "id": "application_1791359074600_0021",
+          "status": "2026-10-07 10:28:41,750 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:28:42,071 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:28:42,071 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0021\n\tApplication-Name : DenseKMeans with Params(hdfs://spark-cluster-master:9000/HiBench-Control/datasets/63b24216d4c19e03d228bd87-11e53e01/Kmeans/Input/tiny/samples,3,2,MEMORY_ONLY,Random)\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368895679\n\tFinish-Time : 1791368920444\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0021/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.13\n\tAggregate Resource Allocation : 66612 MB-seconds, 44 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791368969.162001,
+          "kind": "application",
+          "id": "application_1791359074600_0022",
+          "status": "2026-10-07 10:29:28,630 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:29:28,980 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:29:28,980 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0022\n\tApplication-Name : Create rankings\n\tApplication-Type : MAPREDUCE\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368933628\n\tFinish-Time : 1791368945675\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : http://spark-cluster-slave-3:19888/jobhistory/job/job_1791359074600_0022\n\tRPC Port : 34039\n\tAM Host : spark-cluster-slave-3\n\tAggregate Resource Allocation : 48453 MB-seconds, 26 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : SUCCEEDED\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791368970.8685372,
+          "kind": "application",
+          "id": "application_1791359074600_0023",
+          "status": "2026-10-07 10:29:30,350 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:29:30,727 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:29:30,727 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0023\n\tApplication-Name : Create uservisits\n\tApplication-Type : MAPREDUCE\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368948585\n\tFinish-Time : 1791368965536\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : http://spark-cluster-slave-1:19888/jobhistory/job/job_1791359074600_0023\n\tRPC Port : 40795\n\tAM Host : spark-cluster-slave-1\n\tAggregate Resource Allocation : 59506 MB-seconds, 36 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791369014.7744896,
+          "kind": "application",
+          "id": "application_1791359074600_0024",
+          "status": "2026-10-07 10:30:14,333 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:30:14,642 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:30:14,642 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0024\n\tApplication-Name : ScalaScan\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791368989978\n\tFinish-Time : 1791369013073\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0024/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.12\n\tAggregate Resource Allocation : 62535 MB-seconds, 41 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        }
+      ]
+    },
+    "08fb663d-3172-44f8-99ee-acb65b62d9d7": {
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "kmeans-exact-count",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "ml.kmeans",
+            "parameters": {
+              "k": 3,
+              "max_iteration": 2,
+              "num_of_samples": 101,
+              "samples_per_inputfile": 50
+            }
+          }
+        ]
+      },
+      "metrics": [
+        {
+          "application_id": "application_1791359074600_0027",
+          "duration_s": 39.707,
+          "finished_at_ms": 1791369536998,
+          "input_bytes": 7250,
+          "run_id": "08fb663d-3172-44f8-99ee-acb65b62d9d7",
+          "scale": "tiny",
+          "schema_version": 2,
+          "started_at_ms": 1791369497291,
+          "throughput_bytes_s": 182.5874530939129,
+          "workload": "ScalaSparkKmeans"
+        }
+      ],
+      "applications": [
+        {
+          "at": 1791369488.0996711,
+          "kind": "application",
+          "id": "application_1791359074600_0026",
+          "status": "2026-10-07 10:38:07,605 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:38:07,930 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:38:07,930 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0026\n\tApplication-Name : autogen-8.0-SNAPSHOT-jar-with-dependencies.jar\n\tApplication-Type : MAPREDUCE\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791369474427\n\tFinish-Time : 1791369483912\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : http://spark-cluster-slave-3:19888/jobhistory/job/job_1791359074600_0026\n\tRPC Port : 40725\n\tAM Host : spark-cluster-slave-3\n\tAggregate Resource Allocation : 47616 MB-seconds, 30 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : NOT_START\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        },
+        {
+          "at": 1791369540.3000145,
+          "kind": "application",
+          "id": "application_1791359074600_0027",
+          "status": "2026-10-07 10:38:59,709 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032\n2026-10-07 10:39:00,109 INFO conf.Configuration: resource-types.xml not found\n2026-10-07 10:39:00,110 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.\nApplication Report : \n\tApplication-Id : application_1791359074600_0027\n\tApplication-Name : DenseKMeans with Params(hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bb529ebe6fa0ac790f6053fc-ee5e0bdc/Kmeans/Input/tiny/samples,3,2,MEMORY_ONLY,Random)\n\tApplication-Type : SPARK\n\tUser : sparker\n\tQueue : default\n\tApplication Priority : 0\n\tStart-Time : 1791369506837\n\tFinish-Time : 1791369536789\n\tProgress : 100%\n\tState : FINISHED\n\tFinal-State : SUCCEEDED\n\tTracking-URL : spark-cluster-master:18080/history/application_1791359074600_0027/1\n\tRPC Port : -1\n\tAM Host : 172.18.0.11\n\tAggregate Resource Allocation : 83346 MB-seconds, 55 vcore-seconds\n\tAggregate Resource Preempted : 0 MB-seconds, 0 vcore-seconds\n\tLog Aggregation Status : SUCCEEDED\n\tDiagnostics : \n\tUnmanaged Application : false\n\tApplication Node Label Expression : <Not set>\n\tAM container Node Label Expression : <DEFAULT_PARTITION>\n\tTimeoutType : LIFETIME\tExpiryTime : UNLIMITED\tRemainingTime : -1seconds\n\n"
+        }
+      ]
+    },
+    "f264c882-82c7-4231-aa20-68f58fcfecdb": {
+      "state": "cancelled",
+      "spec": {
+        "mode": "run",
+        "name": "cancellation-smoke",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "micro.sleep",
+            "parameters": {
+              "mapper.seconds": 60
+            }
+          }
+        ]
+      },
+      "metrics": [],
+      "applications": []
+    }
+  },
+  "correctness": {
+    "verify-micro-final.log": "HIBENCH_CORRECTNESS={\"wordcount\": true, \"sort\": true, \"words\": 3130, \"sort_rows\": 49}",
+    "verify-repartition-final.log": "HIBENCH_CORRECTNESS={\"repartition\": true, \"records\": 100, \"bytes\": 10000}",
+    "verify-sql.log": "HIBENCH_CORRECTNESS={\"sql_scan\": true, \"rows\": 100}"
+  },
+  "artifacts": {
+    "autogen/target/autogen-8.0-SNAPSHOT-jar-with-dependencies.jar": "33ac54bbc83b0af9fa00a337f20535c9af57d13e3553e04e18dfd2e0db53728f",
+    "common/target/hibench-common-8.0-SNAPSHOT-jar-with-dependencies.jar": "b46b43f96736a7a204e489419fbefde4f712b12ce3d72cc0edb78e2f7279e3c2",
+    "sparkbench/assembly/target/sparkbench-assembly-8.0-SNAPSHOT-dist.jar": "4cf0b67c1229bcd410c4b8f20db35bf74a375c4bdbe2773dfd2a2aa5816b46b6"
+  },
+  "classic_api_inventory": "rdd-inventory-upgrade.json",
+  "limitations": [
+    "Tiny or reduced datasets only; client deploy mode on YARN",
+    "19 batch catalog entries remain without a smoke test",
+    "Classic Spark/RDD and MapReduce remain; no Databricks serverless adapter",
+    "Worker crash recovery and cloud adapters remain pending"
+  ]
+}

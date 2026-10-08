@@ -1,0 +1,19 @@
+{
+  "namespace": "org.hibench",
+  "run_id": "5dac3d36-0876-40f4-a50d-6b4b8cd16c27",
+  "state": "succeeded",
+  "applications": [
+    "application_1791359074600_0042",
+    "application_1791359074600_0043",
+    "application_1791359074600_0044",
+    "application_1791359074600_0045"
+  ],
+  "java11_build": "11 modules SUCCESS; 2 Java tests passed",
+  "python_tests": 19,
+  "jar_sha256": "3b78d289f6c21273c91f226a0c5805e2de11889ec1c05560b2abc467fd6e6920",
+  "limits": [
+    "Optional DAL and XGBoost namespaces updated, builds not validated",
+    "Historical reports retained unchanged",
+    "Old class-name aliases are not provided"
+  ]
+}

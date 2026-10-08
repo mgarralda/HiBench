@@ -26,7 +26,7 @@ show_bannar start
 rmr_hdfs $INPUT_HDFS || true
 START_TIME=`timestamp`
 
-run_spark_job com.intel.hibench.sparkbench.ml.LinearRegressionDataGenerator $INPUT_HDFS $NUM_EXAMPLES_LINEAR $NUM_FEATURES_LINEAR 
+run_spark_job org.hibench.sparkbench.ml.LinearRegressionDataGenerator $INPUT_HDFS $NUM_EXAMPLES_LINEAR $NUM_FEATURES_LINEAR
 
 END_TIME=`timestamp`
 

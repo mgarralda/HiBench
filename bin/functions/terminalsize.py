@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 """
 from https://gist.github.com/jtriley/1108174
 """
@@ -27,7 +27,6 @@ def get_terminal_size():
     if current_os in ['Linux', 'Darwin'] or current_os.startswith('CYGWIN'):
         tuple_xy = _get_terminal_size_linux()
     if tuple_xy is None:
-        print "default"
         tuple_xy = (80, 25)      # default value
     return tuple_xy
  
@@ -56,8 +55,8 @@ def _get_terminal_size_tput():
     # get terminal width
     # src: http://stackoverflow.com/questions/263890/how-do-i-find-the-width-height-of-a-terminal-window
     try:
-        cols = int(subprocess.check_call(shlex.split('tput cols')))
-        rows = int(subprocess.check_call(shlex.split('tput lines')))
+        cols = int(subprocess.check_output(shlex.split('tput cols')))
+        rows = int(subprocess.check_output(shlex.split('tput lines')))
         return (cols, rows)
     except:
         pass
@@ -69,7 +68,7 @@ def _get_terminal_size_linux():
             import fcntl
             import termios
             cr = struct.unpack('hh',
-                               fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
+                               fcntl.ioctl(fd, termios.TIOCGWINSZ, b'1234'))
             return cr
         except:
             pass
@@ -90,4 +89,4 @@ def _get_terminal_size_linux():
  
 if __name__ == "__main__":
     sizex, sizey = get_terminal_size()
-    print  'width =', sizex, 'height =', sizey
+    print('width =', sizex, 'height =', sizey)

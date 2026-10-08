@@ -20,25 +20,12 @@ root_dir=${current_dir}/../../../../../
 workload_config=${root_dir}/conf/workloads/sql/join.conf
 . "${root_dir}/bin/functions/load_bench_config.sh"
 
-enter_bench HadoopPrepareJoin ${workload_config} ${current_dir}
+enter_bench SparkPrepareJoin ${workload_config} ${current_dir}
 show_bannar start
-
-rmr_hdfs $INPUT_HDFS || true
-echo -e "${On_Blue}Pages:${PAGES}, USERVISITS:${USERVISITS}${Color_Off}"
-
-OPTION="-t hive \
-        -b ${HIVE_BASE_HDFS} \
-        -n ${HIVE_INPUT} \
-        -m ${NUM_MAPS} \
-        -r ${NUM_REDS} \
-        -p ${PAGES} \
-        -v ${USERVISITS} \
-        -o sequence"
-
+rmr_hdfs "$INPUT_HDFS" || true
 START_TIME=`timestamp`
-run_hadoop_job ${DATATOOLS} HiBench.DataGen ${OPTION}
+run_spark_job org.hibench.sparkbench.sql.SqlDataGenerator "$INPUT_HDFS" "$PAGES" "$USERVISITS" "$NUM_MAPS" "$NUM_REDS"
 END_TIME=`timestamp`
 SIZE="0"
-
 show_bannar finish
 leave_bench

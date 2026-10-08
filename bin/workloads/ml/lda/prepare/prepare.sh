@@ -26,7 +26,7 @@ show_bannar start
 rmr_hdfs $INPUT_HDFS || true
 START_TIME=`timestamp`
 
-run_spark_job com.intel.hibench.sparkbench.ml.LDADataGenerator $INPUT_HDFS $NUM_DOCUMENTS_LDA $NUM_VOCABULARY_LDA $DOC_LEN_MIN_LDA $DOC_LEN_MAX_LDA
+run_spark_job org.hibench.sparkbench.ml.LDADataGenerator $INPUT_HDFS $NUM_DOCUMENTS_LDA $NUM_VOCABULARY_LDA $DOC_LEN_MIN_LDA $DOC_LEN_MAX_LDA
 
 END_TIME=`timestamp`
 

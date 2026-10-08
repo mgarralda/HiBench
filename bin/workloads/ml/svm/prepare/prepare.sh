@@ -26,7 +26,7 @@ show_bannar start
 rmr_hdfs $INPUT_HDFS || true
 START_TIME=`timestamp`
 
-run_spark_job com.intel.hibench.sparkbench.ml.SVMDataGenerator $INPUT_HDFS $NUM_EXAMPLES_SVM $NUM_FEATURES_SVM 
+run_spark_job org.hibench.sparkbench.ml.SVMDataGenerator $INPUT_HDFS $NUM_EXAMPLES_SVM $NUM_FEATURES_SVM
 
 END_TIME=`timestamp`
 

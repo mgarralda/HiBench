@@ -27,7 +27,7 @@ show_bannar start
 rmr_hdfs $INPUT_HDFS || true
 START_TIME=`timestamp`
 
-run_spark_job com.intel.hibench.sparkbench.ml.SummarizerDataGenerator $INPUT_HDFS $NUM_EXAMPLES_SUMMARIZER $NUM_FEATURES_SUMMARIZER
+run_spark_job org.hibench.sparkbench.ml.SummarizerDataGenerator $INPUT_HDFS $NUM_EXAMPLES_SUMMARIZER $NUM_FEATURES_SUMMARIZER
 
 END_TIME=`timestamp`
 

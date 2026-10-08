@@ -4,70 +4,27 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.intel.hibench</groupId>
+    <groupId>org.hibench</groupId>
     <artifactId>hibench</artifactId>
     <version>8.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>autogen</artifactId>
   <packaging>jar</packaging>
-  <groupId>com.intel.hibench</groupId>
+  <groupId>org.hibench</groupId>
   <name>HiBench data generation tools</name>
 
   <dependencies>
     <dependency>
-      <groupId>com.intel.hibench</groupId>
+      <groupId>org.hibench</groupId>
       <artifactId>hibench-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.mahout</groupId>
-      <artifactId>mahout-core</artifactId>
-      <version>${mahout.version}</version>
-      <exclusions>
-      <exclusion>
-        <groupId>org.apache.hadoop</groupId>
-        <artifactId>hadoop-core</artifactId>
-      </exclusion>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.mahout</groupId>
-      <artifactId>mahout-math</artifactId>
-      <version>${mahout.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.uncommons.maths</groupId>
-      <artifactId>uncommons-maths</artifactId>
-      <version>${uncommons-maths.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka-clients</artifactId>
-      <version>0.8.2.2</version>
-    </dependency>
-    <dependency>
+<dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-hdfs</artifactId>
       <version>${hadoop.mr2.version}</version>
+      <scope>provided</scope>
       <exclusions>
         <exclusion>
           <groupId>log4j</groupId>
@@ -83,6 +40,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-client</artifactId>
       <version>${hadoop.mr2.version}</version>
+      <scope>provided</scope>
       <exclusions>
         <exclusion>
           <groupId>log4j</groupId>

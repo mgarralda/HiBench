@@ -1,0 +1,394 @@
+[
+  {
+    "file": "sparkbench/common/src/main/scala/com/intel/hibench/sparkbench/common/IOCommon.scala",
+    "apis": [
+      ".rdd",
+      ".sequenceFile",
+      ".textFile",
+      "RDD",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/common/src/main/scala/org/apache/spark/BaseRangePartitioner.scala",
+    "apis": [
+      ".rdd",
+      "RDD"
+    ]
+  },
+  {
+    "file": "sparkbench/common/src/main/scala/org/apache/spark/ConfigurableOrderedRDDFunctions.scala",
+    "apis": [
+      ".rdd",
+      "RDD",
+      "ShuffledRDD"
+    ]
+  },
+  {
+    "file": "sparkbench/dal/src/main/scala/com/intel/sparkbench/dal/DenseKMeans.scala",
+    "apis": [
+      ".sequenceFile",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/dal/src/main/scala/com/intel/sparkbench/dal/KMeans.scala",
+    "apis": [
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/graph/src/main/scala/com/intel/hibench/sparkbench/graph/nweight/Driver.scala",
+    "apis": [
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/graph/src/main/scala/com/intel/hibench/sparkbench/graph/nweight/GraphxNWeight.scala",
+    "apis": [
+      ".rdd",
+      ".textFile",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.graphx"
+    ]
+  },
+  {
+    "file": "sparkbench/graph/src/main/scala/com/intel/hibench/sparkbench/graph/nweight/NWeightDataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/graph/src/main/scala/com/intel/hibench/sparkbench/graph/nweight/PregelNWeight.scala",
+    "apis": [
+      ".textFile",
+      "SparkContext",
+      "org.apache.spark.graphx"
+    ]
+  },
+  {
+    "file": "sparkbench/graph/src/main/scala/com/intel/hibench/sparkbench/graph/pagerank/GraphXPageRank.scala",
+    "apis": [
+      "GraphLoader",
+      "SparkContext",
+      "org.apache.spark.graphx"
+    ]
+  },
+  {
+    "file": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaDFSIOE.scala",
+    "apis": [
+      ".newAPIHadoopFile",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaInMemRepartition.scala",
+    "apis": [
+      ".rdd",
+      "RDD",
+      "ShuffledRDD",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaRepartition.scala",
+    "apis": [
+      ".newAPIHadoopFile",
+      ".sparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaSleep.scala",
+    "apis": [
+      ".parallelize",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaSort.scala",
+    "apis": [
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaTeraSort.scala",
+    "apis": [
+      ".newAPIHadoopFile",
+      ".rdd",
+      "RDD",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaWordCount.scala",
+    "apis": [
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/micro/src/main/scala/org/apache/spark/rdd/MemoryDataRDD.scala",
+    "apis": [
+      ".rdd",
+      "RDD",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/ALSExample.scala",
+    "apis": [
+      ".objectFile",
+      ".sparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/CorrelationDataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      ".rdd",
+      "RDD",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/CorrelationExample.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      ".sparkContext",
+      "RDD"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/DenseKMeans.scala",
+    "apis": [
+      ".sequenceFile",
+      ".sparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/GaussianMixtureModel.scala",
+    "apis": [
+      ".sequenceFile",
+      ".sparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/GradientBoostedTree.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/GradientBoostedTreeDataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/LDADataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/LDAExample.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/LinearRegressionDataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      ".rdd",
+      "RDD",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/LinearRegressionWithElasticNet.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      ".sparkContext",
+      "RDD"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/LogisticRegression.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/LogisticRegressionDataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/PCADataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      ".rdd",
+      "RDD",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/PCAExample.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      ".sparkContext",
+      "RDD"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/RandomForestClassification.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/RandomForestDataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/RatingDataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/SummarizerDataGenerator.scala",
+    "apis": [
+      ".rdd",
+      ".sparkContext",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/SummarizerExample.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      ".sparkContext",
+      "RDD",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/SVDDataGenerator.scala",
+    "apis": [
+      ".rdd",
+      "RDD",
+      "RowMatrix",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/SVDExample.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      "RDD",
+      "RowMatrix",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/SVMDataGenerator.scala",
+    "apis": [
+      ".parallelize",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/SVMWithSGDExample.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/ml/src/main/scala/com/intel/sparkbench/ml/XGBoost.scala",
+    "apis": [
+      ".objectFile",
+      ".rdd",
+      ".sparkContext",
+      "RDD",
+      "SparkContext",
+      "org.apache.spark.mllib"
+    ]
+  },
+  {
+    "file": "sparkbench/websearch/src/main/scala/org/apache/spark/examples/SparkPageRank.scala",
+    "apis": [
+      ".textFile",
+      "SparkContext"
+    ]
+  },
+  {
+    "file": "autogen/src/main/scala/HiBench/BayesDataGen.scala",
+    "apis": [
+      ".parallelize",
+      ".sequenceFile",
+      ".sparkContext"
+    ]
+  }
+]

@@ -26,7 +26,7 @@ show_bannar start
 rmr_hdfs $INPUT_HDFS || true
 START_TIME=`timestamp`
 
-run_spark_job com.intel.hibench.sparkbench.graph.nweight.NWeightDataGenerator $MODEL_INPUT $INPUT_HDFS $EDGES
+run_spark_job org.hibench.sparkbench.graph.nweight.NWeightDataGenerator $MODEL_INPUT $INPUT_HDFS $EDGES
 
 END_TIME=`timestamp`
 

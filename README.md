@@ -1,3 +1,41 @@
+# HiBench Batch — Spark 3.5.9
+
+Build/runtime reference: Java 11, Spark 3.5.9, Scala 2.12.18, Python 3.10+. Default build is batch only. This community fork is not an official Intel release.
+
+HiBench Next uses `org.hibench` for the project packages formerly under Intel's namespace. See the [namespace migration guide](docs/namespace-migration.md) before using custom class names or older JARs.
+
+All five `micro.*` workloads and their preparation paths now use SparkSession and DataFrames/Datasets, without MapReduce or RDD boundaries. See the [micro contracts and migration notes](docs/micro-modernization.md); `configs/smoke-micro.yaml` exercises the complete micro family.
+
+The three `sql.*` workloads now use Spark SQL over Parquet and a Spark generator, without a Hive metastore or MapReduce preparation. See the [SQL contracts and validation](docs/sql-modernization.md); `configs/smoke-sql.yaml` exercises the SQL family.
+
+ML migration covers `ml.als`, `ml.kmeans` and `ml.gmm`: Spark ML estimators, typed Parquet inputs and Dataset generation, with no application RDD boundary. See [ML modernization](docs/ml-modernization.md); `configs/smoke-als.yaml` and `configs/smoke-clustering.yaml` exercise preparation and training. Other ML workloads are still being migrated.
+
+## New controller and Streamlit UI
+
+Build with JDK 11 and Maven 3.9. On Windows, `./bin/build-java11.ps1` builds and tests inside the Maven/Java 11 Docker image, so the host's old Java installation can remain in place.
+
+```sh
+mvn -B -DskipTests clean package
+python -m venv .venv
+# Activate the virtual environment before the following commands.
+python -m pip install -e ".[web]"
+hibench validate configs/docker-yarn.yaml
+hibench install configs/docker-yarn.yaml
+hibench doctor configs/docker-yarn.yaml
+hibench run configs/docker-yarn.yaml --wait
+python -m streamlit run hibench/web.py --server.fileWatcherType none
+```
+
+The sample prepares and runs tiny WordCount and Sort on Docker/YARN. Reinstall after changing runtime scripts or JARs. The UI shares the CLI schema and offers parameters, Run, logs, results, cancellation and durable history. See [controller guide](docs/controlador-batch.md), [verified results](docs/upgrade-validation-2026-10-07.md), [audit](docs/compatibilidad-spark-3.5.md) and [platform analysis](docs/plataformas-y-control-streamlit.md).
+
+MapReduce preparation, Mahout types and classic Spark boundaries remain. Databricks serverless compatibility is not achieved. Cloud submission/storage adapters are not implemented. The 24 batch catalog entries are candidates; compilation does not certify every workload. XGBoost's historical dependencies remain in an unvalidated optional `xgboost` profile.
+
+Python checks: `python -m unittest discover -s tests -v`. Metrics now use named schema-2 CSV fields. Elapsed time includes submission and startup. Legacy monitoring is disabled by default.
+
+## Historical Spark 3.3 notes
+
+The following describes the previous version; use the commands and versions above for the upgrade branch.
+
 # HiBench for Apache Spark 3.3 (Scala-based)
 
 This repository provides an updated version of [Intel's HiBench](https://github.com/Intel-bigdata/HiBench), adapted to support **Apache Spark 3.3.x**, **Scala 2.12**, and modern DataFrame APIs.
@@ -210,7 +248,7 @@ There are totally 24 workloads in HiBench. The workloads are divided into 6 cate
 
 1. Scan (scan) 2. Join (join), 3. Aggregate (aggregation)
 
-    These workloads are developed based on SIGMOD 09 paper "A Comparison of Approaches to Large-Scale Data Analysis" and HIVE-396. It contains Hive queries (Aggregation and Join) performing the typical OLAP queries described in the paper. Its input is also automatically generated Web data with hyperlinks following the Zipfian distribution.
+    These workloads originate from the SIGMOD 09 paper "A Comparison of Approaches to Large-Scale Data Analysis" and HIVE-396. HiBench Next runs Scan, Aggregation and Join using Spark SQL over Parquet, without Hive tables or a metastore. The Spark generator preserves the original scale presets and representative web-data profiles, including Zipfian hyperlink popularity. See [SQL modernization](docs/sql-modernization.md) for schemas, query semantics and validation.
 
 **Websearch Benchmarks:**
 
@@ -233,4 +271,3 @@ rge-scale search indexing is one of the most significant uses of MapReduce. This
   - Spark: Spark 3.3.x
 
 ---
-

@@ -28,7 +28,7 @@ rmr_hdfs $OUTPUT_HDFS || true
 
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
-run_spark_job com.intel.hibench.sparkbench.ml.LDAExample --numTopics $NUM_TOPICS_LDA --maxIterations $NUM_ITERATIONS_LDA --optimizer $OPTIMIZER_LDA --maxResultSize $MAXRESULTSIZE_LDA $INPUT_HDFS $OUTPUT_HDFS
+run_spark_job org.hibench.sparkbench.ml.LDAExample --numTopics $NUM_TOPICS_LDA --maxIterations $NUM_ITERATIONS_LDA --optimizer $OPTIMIZER_LDA --maxResultSize $MAXRESULTSIZE_LDA $INPUT_HDFS $OUTPUT_HDFS
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

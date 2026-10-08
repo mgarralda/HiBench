@@ -24,7 +24,7 @@ enter_bench ScalaSparkSleep ${workload_config} ${current_dir}
 show_bannar start
 
 START_TIME=`timestamp`
-run_spark_job com.intel.hibench.sparkbench.micro.ScalaSleep $MAP_SLEEP_TIME
+run_spark_job org.hibench.sparkbench.micro.ScalaSleep $MAP_SLEEP_TIME
 END_TIME=`timestamp`
 SIZE="0"
 

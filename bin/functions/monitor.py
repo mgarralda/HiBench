@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -17,11 +17,13 @@
 import threading, subprocess, re, os, sys, signal, socket
 from time import sleep, time
 from contextlib import closing
-import traceback, thread
+import traceback, _thread
+import ast
 from datetime import datetime
 from collections import namedtuple
 from pprint import pprint
 from itertools import groupby
+from functools import reduce
 
 # Probe intervals, in seconds.
 # Warning: a value too short may get wrong results due to lack of data when system load goes high.
@@ -35,7 +37,7 @@ def log(*s):
     else: s= " ".join([str(x) for x in s])
 #    with log_lock:
 #        with open("/home/zhihui/monitor_proc.log", 'a') as f:
-    log_str = str(thread.get_ident())+":"+str(s) +'\n'
+    log_str = str(_thread.get_ident())+":"+str(s) +'\n'
     #        f.write( log_str )
     sys.stderr.write(log_str)
         
@@ -69,7 +71,7 @@ class PatchedNameTuple(object):
         cls = self.__class__
         return cls(self[0], *[a-b for a, b in zip(self[1:], other[1:])])
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         return self.__class__(self[0], *[a/other for a in self[1:]])
 
     def _add(self, other, override_title=None):
@@ -101,7 +103,7 @@ try:
  while True:
   log("accepting")
   try:
-   print s.getsockname()[1]
+   print(s.getsockname()[1], flush=True)
    s2,peer=s.accept()
    break
   except socket.timeout:
@@ -110,11 +112,13 @@ try:
 except Exception as e:
  import traceback
  log(traceback.format_exc())
+def send_text(value):
+ s2.sendall(value.encode("utf-8"))
 {func_template}
 while True:
-  s2.send(("{SEP}+%s" % time.time())+chr(10))
+  send_text(("{SEP}+%s" % time.time())+chr(10))
 {call_template}
-  s2.send("{SEP}#end"+chr(10))
+  send_text("{SEP}#end"+chr(10))
   time.sleep({interval})
 ')"""
     template=r"""exec('
@@ -122,13 +126,15 @@ import time, os, sys, socket, traceback
 s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(("0.0.0.0",0))
 s.listen(5)
-print s.getsockname()[1]
+print(s.getsockname()[1], flush=True)
 s2,peer=s.accept()
+def send_text(value):
+ s2.sendall(value.encode("utf-8"))
 {func_template}
 while True:
-  s2.send(("{SEP}+%s" % time.time())+chr(10))
+  send_text(("{SEP}+%s" % time.time())+chr(10))
 {call_template}
-  s2.send("{SEP}#end"+chr(10))
+  send_text("{SEP}#end"+chr(10))
   time.sleep({interval})
 ')"""
 
@@ -151,7 +157,7 @@ while True:
         func_template = "\n".join(["def func_{id}():\n{func}"\
                                        .format(id=id,
                                                func=ident(2,
-                                                          func+'\ns2.send("{SEP}={id}"+chr(10))'\
+                                                          func+'\nsend_text("{SEP}={id}"+chr(10))'\
                                                               .format(SEP=self.SEP, id=id))) \
                                        for id, func in enumerate(self.cmds)])
         call_template="\n".join(["  func_{id}()"\
@@ -165,7 +171,7 @@ while True:
         s = script.replace('"', r'\"').replace("\n", r"\n")
         container=[]
 #        log("ssh client to:", self.host)
-        with self.ssh_client(self.host, "python -u -c \"{script}\"".format(script=s)) as f:
+        with self.ssh_client(self.host, "python3 -u -c \"{script}\"".format(script=s)) as f:
 #            log("ssh client %s connected" % self.host)
             try:
                 port_line = f.readline()
@@ -262,7 +268,7 @@ class BaseMonitor(object):
             self._last = stat
 #            if header.startswith("net"):
 #                print stat_delta
-            stat_delta[header+'/total'] = reduce_patched(lambda a,b: a._add(b, 'total'), stat_delta.values())
+            stat_delta[header+'/total'] = reduce_patched(lambda a,b: a._add(b, 'total'), list(stat_delta.values()))
             self.rproc.aggregate(timestamp, stat_delta)
 
 
@@ -272,7 +278,7 @@ class BashSSHClientMixin(object):
         with open(os.devnull, 'rb', 0) as DEVNULL:
             with BashSSHClientMixin.ssh_lock:
                 self.proc = subprocess.Popen(["ssh", host, shell], bufsize=1, 
-                                             stdin=DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                                             stdin=DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf-8', errors='replace')
         return self.proc.stdout
 
     def ssh_close(self):
@@ -291,7 +297,7 @@ class CPUMonitor(BaseMonitor):
     def __init__(self, rproc):
         super(CPUMonitor, self).__init__(rproc)
         rproc.register(self, """with open("/proc/stat") as f:
-  s2.send("".join([x for x in f.readlines() if x.startswith("cpu")]))
+  send_text("".join([x for x in f.readlines() if x.startswith("cpu")]))
 """)
 
     def feed(self, container, timestamp):
@@ -322,14 +328,14 @@ class NetworkMonitor(BaseMonitor):
     IGNORE_KEYS=["lo"]
     def __init__(self, rproc):
         rproc.register(self, """with open("/proc/net/dev") as f:
-  s2.send("".join([x for x in f.readlines()]))
+  send_text("".join([x for x in f.readlines()]))
 """)
         self._filter = re.compile('^\s*(.+):\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+\d+\s+\d+\s+\d+\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+).*$')
         super(NetworkMonitor, self).__init__(rproc)
 
     def feed(self, container, timestamp):
         "parse /proc/net/dev"
-        self.commit(timestamp, "net", dict(filter(lambda x:x, [self._parse_net_dev(line) for line in container])))
+        self.commit(timestamp, "net", dict([x for x in [self._parse_net_dev(line) for line in container] if x]))
 
     def _parse_net_dev(self, line):
         matched = self._filter.match(line)
@@ -347,7 +353,7 @@ class DiskMonitor(BaseMonitor):
         super(DiskMonitor, self).__init__(rproc)
         rproc.register(self, """with open("/proc/diskstats") as f:
   blocks = os.listdir("/sys/block")
-  s2.send("".join([x for x in f.readlines() if x.split()[2] in blocks and not x.split()[2].startswith("loop") and x.split()[3]!="0"]))
+  send_text("".join([x for x in f.readlines() if x.split()[2] in blocks and not x.split()[2].startswith("loop") and x.split()[3]!="0"]))
 """)
 
     def feed(self, container, timestamp):
@@ -370,7 +376,7 @@ class MemoryMonitor(BaseMonitor):
         super(MemoryMonitor, self).__init__(rproc)
         rproc.register(self, """with open("/proc/meminfo") as f:
   mem = dict([(a, b.split()[0].strip()) for a, b in [x.split(":") for x in f.readlines()]])
-  s2.send(":".join([mem[field] for field in ["MemTotal", "Buffers", "Cached", "MemFree", "Mapped"]])+chr(10))
+  send_text(":".join([mem[field] for field in ["MemTotal", "Buffers", "Cached", "MemFree", "Mapped"]])+chr(10))
 """)
 
     def feed(self, memory_status, timestamp):
@@ -388,7 +394,7 @@ class ProcMonitor(BaseMonitor):
     def __init__(self, rproc):
         super(ProcMonitor, self).__init__(rproc)
         rproc.register(self, """with open("/proc/loadavg") as f:
-  s2.send(f.read())
+  send_text(f.read())
 """)
 
     def feed(self, load_status, timestamp):
@@ -422,13 +428,13 @@ class NodeAggregator(object):
                 f.write(repr(datas) + "\n")
 
     def run(self):
-        for v in self.node_pool.values():
+        for v in list(self.node_pool.values()):
             v.start()
 
     def stop(self):
-        for v in self.node_pool.values():
+        for v in list(self.node_pool.values()):
             v.stop()
-        for v in self.node_pool.values():
+        for v in list(self.node_pool.values()):
             v.join()
 
 def round_to_base(v, b):
@@ -451,7 +457,7 @@ def round_to_base(v, b):
     return float(int(v * 10**i) / base * base) / (10**i)
 
 def filter_dict_with_prefix(d, prefix, sort=True):
-    keys = sorted(d.keys()) if sort else d.keys()
+    keys = sorted(d.keys()) if sort else list(d.keys())
     if prefix[0]=='!':
         return  dict([(x, d[x]) for x in keys if not x.startswith(prefix[1:])])
     else:
@@ -477,15 +483,15 @@ def test():
     script=r"""exec('
 import time, os, sys
 while 1:
-  with open("/proc/stat") as f: print f.read(),
-  print "---hello---"
+  with open("/proc/stat") as f: print(f.read(), end="")
+  print("---hello---")
   time.sleep(1)
 ')"""
     s = script.replace('"', r'\"').replace("\n", r"\n")
-    with p.ssh_client("localhost", "python -u -c \"{s}\"".format(s=s)) as f:
+    with p.ssh_client("localhost", "python3 -u -c \"{s}\"".format(s=s)) as f:
         while 1:
             l = f.readline()
-            print l.rstrip()
+            print(l.rstrip())
             if not l: break
     p.ssh_close()
 
@@ -601,7 +607,7 @@ def parse_bench_log(benchlog_fn):
 def generate_report(workload_title, log_fn, benchlog_fn, report_fn):
     c =- 1
     with open(log_fn) as f:
-        datas=[eval(x) for x in f.readlines()]
+        datas=[ast.literal_eval(x) for x in f.readlines()]
 
     all_hosts = sorted(list(set([x['hostname'] for x in datas])))
     data_slices = groupby(datas, lambda x:round_to_base(x['timestamp'], PROBE_INTERVAL)) # round to time interval and groupby
@@ -631,7 +637,7 @@ def generate_report(workload_title, log_fn, benchlog_fn, report_fn):
         data_by_all_hosts = [classed_by_host.get(h, {}) for h in all_hosts]
 
         # all cpu cores, total cluster
-        summed1 = [x['cpu/total'] for x in data_by_all_hosts if x.has_key('cpu/total')]
+        summed1 = [x['cpu/total'] for x in data_by_all_hosts if 'cpu/total' in x]
         if summed1: 
             summed = reduce_patched(lambda a,b: a._add(b), summed1) / len(summed1)
             for x in data_by_all_hosts:
@@ -659,7 +665,7 @@ def generate_report(workload_title, log_fn, benchlog_fn, report_fn):
                                                host = x['hostname'], cpuid = y.label))
 
         # all disk of each node, total cluster
-        summed1=[x['disk/total'] for x in data_by_all_hosts if x.has_key('disk/total')]
+        summed1=[x['disk/total'] for x in data_by_all_hosts if 'disk/total' in x]
         if summed1:
             summed = reduce_patched(lambda a,b: a._add(b), summed1)
             for x in data_by_all_hosts:
@@ -693,7 +699,7 @@ def generate_report(workload_title, log_fn, benchlog_fn, report_fn):
                                                diskid = y.label))
 
         # memory of each node, total cluster
-        summed1 = [x['memory/total'] for x in data_by_all_hosts if x.has_key('memory/total')]
+        summed1 = [x['memory/total'] for x in data_by_all_hosts if 'memory/total' in x]
         if summed1:
             summed = reduce_patched(lambda a,b: a._add(b), summed1)
             for x in data_by_all_hosts:
@@ -725,7 +731,7 @@ def generate_report(workload_title, log_fn, benchlog_fn, report_fn):
 
 
         # proc of each node, total cluster
-        summed1 = [x['proc'] for x in data_by_all_hosts if x.has_key('proc')]
+        summed1 = [x['proc'] for x in data_by_all_hosts if 'proc' in x]
         if summed1: 
             summed = reduce_patched(lambda a,b: a._add(b), summed1)
             for x in data_by_all_hosts:
@@ -751,7 +757,7 @@ def generate_report(workload_title, log_fn, benchlog_fn, report_fn):
                                                     host = x['hostname']))
 
         # all network interface, total cluster
-        summed1 = [x['net/total'] for x in data_by_all_hosts if x.has_key('net/total')]
+        summed1 = [x['net/total'] for x in data_by_all_hosts if 'net/total' in x]
 
         if summed1: 
             summed = reduce_patched(lambda a,b: a._add(b), summed1)
@@ -838,7 +844,7 @@ if __name__=="__main__":
     nodes_to_monitor = sys.argv[6:]
     pid=os.fork()
     if pid:                               #parent
-        print pid
+        print(pid)
     else:                                 #child
         os.close(0)
         os.close(1)

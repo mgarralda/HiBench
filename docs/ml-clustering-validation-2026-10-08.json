@@ -1,0 +1,201 @@
+{
+  "date": "2026-10-08",
+  "spark": "3.5.9",
+  "java": "11",
+  "contract": "gaussian-parquet-v1",
+  "workloads": [
+    "ml.kmeans",
+    "ml.gmm"
+  ],
+  "python_tests": 46,
+  "post_LF_fix_contract_tests": 7,
+  "build": "All 11 default modules successful; no legacy clustering generator tests retained.",
+  "controller_run": {
+    "id": "9efd172a-8504-4bac-bb79-bc110c195a44",
+    "state": "succeeded"
+  },
+  "application_ids": [
+    "application_1791359074600_0072",
+    "application_1791359074600_0073",
+    "application_1791359074600_0074",
+    "application_1791359074600_0075"
+  ],
+  "profile_checks": [
+    {
+      "workload": "kmeans",
+      "scale": "tiny",
+      "planned_samples": 30000,
+      "dimensions": 3,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "kmeans",
+      "scale": "small",
+      "planned_samples": 3000000,
+      "dimensions": 20,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "kmeans",
+      "scale": "large",
+      "planned_samples": 20000000,
+      "dimensions": 20,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "kmeans",
+      "scale": "huge",
+      "planned_samples": 100000000,
+      "dimensions": 20,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "kmeans",
+      "scale": "gigantic",
+      "planned_samples": 200000000,
+      "dimensions": 20,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "kmeans",
+      "scale": "bigdata",
+      "planned_samples": 1200000000,
+      "dimensions": 20,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "gmm",
+      "scale": "tiny",
+      "planned_samples": 30000,
+      "dimensions": 3,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "gmm",
+      "scale": "small",
+      "planned_samples": 3000000,
+      "dimensions": 20,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "gmm",
+      "scale": "large",
+      "planned_samples": 20000000,
+      "dimensions": 20,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "gmm",
+      "scale": "huge",
+      "planned_samples": 100000000,
+      "dimensions": 20,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "gmm",
+      "scale": "gigantic",
+      "planned_samples": 200000000,
+      "dimensions": 20,
+      "clusters": 5,
+      "allocation_verified": true
+    },
+    {
+      "workload": "gmm",
+      "scale": "bigdata",
+      "planned_samples": 2000000,
+      "dimensions": 100,
+      "clusters": 200,
+      "allocation_verified": true
+    },
+    {
+      "samples": 101,
+      "clusters": 5,
+      "chunk": 7,
+      "deterministic_across_partitions": true
+    },
+    {
+      "samples": 3,
+      "clusters": 5,
+      "chunk": 2,
+      "deterministic_across_partitions": true
+    },
+    {
+      "samples": 100,
+      "clusters": 5,
+      "chunk": 1000,
+      "deterministic_across_partitions": true
+    },
+    {
+      "samples": 100001,
+      "standardized_mean": 7.626492865022158e-05,
+      "standardized_variance": 1.0018814020751852,
+      "two_sigma_tail_fraction": 0.045292880404529286,
+      "max_abs_conditional_covariance": 0.013947717805613439,
+      "original_profile_equivalent": true
+    },
+    {
+      "samples": 30000,
+      "dimensions": 3,
+      "parquet_roundtrip": true,
+      "file_row_limit": 6000
+    }
+  ],
+  "original_profile": {
+    "rows": 100001,
+    "dimensions": 3,
+    "clusters": 5,
+    "standardized_mean": -0.0009143619253173866,
+    "standardized_variance": 1.0001917533990496,
+    "two_sigma_tail_fraction": 0.04554621120455462
+  },
+  "fixture_sha256": "7bb72a2b297c70c7cf5bfbb9da748687f3cd417e72933f97258221a5cde5738e",
+  "benchmark_results": [
+    {
+      "application_id": "application_1791359074600_0073",
+      "duration_s": 33.393,
+      "finished_at_ms": 1791450548863,
+      "input_bytes": 853829,
+      "run_id": "9efd172a-8504-4bac-bb79-bc110c195a44",
+      "scale": "tiny",
+      "schema_version": 2,
+      "started_at_ms": 1791450515470,
+      "throughput_bytes_s": 25569.101308657504,
+      "workload": "ScalaSparkKmeans"
+    },
+    {
+      "application_id": "application_1791359074600_0075",
+      "duration_s": 37.871,
+      "finished_at_ms": 1791450631630,
+      "input_bytes": 853829,
+      "run_id": "9efd172a-8504-4bac-bb79-bc110c195a44",
+      "scale": "tiny",
+      "schema_version": 2,
+      "started_at_ms": 1791450593759,
+      "throughput_bytes_s": 22545.72100023765,
+      "workload": "GaussianMixtureModel"
+    }
+  ],
+  "input_counts": [
+    30000,
+    30000
+  ],
+  "kmeans_cost": 327075503.64038146,
+  "gmm_log_likelihood": -528069.8452813178,
+  "retired_classes_in_default_jars": [],
+  "limits": [
+    "All six preset allocations and dimensions checked; actual large preset generation and training were not run.",
+    "Full YARN execution used tiny: 30000 rows, 3 dimensions, 5 generated components, k=10 and 5 iterations per workload.",
+    "Parquet physical bytes and partition layout differ from legacy SequenceFile.",
+    "Optional DAL launchers are unavailable pending migration; cloud/serverless support is not certified."
+  ]
+}

@@ -14,11 +14,6 @@ public class DataGen extends Configured implements Tool {
 
 		DataOptions options = new DataOptions(args);
 		switch (options.getType()) {
-			case HIVE: {
-				HiveData data = new HiveData (options);
-				data.generate();
-				break;
-			}
 			case PAGERANK: {
 				PagerankData data = new PagerankData(options);
 				data.generate();

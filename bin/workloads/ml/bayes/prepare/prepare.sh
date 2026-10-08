@@ -48,6 +48,7 @@ run_spark_job --jars ${DATATOOLS} HiBench.BayesDataGen --input ${INPUT_HDFS} --o
   --classes ${CLASSES}
 
 END_TIME=`timestamp`
+echo "HIBENCH_INPUT_PATH=${INPUT_HDFS}.parquet"
 
 show_bannar finish
 leave_bench
