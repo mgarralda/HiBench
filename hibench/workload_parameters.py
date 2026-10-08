@@ -5,6 +5,8 @@ from .catalog import SCALES, read_properties, repository_root, workloads
 
 MEANINGS = {
     "seed": "Random seed for reproducible data generation.",
+    "noise_std": "Standard deviation of zero-mean Gaussian label noise; linear labels equal features dot coefficients plus this noise. Default: 1.0.",
+    "test_fraction": "Fraction excluded from linear training (split seed 12345); reported metrics remain training metrics. Default: 0.25.",
     "pages": "Number of page or document candidates.",
     "uservisits": "Candidate visits; SQL drops visits to pages without incoming links.",
     "num_of_samples": "Number of generated samples.",

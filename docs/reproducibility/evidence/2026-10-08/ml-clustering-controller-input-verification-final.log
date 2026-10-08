@@ -1,0 +1,2 @@
+HIBENCH_CLUSTERING_CONTROLLER_VERIFIED={"input": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/34811a00637f89d6ebd1f9e7-f7731e38/Kmeans/gaussian-parquet-v1/Input/tiny", "rows": 30000, "dimensions": 3, "exact_cli_data_match": true}
+HIBENCH_CLUSTERING_CONTROLLER_VERIFIED={"input": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/89008f809ce5bade0f890686-df757578/GMM/gaussian-parquet-v1/Input/tiny", "rows": 30000, "dimensions": 3, "exact_cli_data_match": true}

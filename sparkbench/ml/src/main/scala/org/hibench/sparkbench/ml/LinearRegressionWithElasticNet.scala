@@ -1,9 +1,7 @@
 package org.hibench.sparkbench.ml
 
-import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.ml.linalg.Vector
 import org.apache.spark.ml.regression.LinearRegression
-import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scopt.OptionParser
@@ -66,7 +64,8 @@ object LinearRegressionWithElasticNet {
       .appName("LinearRegressionWithElasticNet")
       .getOrCreate()
 
-    val training: DataFrame = loadDatasets(params.input,"regression",params.fracTest)
+    val training: DataFrame = loadDatasets(spark, params.input, params.fracTest)
+    try {
 
     val lr = new LinearRegression()
       .setFeaturesCol("features")
@@ -87,35 +86,24 @@ object LinearRegressionWithElasticNet {
     println(s"numIterations: ${trainingSummary.totalIterations}")
     println(s"objectiveHistory: [${trainingSummary.objectiveHistory.mkString(",")}]")
     trainingSummary.residuals.show()
+    require(!trainingSummary.rootMeanSquaredError.isNaN && !trainingSummary.rootMeanSquaredError.isInfinity, "Non-finite training RMSE")
     println(s"RMSE: ${trainingSummary.rootMeanSquaredError}")
     println(s"r2: ${trainingSummary.r2}")
 
-    spark.stop()
+    } finally {
+      training.unpersist()
+      spark.stop()
+    }
   }
 
-  private[ml] def loadDatasets(input: String,
-      algo: String,
-      fracTest: Double): DataFrame ={
-    val spark = SparkSession
-      .builder
-      .getOrCreate()
-
-    // Load training data
-    val data: RDD[LabeledPoint] = spark.sparkContext.objectFile(input)
-    import spark.implicits._
-    val origExamples = data.toDF()
-
-    // Load or create test set
-    val dataframes: Array[DataFrame] = origExamples.randomSplit(Array(1.0 - fracTest, fracTest), seed = 12345)
-
-    val training = dataframes(0).cache()
-
+  private[ml] def loadDatasets(spark: SparkSession, input: String,
+      fracTest: Double): DataFrame = {
+    val origExamples = spark.read.parquet(input).select("label", "features")
+    val training = origExamples.randomSplit(Array(1.0 - fracTest, fracTest), seed = 12345)(0).cache()
     val numTraining = training.count()
-
+    require(numTraining > 0, "Linear regression training split is empty")
     val numFeatures = training.select("features").first().getAs[Vector](0).size
-    println("Loaded data:")
-    println(s"  numTraining = $numTraining")
-    println(s"  numFeatures = $numFeatures")
+    println(s"Loaded data: numTraining = $numTraining, numFeatures = $numFeatures")
     training
   }
 }

@@ -123,18 +123,7 @@
 <!--      </dependencies>-->
 <!--    </profile>-->
 
-<!--    <profile>-->
-<!--      <id>dal</id>-->
-<!--      <dependencies>-->
-<!--        <dependency>-->
-<!--          <groupId>org.hibench.sparkbench</groupId>-->
-<!--          <artifactId>sparkbench-dal</artifactId>-->
-<!--          <version>${project.version}</version>-->
-<!--        </dependency>-->
-<!--      </dependencies>-->
-<!--    </profile>-->
-
-    <profile>
+<profile>
 <!--      <id>allModules</id>-->
       <id>SparkBench</id>
 

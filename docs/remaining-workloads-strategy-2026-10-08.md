@@ -2,11 +2,16 @@
 
 Source review: 2026-10-08, current upgrade working tree. This is a migration proposal, not runtime certification. No algorithms or generators were changed during this review. User requirement: maintained workload and generator code must not use RDD APIs; a classic-only RDD exception is not acceptable.
 
-Implementation update after the review: ALS, KMeans and GMM are now migrated; see [ML modernization](ml-modernization.md), [ALS validation](ml-als-validation-2026-10-08.json) and [clustering validation](ml-clustering-validation-2026-10-08.json). The inventory below describes the original review baseline.
+Implementation update after the review: ALS, KMeans, GMM and linear regression
+are now migrated; see [ML modernization](ml-modernization.md),
+[ALS validation](ml-als-validation-2026-10-08.json),
+[clustering validation](ml-clustering-validation-2026-10-08.json) and
+[linear validation](ml-linear-validation-2026-10-08.json).
+The inventory below describes the original review baseline.
 
 ## Scope and inventory
 
-The maintained catalog contains 24 workloads. Micro (5) and SQL (3) have completed their migration; the remaining catalog scope is ML (14), graph.nweight and websearch.pagerank. Additional launchers exist for graph.pagerank, optional ml.xgboost and dal.kmeans; these need an explicit disposition rather than being silently omitted or enabled.
+The maintained catalog contains 24 workloads. Micro (5) and SQL (3) have completed their migration; the remaining catalog scope is ML (14), graph.nweight and websearch.pagerank. Additional launchers exist for graph.pagerank and optional ml.xgboost; these need an explicit disposition. The obsolete DAL variant has been retired completely.
 
 | Workloads | Current execution / input | Proposed migration | Relative effort |
 | --- | --- | --- | --- |
@@ -71,7 +76,7 @@ Separate generation, import and benchmark timing. Force lazy transformations thr
 
 For each delivery: original small fixtures or statistical baseline, all-preset configuration validation, new generator/profile tests, workload result/quality checks and a real Spark 3.5.9 cluster run. Larger-size runtime claims require actual execution, not extrapolation. Retire the previous production generator and launcher references only after these checks; retain provenance, metadata and small reference fixtures. Shared legacy classes can be removed only after the last remaining consumer migrates.
 
-Optional XGBoost (current profile dependency 1.0.0), DAL/native code and the extra GraphX PageRank launcher require separate dependency/platform reviews. DataFrame APIs alone do not certify Databricks serverless, Fabric or another managed runtime: estimator, custom JVM code, library installation, storage and submission support remain platform-specific checks.
+Optional XGBoost (current profile dependency 1.0.0) and the extra GraphX PageRank launcher require separate dependency/platform reviews. DataFrame APIs alone do not certify Databricks serverless, Fabric or another managed runtime: estimator, custom JVM code, library installation, storage and submission support remain platform-specific checks.
 
 ## Primary references
 

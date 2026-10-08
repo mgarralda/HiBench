@@ -30,7 +30,7 @@ SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
 run_spark_job org.hibench.sparkbench.ml.LinearRegressionWithElasticNet \
     --regParam ${REG_PARAM_LINEAR} --elasticNetParam ${ELASTICNET_PARAM_LINEAR} \
-    --maxIter ${NUM_ITERATIONS_LINEAR} --tol ${TOL_LINEAR} ${INPUT_HDFS}
+    --maxIter ${NUM_ITERATIONS_LINEAR} --tol ${TOL_LINEAR} --fracTest ${TEST_FRACTION_LINEAR} ${INPUT_HDFS}
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

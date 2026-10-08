@@ -1,0 +1,54 @@
+1da6421b-e30c-499d-aa6f-3a0928e3c7af
+{
+  "id": "1da6421b-e30c-499d-aa6f-3a0928e3c7af",
+  "request_key": "ed909f0a-78d2-4f1b-bb65-efb63f80c72d",
+  "state": "succeeded",
+  "spec": {
+    "mode": "prepare_and_run",
+    "name": "ml-linear-modern-validation",
+    "repetitions": 1,
+    "resources": {
+      "driver_memory": "2g",
+      "executor_cores": 1,
+      "executor_instances": 1,
+      "executor_memory": "2g",
+      "map_partitions": 2,
+      "shuffle_partitions": 2
+    },
+    "scale": "tiny",
+    "schema_version": 1,
+    "spark_conf": {
+      "spark.dynamicAllocation.enabled": false,
+      "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+      "spark.sql.adaptive.enabled": false,
+      "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+    },
+    "target": {
+      "container": "spark-cluster-master",
+      "deploy_mode": "client",
+      "hadoop_home": "/home/sparker/hadoop-3.3.6",
+      "hdfs_uri": "hdfs://spark-cluster-master:9000",
+      "kind": "docker",
+      "master": "yarn",
+      "spark_home": "/usr/local/spark",
+      "workers": [
+        "spark-cluster-slave-1",
+        "spark-cluster-slave-2",
+        "spark-cluster-slave-3"
+      ],
+      "workspace": "/home/sparker/HiBench"
+    },
+    "timeout_s": 1800,
+    "workloads": [
+      {
+        "id": "ml.linear",
+        "parameters": {}
+      }
+    ]
+  },
+  "created": 1791452526.7857738,
+  "updated": 1791452638.5018828,
+  "cancel": 0,
+  "detail": "All requested phases completed",
+  "worker_pid": 61000
+}

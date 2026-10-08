@@ -1,0 +1,19 @@
+docker compose --project-directory C:\Users\mgarralda\AppData\Local\Temp\tmpoxjya42l\lab -f C:\Users\mgarralda\AppData\Local\Temp\tmpoxjya42l\lab\docker-compose.yml -p spark-cluster up -d --wait --wait-timeout 300
+...........2026-10-08 10:04:04.549 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+..2026-10-08 10:04:05.085 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+......2026-10-08 10:04:05.495 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+.2026-10-08 10:04:05.598 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+..2026-10-08 10:04:05.902 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+.2026-10-08 10:04:05.988 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+..2026-10-08 10:04:06.132 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+..2026-10-08 10:04:06.370 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+..........2026-10-08 10:04:06.552 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+..E:\projects\HiBench\hibench\config.py:113: FutureWarning: Possible set union at position 4
+  if kind == "string" and (not isinstance(value, str) or not re.fullmatch(r"[\w.||-]+", value)):
+.2026-10-08 10:04:08.786 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+.2026-10-08 10:04:08.921 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+.
+----------------------------------------------------------------------
+Ran 42 tests in 6.273s
+
+OK

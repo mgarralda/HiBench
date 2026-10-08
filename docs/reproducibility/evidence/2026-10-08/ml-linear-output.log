@@ -1,0 +1,75 @@
+patching args=
+Parsing conf: /home/sparker/HiBench/conf/hadoop.conf
+Parsing conf: /home/sparker/HiBench/conf/hibench.conf
+Parsing conf: /home/sparker/HiBench/conf/spark.conf
+Parsing conf: /home/sparker/HiBench/conf/workloads/ml/linear.conf
+Parsing conf: /home/sparker/HiBench/report/control/1da6421b-e30c-499d-aa6f-3a0928e3c7af/ml.linear/0/override.conf
+HIBENCH_INPUT_PATH=hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bcdaeb306b8f3e90aa82e67b-c3fa615d/Linear/linear-parquet-v1/Input/tiny
+start LinearRegressionDataPrepare bench
+hdfs rm -r: /home/sparker/hadoop-3.3.6/bin/hadoop --config /home/sparker/hadoop-3.3.6/etc/hadoop fs -rm -r -f -skipTrash hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bcdaeb306b8f3e90aa82e67b-c3fa615d/Linear/linear-parquet-v1/Input/tiny
+Export env: SPARKBENCH_PROPERTIES_FILES=/home/sparker/HiBench/report/control/1da6421b-e30c-499d-aa6f-3a0928e3c7af/ml.linear/0/linear/prepare/conf/sparkbench/sparkbench.conf
+Export env: HADOOP_CONF_DIR=/home/sparker/hadoop-3.3.6/etc/hadoop
+Submit Spark job: /usr/local/spark/bin/spark-submit            --files /home/sparker/HiBench/report/control/1da6421b-e30c-499d-aa6f-3a0928e3c7af/ml.linear/0/linear/prepare/conf/sparkbench/sparkbench.conf           --properties-file /home/sparker/HiBench/report/control/1da6421b-e30c-499d-aa6f-3a0928e3c7af/ml.linear/0/linear/prepare/conf/sparkbench/spark.conf           --conf spark.extraListeners=org.hibench.sparkbench.common.BenchmarkListener           --conf spark.executorEnv.SPARKBENCH_PROPERTIES_FILES=sparkbench.conf           --conf spark.yarn.appMasterEnv.SPARKBENCH_PROPERTIES_FILES=sparkbench.conf           --class org.hibench.sparkbench.ml.LinearRegressionDataGenerator           --master yarn --num-executors 1 --executor-cores 1 --executor-memory 2g --driver-memory 2g --driver-cores 1 --deploy-mode client /home/sparker/HiBench/sparkbench/assembly/target/sparkbench-assembly-8.0-SNAPSHOT-dist.jar hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bcdaeb306b8f3e90aa82e67b-c3fa615d/Linear/linear-parquet-v1/Input/tiny 50000 1000 2 42 1.0
+HIBENCH_APPLICATION_ID=application_1791359074600_0076
+finish LinearRegressionDataPrepare bench
+patching args=
+Parsing conf: /home/sparker/HiBench/conf/hadoop.conf
+Parsing conf: /home/sparker/HiBench/conf/hibench.conf
+Parsing conf: /home/sparker/HiBench/conf/spark.conf
+Parsing conf: /home/sparker/HiBench/conf/workloads/ml/linear.conf
+Parsing conf: /home/sparker/HiBench/report/control/1da6421b-e30c-499d-aa6f-3a0928e3c7af/ml.linear/1/override.conf
+HIBENCH_INPUT_PATH=hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bcdaeb306b8f3e90aa82e67b-c3fa615d/Linear/linear-parquet-v1/Input/tiny
+start LinearRegression bench
+Checking if input data path exists: /home/sparker/hadoop-3.3.6/bin/hadoop --config /home/sparker/hadoop-3.3.6/etc/hadoop fs -test -e hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bcdaeb306b8f3e90aa82e67b-c3fa615d/Linear/linear-parquet-v1/Input/tiny
+hdfs rm -r: /home/sparker/hadoop-3.3.6/bin/hadoop --config /home/sparker/hadoop-3.3.6/etc/hadoop fs -rm -r -f -skipTrash hdfs://spark-cluster-master:9000/HiBench-Control/runs/1da6421b-e30c-499d-aa6f-3a0928e3c7af/ml.linear/1
+Export env: SPARKBENCH_PROPERTIES_FILES=/home/sparker/HiBench/report/control/1da6421b-e30c-499d-aa6f-3a0928e3c7af/ml.linear/1/linear/spark/conf/sparkbench/sparkbench.conf
+Export env: HADOOP_CONF_DIR=/home/sparker/hadoop-3.3.6/etc/hadoop
+Submit Spark job: /usr/local/spark/bin/spark-submit            --files /home/sparker/HiBench/report/control/1da6421b-e30c-499d-aa6f-3a0928e3c7af/ml.linear/1/linear/spark/conf/sparkbench/sparkbench.conf           --properties-file /home/sparker/HiBench/report/control/1da6421b-e30c-499d-aa6f-3a0928e3c7af/ml.linear/1/linear/spark/conf/sparkbench/spark.conf           --conf spark.extraListeners=org.hibench.sparkbench.common.BenchmarkListener           --conf spark.executorEnv.SPARKBENCH_PROPERTIES_FILES=sparkbench.conf           --conf spark.yarn.appMasterEnv.SPARKBENCH_PROPERTIES_FILES=sparkbench.conf           --class org.hibench.sparkbench.ml.LinearRegressionWithElasticNet           --master yarn --num-executors 1 --executor-cores 1 --executor-memory 2g --driver-memory 2g --driver-cores 1 --deploy-mode client /home/sparker/HiBench/sparkbench/assembly/target/sparkbench-assembly-8.0-SNAPSHOT-dist.jar --regParam 0.3 --elasticNetParam 0.8 --maxIter 50 --tol 1E-6 --fracTest 0.25 hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bcdaeb306b8f3e90aa82e67b-c3fa615d/Linear/linear-parquet-v1/Input/tiny
+HIBENCH_APPLICATION_ID=application_1791359074600_0077
+Loaded data: numTraining = 37451, numFeatures = 1000
+Coefficients: [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.09789442534269877,0.0,0.0,0.0,0.0865470018128505,0.0,0.0,0.0,0.060141243397559205,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002504219038531197,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.030820852349691254,0.0,0.0,-0.07435671545674394,0.0,0.0,0.0,0.04263788592362434,0.0,0.0,0.0,0.0,0.0,0.012745725185797953,-0.019896017881886125,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.013346876079324766,0.0,0.0,0.0,0.0,0.0,-0.0147598048979892,0.0,0.0,0.02873164554187339,0.0,0.0,-0.05370390529323289,0.0,0.0,0.0,0.0,0.0,0.0,-0.02215297010169833,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.017363929913544282,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.022172160552783808,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.06352474126912046,-0.007375628903830625,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.09675318524015836,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1110820391913396,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.014063025625452313,0.0,0.0,0.0,0.13711490161643727,0.0,0.0,0.0,-0.00785686902021962,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.07212631635610349,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.07109306205372952,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.08347662345533616,0.13564112845077067,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0760928923163576,0.0,0.0,0.0,-0.03102543234032643,0.0,-0.05430806395464334,0.0,0.07124833029741354,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.18362369023338318,0.0,-0.13557871056823434,0.0,0.0,0.0,-0.03826702873279856,0.0,0.0,0.0,0.0,0.0,0.09528844295130619,0.0,-0.06878713739330068,0.0,0.0,0.0,0.0,0.007363621831244001,0.0,0.0,0.07061493117754968,0.0,0.0,0.0,0.0,0.0,-0.03591723826094909,0.0,0.0,0.0,-0.12284017514054511,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.10043880587735184,-0.0063336621606713255,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.057670372542438134,0.0,0.0,0.0,0.0,-0.010450726918754306,0.0,0.0,0.0,0.0,0.0,0.0,-0.01853428097280557,0.0,0.0,0.0,0.0,0.0,0.0,-0.06400783954423733,-0.040733596093579766,0.0,0.0,0.0,-0.10042487884187078,0.0,0.0,0.0,0.0,0.0,-0.046411894085939924,0.0,0.0,0.06411472737366611,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.10591907707523128,0.0,0.0,0.0,0.026561944507313993,-0.05762294481378726,0.0,0.0,0.010298848881267579,0.0,-0.06691854654092773,0.0,-0.041635152091337224,0.0,0.0,0.05283247021225197,0.0,0.0,0.0,-0.10713979296738936,0.15177346011800888,-0.05656818036142519,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.023670791609325777,0.0,0.0,0.0,0.07385245775017672,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.10079075723889175,0.0,0.0,0.0,0.0,0.0,-0.0555077201710716,0.14251029881301958,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.011712406425986978,0.0,0.0,0.0,0.0,0.0,-0.05783658408254143,0.0,0.0,0.0,-0.017139103276197366,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.10757137156942817,0.0,0.0,0.021755769096210933,0.0,0.0,0.0,0.0,0.006927192538138022,0.0,0.0,-0.07300348811921499,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.005621334223207609,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.10193444983369523,-0.1257968279183553,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.06513385814091091,0.0,0.0,0.0,0.0,-0.036383685049756545,0.0,0.0,0.0,0.0,0.0,0.0,0.07271744377946665,0.0,0.0,0.0,0.0,0.033208346182304324,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.007850761447377256,0.0,0.0,0.0,0.0,-0.037098955405477155,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.019901391428071288,0.0,0.03747029643737694,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.056290845459575765,0.005220453811664898,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0044680019935723885,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03187520250847039,0.0,0.0,0.0,0.0,0.0,0.0,0.04342865943723777,0.0,-0.016971781752701493,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.11268519760869235,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.04582882021136375,0.0,0.0,0.0,0.0,0.1505868832247019,0.0,0.0,0.0,0.0,0.0,0.0,0.0552632671371502,0.0,0.0,0.0,0.0,0.0,-0.08892037290874948,0.0,0.0,-0.11248819856977772,0.05654469455461372,0.006919936251473733,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.029232197815753928,0.0,-0.13213631605797577,0.0,0.04377559040881664,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0626502531386763,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.048333555352277034,0.0,0.0,0.0,0.0253507069832214,0.0,0.0,-0.05467754621186117,0.0,-0.05538672868379943,0.07982750167406513,0.0,0.0,0.0,-0.028543601556968938,0.0,0.0,0.0,0.0,0.14555485762733367,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.060379968791553884,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.11656169173024603,0.0,0.0,0.0,0.0,0.07992150516129137,0.0,0.0,0.0,-0.0022687172285524686,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.09125186285983641,0.0,0.0,0.0,0.0,0.08647551654467371,0.0,0.0,0.0,0.12522637776031603,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.004889014723424977,-0.03600788249276316,0.0,0.09527481778004172,0.0,0.0,0.06222594010936505,0.0,0.0,0.0,0.0,0.0,-0.034238547338506016,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.009899774802446356,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.16840237932892477,0.0,-0.0067228039918487605,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.007950646316215951,0.0,0.0,0.004229929025165562,0.0,0.0,0.0,0.0,-0.009451315156132586,0.0,0.0,0.0,0.0,0.0,0.0,0.02765351238742579,0.0,0.0,0.08390301896874311,0.007948482433860572,0.0,0.0,0.0,0.0,0.0,-0.03680292776565729,0.0,0.0,0.0,0.0,0.0,0.0,-0.060934478189196416,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.06930586697380202,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.04670434626623059,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.003136701357964194,0.0,0.0,0.0,0.06926769069180304,0.0,0.0,-0.013774450434173162,0.0,-0.06000064293843776,0.0,0.0,0.007313141622117476,0.0,-0.05276579507432188,0.0,-0.1079200626779494,0.0,0.0,0.0,0.0,0.0407525065313847,0.0,0.0,0.0,0.0,0.0,0.07995951661159482,0.0,0.0,0.0,0.1051161527103858,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.050734605253821924,0.0,0.014329623904424996,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0] Intercept: 0.035480782091731874
+numIterations: 5
+objectiveHistory: [0.49999999999999994,0.49902659834227414,0.4953423916175957,0.4953405391098743,0.49534053598576183,0.4953405359245635]
++-------------------+
+|          residuals|
++-------------------+
+|-19.906328709644587|
+|-18.784202146680286|
+|-17.728290231686298|
+|-17.315077162451395|
+| -17.08515496551543|
+| -17.23491600189511|
+|-16.314652639468356|
+|-16.281984471981065|
+| -16.48090722458711|
+| -16.03552658851612|
+|-15.698489110410643|
+| -15.73773024299173|
+|-15.829327749877322|
+|-15.461794009116902|
+|-15.061297636198764|
+|-15.341423740356696|
+| -14.32065507006739|
+|-15.554069880936343|
+|-15.595656021186768|
+|-15.367758029236505|
++-------------------+
+only showing top 20 rows
+
+RMSE: 4.946521740211151
+r2: 0.0940384157479559
+org.apache.spark.SparkException: Could not find CoarseGrainedScheduler.
+	at org.apache.spark.rpc.netty.Dispatcher.postMessage(Dispatcher.scala:178)
+	at org.apache.spark.rpc.netty.Dispatcher.postOneWayMessage(Dispatcher.scala:150)
+	at org.apache.spark.rpc.netty.NettyRpcEnv.send(NettyRpcEnv.scala:193)
+	at org.apache.spark.rpc.netty.NettyRpcEndpointRef.send(NettyRpcEnv.scala:563)
+	at org.apache.spark.scheduler.cluster.YarnSchedulerBackend$YarnSchedulerEndpoint.$anonfun$org$apache$spark$scheduler$cluster$YarnSchedulerBackend$$handleExecutorDisconnectedFromDriver$3(YarnSchedulerBackend.scala:319)
+	at org.apache.spark.scheduler.cluster.YarnSchedulerBackend$YarnSchedulerEndpoint.$anonfun$org$apache$spark$scheduler$cluster$YarnSchedulerBackend$$handleExecutorDisconnectedFromDriver$3$adapted(YarnSchedulerBackend.scala:319)
+	at scala.util.Success.foreach(Try.scala:253)
+	at scala.concurrent.Future.$anonfun$foreach$1$adapted(Future.scala:229)
+	at scala.concurrent.impl.CallbackRunnable.run(Promise.scala:64)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+HIBENCH_RESULT={"application_id": "application_1791359074600_0077", "duration_s": 52.07, "finished_at_ms": 1791452634518, "input_bytes": 400962056, "run_id": "1da6421b-e30c-499d-aa6f-3a0928e3c7af", "scale": "tiny", "schema_version": 2, "started_at_ms": 1791452582448, "throughput_bytes_s": 7700442.788553869, "workload": "LinearRegression"}
+finish LinearRegression bench

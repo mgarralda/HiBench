@@ -32,9 +32,11 @@ def render():
             st.dataframe(other, hide_index=True, width="stretch")
         st.caption("Source: " + str(path.relative_to(path.parents[3])))
     resources = st.session_state.experiment["resources"]
-    st.info(f"Shared execution settings: {resources['map_partitions']} generation partitions · "
+    st.info(f"Shared execution settings: {resources['map_partitions']} map partitions · "
             f"{resources['shuffle_partitions']} shuffle partitions. Configure these in Experiments; "
             "they can affect data layout and generator content.")
+    if selected == "ml.linear":
+        st.caption("Linear generation defaults to the shuffle partition count. Changing it changes the random streams and dataset. Metrics are measured on the training split.")
     st.subheader("Customize for an experiment")
     base = st.session_state.experiment
     scale = st.selectbox("Reference scale", SCALES, index=SCALES.index(base["scale"]))

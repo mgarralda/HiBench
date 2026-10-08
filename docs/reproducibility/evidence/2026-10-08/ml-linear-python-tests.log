@@ -1,0 +1,68 @@
+test_cancel_and_timeout_use_adapter_cancellation (test_adapters.AdapterTests.test_cancel_and_timeout_use_adapter_cancellation) ... ok
+test_classic_collection_and_authoritative_failure (test_adapters.AdapterTests.test_classic_collection_and_authoritative_failure) ... ok
+test_preparation_and_run_capabilities_are_separate (test_adapters.AdapterTests.test_preparation_and_run_capabilities_are_separate) ... ok
+test_registry_and_planned_destinations (test_adapters.AdapterTests.test_registry_and_planned_destinations) ... ok
+test_text_workloads_need_spark_only_and_validate_byte_size (test_adapters.AdapterTests.test_text_workloads_need_spark_only_and_validate_byte_size) ... ok
+test_worker_uses_only_adapter_contract (test_adapters.AdapterTests.test_worker_uses_only_adapter_contract) ... ok
+test_invalid_counts (test_als.AlsContractTests.test_invalid_counts) ... ok
+test_presets_preserved (test_als.AlsContractTests.test_presets_preserved) ... ok
+test_ratings_allow_long_counts (test_als.AlsContractTests.test_ratings_allow_long_counts) ... ok
+test_invalid_configuration (test_clustering.ClusteringContractTests.test_invalid_configuration) ... ok
+test_legacy_generator_and_dependencies_removed (test_clustering.ClusteringContractTests.test_legacy_generator_and_dependencies_removed) ... ok
+test_original_presets (test_clustering.ClusteringContractTests.test_original_presets) ... ok
+test_spark_only_preparation (test_clustering.ClusteringContractTests.test_spark_only_preparation) ... ok
+docker compose --project-directory C:\Users\mgarralda\AppData\Local\Temp\tmpkcchao8w\lab -f C:\Users\mgarralda\AppData\Local\Temp\tmpkcchao8w\lab\docker-compose.yml -p spark-cluster up -d --wait --wait-timeout 300
+test_detached_operation_and_duplicate_protection (test_clusters.ClusterTests.test_detached_operation_and_duplicate_protection) ... ok
+test_lifecycle_plans_preserve_volumes_and_project (test_clusters.ClusterTests.test_lifecycle_plans_preserve_volumes_and_project) ... ok
+test_navigation_pages_do_not_change_cluster_automatically (test_clusters.ClusterTests.test_navigation_pages_do_not_change_cluster_automatically) ... 2026-10-08 11:42:21.250 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_profile_and_download_arguments (test_clusters.ClusterTests.test_profile_and_download_arguments) ... ok
+test_destination_selection_and_independent_connection_check (test_control.ControlTests.test_destination_selection_and_independent_connection_check) ... 2026-10-08 11:42:21.829 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_fractional_record_counts_are_rejected (test_control.ControlTests.test_fractional_record_counts_are_rejected) ... ok
+test_idempotence_claim_and_destination_lease (test_control.ControlTests.test_idempotence_claim_and_destination_lease) ... ok
+test_injection_and_unknown_parameters_rejected (test_control.ControlTests.test_injection_and_unknown_parameters_rejected) ... ok
+test_simultaneous_requests_create_one_run (test_control.ControlTests.test_simultaneous_requests_create_one_run) ... ok
+test_sleep_does_not_require_a_physical_dataset (test_control.ControlTests.test_sleep_does_not_require_a_physical_dataset) ... ok
+test_streamlit_loads_without_exception (test_control.ControlTests.test_streamlit_loads_without_exception) ... 2026-10-08 11:42:22.235 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_streamlit_repeated_run_does_not_duplicate_submission (test_control.ControlTests.test_streamlit_repeated_run_does_not_duplicate_submission) ... 2026-10-08 11:42:22.342 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_subprocess_preserves_arguments_and_failure (test_control.ControlTests.test_subprocess_preserves_arguments_and_failure) ... ok
+test_azure_event_logs_are_independent_from_hdfs_datasets (test_general.GeneralSettingsTests.test_azure_event_logs_are_independent_from_hdfs_datasets) ... 2026-10-08 11:42:22.679 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_general_ui_saves_and_preserves_custom_paths (test_general.GeneralSettingsTests.test_general_ui_saves_and_preserves_custom_paths) ... 2026-10-08 11:42:22.782 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_invalid_roots_are_rejected_and_ha_nameservice_is_accepted (test_general.GeneralSettingsTests.test_invalid_roots_are_rejected_and_ha_nameservice_is_accepted) ... ok
+test_provider_switch_replaces_uri_prefixes_without_saving (test_general.GeneralSettingsTests.test_provider_switch_replaces_uri_prefixes_without_saving) ... 2026-10-08 11:42:22.941 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_storage_and_runtime_settings_reach_staging_and_dataset_identity (test_general.GeneralSettingsTests.test_storage_and_runtime_settings_reach_staging_and_dataset_identity) ... ok
+test_wasbs_dataset_storage_can_be_applied (test_general.GeneralSettingsTests.test_wasbs_dataset_storage_can_be_applied) ... 2026-10-08 11:42:23.159 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_invalid_contracts (test_linear.LinearContractTests.test_invalid_contracts) ... ok
+test_original_presets_and_payload (test_linear.LinearContractTests.test_original_presets_and_payload) ... ok
+test_valid_zero_noise_and_long_count (test_linear.LinearContractTests.test_valid_zero_noise_and_long_count) ... ok
+test_in_memory_repartition_and_sleep_have_no_input (test_micro.MicroContractTests.test_in_memory_repartition_and_sleep_have_no_input) ... ok
+test_micro_only_needs_spark_batch (test_micro.MicroContractTests.test_micro_only_needs_spark_batch) ... ok
+test_no_micro_rdd_or_legacy_example_dependency (test_micro.MicroContractTests.test_no_micro_rdd_or_legacy_example_dependency) ... ok
+test_original_scale_presets_are_preserved (test_micro.MicroContractTests.test_original_scale_presets_are_preserved) ... ok
+test_tera_size_and_memory_overflow_are_rejected (test_micro.MicroContractTests.test_tera_size_and_memory_overflow_are_rejected) ... ok
+test_advanced_properties_are_saved_and_emitted_for_submission (test_spark_properties.SparkPropertyTests.test_advanced_properties_are_saved_and_emitted_for_submission) ... ok
+test_invalid_generation_sizes (test_sql.SqlContractTests.test_invalid_generation_sizes) ... ok
+test_original_scales_preserved (test_sql.SqlContractTests.test_original_scales_preserved) ... ok
+test_weighted_vocabularies_preserved (test_sql.SqlContractTests.test_weighted_vocabularies_preserved) ... ok
+test_all_workload_pages_render_without_execution (test_workload_parameters.WorkloadParameterTests.test_all_workload_pages_render_without_execution) ... 2026-10-08 11:42:23.488 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_customizations_are_validated_without_mutating_reference_or_draft (test_workload_parameters.WorkloadParameterTests.test_customizations_are_validated_without_mutating_reference_or_draft) ... ok
+test_every_workload_and_scale_can_be_inspected_and_applied (test_workload_parameters.WorkloadParameterTests.test_every_workload_and_scale_can_be_inspected_and_applied) ... E:\projects\HiBench\hibench\config.py:113: FutureWarning: Possible set union at position 4
+  if kind == "string" and (not isinstance(value, str) or not re.fullmatch(r"[\w.||-]+", value)):
+ok
+test_experiment_draft_survives_navigation_without_submission (test_workload_parameters.WorkloadParameterTests.test_experiment_draft_survives_navigation_without_submission) ... 2026-10-08 11:42:26.164 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_ui_applies_overrides_and_returns_to_experiment (test_workload_parameters.WorkloadParameterTests.test_ui_applies_overrides_and_returns_to_experiment) ... 2026-10-08 11:42:26.310 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+
+----------------------------------------------------------------------
+Ran 49 tests in 7.251s
+
+OK

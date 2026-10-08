@@ -92,14 +92,7 @@
 <!--      </modules>-->
 <!--    </profile>-->
 
-<!--    <profile>-->
-<!--      <id>dal</id>-->
-<!--      <modules>-->
-<!--        <module>dal</module>-->
-<!--      </modules>-->
-<!--    </profile>-->
-
-  <profiles>
+<profiles>
     <profile>
       <id>SparkBench</id>
       <modules>

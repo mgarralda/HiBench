@@ -1,0 +1,34 @@
+schema_version: 1
+name: ml-linear-modern-validation
+target:
+  kind: docker
+  container: spark-cluster-master
+  workspace: /home/sparker/HiBench
+  spark_home: /usr/local/spark
+  hadoop_home: /home/sparker/hadoop-3.3.6
+  master: yarn
+  deploy_mode: client
+  hdfs_uri: hdfs://spark-cluster-master:9000
+  workers:
+  - spark-cluster-slave-1
+  - spark-cluster-slave-2
+  - spark-cluster-slave-3
+mode: prepare_and_run
+scale: tiny
+repetitions: 1
+timeout_s: 1800
+resources:
+  executor_instances: 1
+  executor_cores: 1
+  executor_memory: 2g
+  driver_memory: 2g
+  map_partitions: 2
+  shuffle_partitions: 2
+spark_conf:
+  spark.dynamicAllocation.enabled: false
+  spark.sql.adaptive.enabled: false
+  spark.eventLog.dir: hdfs://spark-cluster-master:9000/shared/spark-logs
+  spark.yarn.historyServer.address: spark-cluster-master:18080
+workloads:
+- id: ml.linear
+  parameters: {}

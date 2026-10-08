@@ -112,6 +112,22 @@ def validate(data):
                 raise ValueError(f"{key} must be boolean")
             if kind == "string" and (not isinstance(value, str) or not re.fullmatch(r"[\w.||-]+", value)):
                 raise ValueError(f"Invalid parameter string: {key}")
+        if item["id"] == "ml.linear":
+            for key in ("examples", "features", "seed", "num_iterations"):
+                value = parameters.get(key, int(schema[key]["presets"][data["scale"]]))
+                limit = 2**63 - 1 if key in ("examples", "seed") else 2**31 - 1
+                minimum = 0 if key == "seed" else 1
+                if type(value) is not int or not minimum <= value <= limit:
+                    raise ValueError(f"Linear {key} must be an integer between {minimum} and {limit}")
+            alpha = parameters.get("elasticnet_param", float(schema["elasticnet_param"]["default"]))
+            if not 0 <= alpha <= 1:
+                raise ValueError("Linear elasticnet_param must be between 0 and 1")
+            tol = parameters.get("tolerance", float(schema["tolerance"]["default"]))
+            if tol <= 0:
+                raise ValueError("Linear tolerance must be positive")
+            fraction = parameters.get("test_fraction", float(schema["test_fraction"]["default"]))
+            if not 0 <= fraction < 1:
+                raise ValueError("Linear test_fraction must be in [0, 1)")
         if item["id"] == "ml.als":
             effective = {key: parameters.get(key, int(schema[key]["presets"][data["scale"]]))
                          for key in ("users", "products", "ratings")}

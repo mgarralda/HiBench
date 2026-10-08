@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "baseline_revision": "57473c3f8829d86f90d4e42d489f1c66eaf2b5f0",
+  "scope": "Current working-tree evidence, including changes after baseline revision; not a release certification.",
+  "companion_cluster_revision": "379c801b92d3baf6b2c9e70532e21825107861a0",
+  "files": {
+    "bin/reproducibility_snapshot.py": {
+      "sha256": "328216ad55dad8467fdaf25439f1a8eb441b3d0ca226677f688cab1ecf91aa07",
+      "bytes": 3238
+    },
+    "bin/update_evidence_manifest.py": {
+      "sha256": "4dd9e01e018bc7273c74c9829d338d74d8df4906c31cf3c1fe781cf856ae78e6",
+      "bytes": 2159
+    },
+    "configs/smoke-als.yaml": {
+      "sha256": "f5d0189c2bfe9431c43b0088321c818286e3e8502362a747710e4bae6d46173c",
+      "bytes": 891
+    },
+    "configs/smoke-clustering.yaml": {
+      "sha256": "ceb400d45b05d505cfcedb9c280936ac88d767f32d4a7f15fa99ec98c978e81b",
+      "bytes": 933
+    },
+    "configs/smoke-extended.yaml": {
+      "sha256": "02b0ce63233c23c22f2f182939530b8479a42a680819f45a38a81fcab7d24ef6",
+      "bytes": 1128
+    },
+    "configs/smoke-kmeans-count.yaml": {
+      "sha256": "89b4e484a64e7f41074cc9ce47053756ee060430ac377b807fbe8c987e856ead",
+      "bytes": 973
+    },
+    "configs/smoke-micro.yaml": {
+      "sha256": "12b60e67e432278928e4f5df1e1b637926cc6626fb24b361498a44ae35b5d974",
+      "bytes": 1174
+    },
+    "configs/smoke-sql.yaml": {
+      "sha256": "53dca7ab7f55980dd1bec2865104b68b68128a95d162920b6826f43021dba485",
+      "bytes": 1070
+    },
+    "configs/smoke-text-micro.yaml": {
+      "sha256": "5cd4f1a821607472173eef5ac1b69008aa8b4d93dcd3c5ca223146b441e9bc7a",
+      "bytes": 1000
+    },
+    "docs/adaptadores.md": {
+      "sha256": "ee76bd63ef7565299647086fd4a39dfb506ae92ed09c74313487f669ea388673",
+      "bytes": 4253
+    },
+    "docs/controlador-batch.md": {
+      "sha256": "43175df109b3fd88bde3adfc761f47e7b448800176af6df86c0651661a601489",
+      "bytes": 3742
+    },
+    "docs/general-configuration-review.md": {
+      "sha256": "46eeddfb9a790fad96b662831400e656c33035f72e0b675dddfb1df0750feebc",
+      "bytes": 7360
+    },
+    "docs/generator-migration-policy.md": {
+      "sha256": "c844f0211adb0535167e0d2e0bf384a809e7d552b69ca7c2efc51956ef9091eb",
+      "bytes": 1855
+    },
+    "docs/gestion-cluster.md": {
+      "sha256": "820b043b2fb2dd86d020f14c34b27af5d2c21f9402e28392a4ceab5c34f42ff7",
+      "bytes": 2884
+    },
+    "docs/micro-modern-validation-2026-10-07.json": {
+      "sha256": "8732b683378766268c2a1f119229f42ced150ede0e2d91656bc14231acfaf9d9",
+      "bytes": 17872
+    },
+    "docs/micro-modernization.md": {
+      "sha256": "915d320ed4e3bff55393070071c95dc9d011208d668ae405975679d58c2e560a",
+      "bytes": 5637
+    },
+    "docs/micro-scale-reference.json": {
+      "sha256": "a3723ef7bd5bae6300f966614c8af00e211336f091293f6e43cd585b22903df1",
+      "bytes": 1398
+    },
+    "docs/ml-als-scale-reference.json": {
+      "sha256": "985a1be1e7208d8ae8b359c61ed06d5feea11f02caede1b759d5d711eb46046b",
+      "bytes": 740
+    },
+    "docs/ml-als-validation-2026-10-08.json": {
+      "sha256": "5a49c5d027d5e571a9b513a503f9f6f4db531d8a6bb83d49f03f9403a46d5f2f",
+      "bytes": 4123
+    },
+    "docs/ml-clustering-scale-reference.json": {
+      "sha256": "0df0e208985fc60b86865fde5d969ff254ca695ff59667a8a7b9da93abfbb7f4",
+      "bytes": 3014
+    },
+    "docs/ml-clustering-validation-2026-10-08.json": {
+      "sha256": "3329db1a7fc60d6e2c25e243b7331ceaa6a40abc623332a69fe724b7f9f3c74b",
+      "bytes": 6357
+    },
+    "docs/ml-modernization.md": {
+      "sha256": "79009240bc7c77dfbee603c09c72e2c18f8a1a7de6fc060d06b140dcda807aad",
+      "bytes": 8076
+    },
+    "docs/namespace-migration.md": {
+      "sha256": "8dec0939d5a32090253382c1dccc121fc2ce0d0d2e1e0c16f66793b9e27b415f",
+      "bytes": 1299
+    },
+    "docs/randomtextwriter-reference.json": {
+      "sha256": "6819e7b207226ef2dff7acb8430cf2579d2381387fbfa845a742089f371a6b07",
+      "bytes": 18920
+    },
+    "docs/reproducibility/README.md": {
+      "sha256": "54c1bedc083e2737a8d66bfa333ddf008ece34c12003b7b2cf9e68bc89e0fb72",
+      "bytes": 3480
+    },
+    "docs/reproducibility/evidence/2026-10-08/dal-retirement-controller-tests.log": {
+      "sha256": "723da62a03b96092b4eea2afe1f8682048f115fc141fac7129e64337567077fb",
+      "bytes": 8122
+    },
+    "docs/reproducibility/evidence/2026-10-08/micro-modern-build-final.log": {
+      "sha256": "3959a06fa95600491e318691a67def1ab644b8208abfe37a87740eb19ed6cd07",
+      "bytes": 25048
+    },
+    "docs/reproducibility/evidence/2026-10-08/ml-als-build.log": {
+      "sha256": "6ddc4d67a704cf9f838897c7833ab5afc52e2eaec3a885bfec6589c2d5b35ecd",
+      "bytes": 25124
+    },
+    "docs/reproducibility/evidence/2026-10-08/ml-als-final-tests-unsandboxed.log": {
+      "sha256": "a48d3d79ffe6df5be2f0b83ac074e92a7d3f746a7cc8cce46c6e91cb4160ecf6",
+      "bytes": 2013
+    },
+    "docs/reproducibility/evidence/2026-10-08/ml-als-profile.log": {
+      "sha256": "2f31b46f61ae12fc36586526526563830b7b69b07ad5fa07724f6246107bec81",
+      "bytes": 1416
+    },
+    "docs/reproducibility/evidence/2026-10-08/ml-clustering-contract-tests.log": {
+      "sha256": "3b1b1015edd0bd647f7bf0e38977e0a58760f4cd2b6c7d353b5dd1c85fb19e19",
+      "bytes": 110
+    },
+    "docs/reproducibility/evidence/2026-10-08/ml-clustering-controller-input-verification-final.log": {
+      "sha256": "136053954fec260d8f1f9ef40da1612592651079a55ec33107c2032ba8e3fea4",
+      "bytes": 487
+    },
+    "docs/reproducibility/evidence/2026-10-08/ml-clustering-final-build.log": {
+      "sha256": "35c328664ae654bf59337f5dcb153cf00ebe312ad757b124fbe73e9303e9031d",
+      "bytes": 23395
+    },
+    "docs/reproducibility/evidence/2026-10-08/ml-clustering-final-profile.log": {
+      "sha256": "21b6cbfc0815411502c3e44e4d904bc26ff7ae19d9d1b44032d647ea686f702a",
+      "bytes": 2209
+    },
+    "docs/reproducibility/evidence/2026-10-08/ml-clustering-original-profile.log": {
+      "sha256": "91f77b7d5e4479a682e37a8348da33990e478ba262b486617fa11b5fef519b58",
+      "bytes": 176
+    },
+    "docs/reproducibility/evidence/2026-10-08/ml-clustering-python-tests.log": {
+      "sha256": "b65f5b76ef01c6f7f7bf55c61c384c329d2e92cbdcae378358d397cee1bbfc26",
+      "bytes": 2017
+    },
+    "docs/reproducibility/evidence/2026-10-08/sql-modern-build-final.log": {
+      "sha256": "a4c36ffa9d0694b6f1547999be851d0c2d37cad9a7d4320f523f04261499dee2",
+      "bytes": 25122
+    },
+    "docs/reproducibility/migrations.json": {
+      "sha256": "ab253478f025be2861328bdb75d125d0a667c38f82fd6fb5614476a15791ca51",
+      "bytes": 12129
+    },
+    "docs/reproducibility/publication-roadmap.md": {
+      "sha256": "68729a02a3b409d985bb66570a71cd464a567ed646bdbf4fe9da6030af0b0910",
+      "bytes": 3754
+    },
+    "docs/reproducibility/reporting-protocol.md": {
+      "sha256": "e2d62e53ef649d6d7ec65c3de18657ac4f11d720a3a396e311307ccefdf494e9",
+      "bytes": 3407
+    },
+    "docs/sql-modern-validation-2026-10-08.json": {
+      "sha256": "b13695efb2cf80ed4528515cbccfd4367e58da17a95bbbb82ed4155f637ad72b",
+      "bytes": 5451
+    },
+    "docs/sql-modernization.md": {
+      "sha256": "05098e0c51e14a7952ad2484d45632439fa629ba450d058a64e0d08901474265",
+      "bytes": 4647
+    },
+    "docs/sql-original-reference.json": {
+      "sha256": "1eb865af0bd6bf62c51bbeb1fd6bec967cf961473ad26f5562168bd1b9098c70",
+      "bytes": 1536
+    },
+    "docs/sql-scale-reference.json": {
+      "sha256": "90d1c0375ec3e3265c30ec6fbea1adbca420f2c9d2ea456daadab054c6f7853a",
+      "bytes": 1544
+    },
+    "docs/workload-parameterization.md": {
+      "sha256": "661eb14ede7904ebf54606fd47bc98b143e9c999df5f8dddb05075c2abf28bb3",
+      "bytes": 1426
+    },
+    "docs/workload-status-2026-10-07.md": {
+      "sha256": "563972a0ab5e717c6ac4f85bf827b4a5088391ecd6cdcee4b48f6e85109735a2",
+      "bytes": 9993
+    },
+    "tests/fixtures/gaussian-original-profile.json": {
+      "sha256": "7bb72a2b297c70c7cf5bfbb9da748687f3cd417e72933f97258221a5cde5738e",
+      "bytes": 209
+    },
+    "tests/fixtures/sql-original-tiny.json": {
+      "sha256": "972e9154a443ae687bb765218717862c93e52dbdf399d549911594dc667ebf40",
+      "bytes": 190004
+    },
+    "tests/integration/verify_als.py": {
+      "sha256": "7ff65720109930c9784f7650028f833f2e4e3be302fc5e95a91799673db26aa5",
+      "bytes": 2934
+    },
+    "tests/integration/verify_clustering_controller.py": {
+      "sha256": "60d47d53cc832294a656c24679195363e2251a0d187ddf044ac38bdce1828c5f",
+      "bytes": 1658
+    },
+    "tests/integration/verify_gaussian.py": {
+      "sha256": "b43ce816f18cf1ba00fe614e99c6f3bd291476923d5951caef38cac56e9c0206",
+      "bytes": 5313
+    },
+    "tests/integration/verify_in_memory.py": {
+      "sha256": "94f5c693a8e583cdc44701bf350bf197e158c53403a36e4e9e3e8f500348bdb4",
+      "bytes": 828
+    },
+    "tests/integration/verify_micro.py": {
+      "sha256": "430ecc6acd6960a79ec80e7e6a3ef4dc582f8a20ff171906cd436f7173212862",
+      "bytes": 1751
+    },
+    "tests/integration/verify_sql.py": {
+      "sha256": "d5cb6b81dd33465904de281d9532a097f53c940a4457c36de75e752fedb0c0ed",
+      "bytes": 3402
+    },
+    "tests/integration/verify_sql_controller.py": {
+      "sha256": "a8293f258025f37513993594cb0b0a3ea4be00d7a49974650bad5e4deb7ee7c5",
+      "bytes": 3883
+    },
+    "tests/integration/verify_tera.py": {
+      "sha256": "b653b962235bdf334f0193b09803549c14c72b65cc7052bedd9939604e2ae2ab",
+      "bytes": 2561
+    },
+    "tests/integration/verify_text_generator.py": {
+      "sha256": "3abff0ecbbb08f1de85d9054ab242e55b8dbc34e5b5dcb2b820ae5e0d0a8ae90",
+      "bytes": 2966
+    },
+    "tests/integration/verify_text_profile.py": {
+      "sha256": "24284bf0919551ef0cc7efbf1703cb4fe8c29fce21c3b24efc26f573bf34aeb6",
+      "bytes": 2482
+    }
+  }
+}

@@ -197,5 +197,22 @@
     "Full YARN execution used tiny: 30000 rows, 3 dimensions, 5 generated components, k=10 and 5 iterations per workload.",
     "Parquet physical bytes and partition layout differ from legacy SequenceFile.",
     "Optional DAL launchers are unavailable pending migration; cloud/serverless support is not certified."
+  ],
+  "controller_input_checks": [
+    {
+      "input": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/34811a00637f89d6ebd1f9e7-f7731e38/Kmeans/gaussian-parquet-v1/Input/tiny",
+      "rows": 30000,
+      "dimensions": 3,
+      "exact_cli_data_match": true
+    },
+    {
+      "input": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/89008f809ce5bade0f890686-df757578/GMM/gaussian-parquet-v1/Input/tiny",
+      "rows": 30000,
+      "dimensions": 3,
+      "exact_cli_data_match": true
+    }
+  ],
+  "verification_notes": [
+    "The auxiliary local distributed exceptAll verifier stalled and was stopped; the final exact input verification uses a bounded 30000-row fixture comparison. No root cause for that local set-operation stall has been established. Production generation and Spark ML training completed successfully."
   ]
 }

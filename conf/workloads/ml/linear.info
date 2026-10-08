@@ -1,3 +1,9 @@
+Historical pre-modernization reference (unverified hardware/timing/size notes).
+Do not use these values as current preset sizes or expected runtimes.
+The tiny size below conflicts with the configured dense feature payload (400 MB).
+Current data contract: docs/ml-linear-modernization.md
+Measured validation: docs/ml-linear-validation-2026-10-08.json
+
 Spark job
             tiny   small   large   huge   gigantic   bigdata
 Time cost   32s    1.4m    4.3m    9.9m    24m       1.9h 

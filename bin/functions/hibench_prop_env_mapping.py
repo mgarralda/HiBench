@@ -175,10 +175,14 @@ HiBenchEnvPropMapping=dict(
     MAXRESULTSIZE_SVD="hibench.svd.maxresultsize",
     # For Linear Regression
     NUM_EXAMPLES_LINEAR="hibench.linear.examples",
+    NUM_PARTITIONS_LINEAR="hibench.linear.partitions",
+    SEED_LINEAR="hibench.linear.seed",
+    NOISE_STD_LINEAR="hibench.linear.noise_std",
     NUM_FEATURES_LINEAR="hibench.linear.features",
     NUM_ITERATIONS_LINEAR="hibench.linear.num_iterations",
     REG_PARAM_LINEAR="hibench.linear.regularization_param",
     ELASTICNET_PARAM_LINEAR="hibench.linear.elasticnet_param",
+    TEST_FRACTION_LINEAR="hibench.linear.test_fraction",
     TOL_LINEAR="hibench.linear.tolerance",
     # For Correlation
     NUM_EXAMPLES_CORRELATION="hibench.correlation.examples",

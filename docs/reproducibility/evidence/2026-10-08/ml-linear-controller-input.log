@@ -1,0 +1,1 @@
+HIBENCH_LINEAR_CONTROLLER_VERIFIED={"input": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bcdaeb306b8f3e90aa82e67b-c3fa615d/Linear/linear-parquet-v1/Input/tiny", "rows": 50000, "dimensions": 1000, "unique_ids": 50000, "logical_feature_bytes": 400000000, "physical_bytes_including_profile": 400962056, "profile_verified": true, "original_selected_rows_verified": 6}

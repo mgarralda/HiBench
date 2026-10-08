@@ -1,0 +1,39 @@
+openjdk version "11.0.32.1" 2026-08-18
+OpenJDK Runtime Environment (build 11.0.32.1+1-post-1ubuntu1-22.04-Ubuntu)
+OpenJDK 64-Bit Server VM (build 11.0.32.1+1-post-1ubuntu1-22.04-Ubuntu, mixed mode, sharing)
+Python 3.10.12
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 3.5.9
+      /_/
+                        
+Using Scala version 2.12.18, OpenJDK 64-Bit Server VM, 11.0.32.1
+Branch HEAD
+Compiled by user holden on 2026-07-12T18:40:50Z
+Revision 7c14a3c28b141cc97a330c4d0f5d2a6da7267f85
+Url https://github.com/apache/spark
+Type --help for more information.
+Hadoop 3.3.6
+Source code repository https://github.com/apache/hadoop.git -r 1be78238728da9266a4f88195058f08fd012bf9c
+Compiled by ubuntu on 2023-06-18T08:22Z
+Compiled on platform linux-x86_64
+Compiled with protoc 3.7.1
+From source with checksum 5652179ad55f76cb287d9c633bb53bbd
+This command was run using /home/sparker/hadoop-3.3.6/share/hadoop/common/hadoop-common-3.3.6.jar
+HIBENCH_RUNTIME_FILES_OK
+Found 5 items
+drwxr-xr-x   - sparker supergroup          0 2026-10-07 16:49 hdfs://spark-cluster-master:9000/HiBench-Control
+drwxr-xr-x   - sparker supergroup          0 2026-10-08 09:41 hdfs://spark-cluster-master:9000/HiBench-Validation
+drwxr-xr-x   - sparker supergroup          0 2026-10-07 07:36 hdfs://spark-cluster-master:9000/shared
+drwxrwxrwt   - sparker supergroup          0 2026-10-07 21:31 hdfs://spark-cluster-master:9000/tmp
+drwxr-xr-x   - sparker supergroup          0 2026-10-07 07:37 hdfs://spark-cluster-master:9000/user
+2026-10-08 09:46:18,684 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at spark-cluster-master/172.18.0.20:8032
+Total Nodes:3
+         Node-Id	     Node-State	Node-Http-Address	Number-of-Running-Containers
+spark-cluster-slave-3:34583	        RUNNING	spark-cluster-slave-3:8042	                           0
+spark-cluster-slave-2:39011	        RUNNING	spark-cluster-slave-2:8042	                           0
+spark-cluster-slave-1:42395	        RUNNING	spark-cluster-slave-1:8042	                           0
+HIBENCH_DOCTOR_OK
+

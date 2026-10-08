@@ -6,7 +6,9 @@ optional XGBoost sources. Launch scripts, Spark's benchmark listener and Maven
 group IDs use the new namespace. Artifact filenames remain unchanged.
 
 Third-party packages and copyright/license notices retain their original names.
-This includes Intel DAAL and the bundled Hadoop, Mahout and Nutch sources.
+This includes bundled Hadoop, Mahout and Nutch sources where still required.
+The optional Intel DAAL implementation was subsequently retired on 2026-10-08;
+its names remain only in historical records and license attribution.
 Older generators under the existing `HiBench` package are outside this Intel
 namespace migration.
 

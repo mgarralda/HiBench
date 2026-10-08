@@ -55,6 +55,9 @@ def workloads(root=None):
             parameters[suffix] = {"property": key, "kind": kind, "default": value,
                                   "presets": {scale: props.get(prefix + scale + "." + suffix, value)
                                               for scale in SCALES}}
+            if workload_id == "ml.linear" and suffix == "tolerance":
+                parameters[suffix]["kind"] = "number"
+                kind = "number"
             if category == "ml" and name in ("kmeans", "gmm") and suffix == "seed":
                 parameters[suffix]["kind"] = "integer"
             if kind == "number":
@@ -63,7 +66,7 @@ def workloads(root=None):
                     parameters[suffix]["kind"] = "boolean"
                 elif all(re.fullmatch(r"\d+", x) for x in preset_values):
                     parameters[suffix]["kind"] = "integer"
-                elif not all(re.fullmatch(r"-?\d+(?:\.\d+)?", x) for x in preset_values):
+                elif not all(re.fullmatch(r"-?\d+(?:\.\d+)?(?:[Ee][+-]?\d+)?", x) for x in preset_values):
                     parameters[suffix]["kind"] = "string"
             if parameters[suffix]["kind"] == "string":
                 parameters[suffix]["presets"] = {scale: x[1:-1] if len(x) >= 2 and x[0] == x[-1] and x[0] in ("'", '"') else x
@@ -75,7 +78,7 @@ def workloads(root=None):
             parameters["datasize"]["unit"] = ("records of 100 bytes; in-memory mode: 200 bytes per record per partition" if name == "repartition" else "records of 100 bytes") if name in ("terasort", "repartition") else "logical payload bytes (RandomTextWriter)"
         prepare_script = (root / "bin" / "workloads" / category / name / "prepare" / "prepare.sh").read_text(encoding="utf-8")
         prepare_capabilities = []
-        modern = category in ("micro", "sql") or workload_id in ("ml.als", "ml.kmeans", "ml.gmm")
+        modern = category in ("micro", "sql") or workload_id in ("ml.als", "ml.kmeans", "ml.gmm", "ml.linear")
         if "run_hadoop_job" in prepare_script:
             prepare_capabilities.append("mapreduce")
         if "run_spark_job" in prepare_script:

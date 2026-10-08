@@ -17,92 +17,61 @@
 
 package org.hibench.sparkbench.ml
 
-import org.hibench.sparkbench.common.IOCommon
+import org.apache.spark.ml.linalg.{Vector, Vectors}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
-
-import scala.util.Random
-
-import org.apache.spark.ml.feature.LabeledPoint
-import org.apache.spark.ml.linalg.Vectors
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.rdd.RDD
-
-/**
- * :: DeveloperApi ::
- * Generate sample data for Linear Regression. This class 
- * generates uniformly random values for each feature and
- * adds Gaussian noise with mean 'eps' to the label 'Y'.
- */
+/** Preserves the original partition-seeded dense linear model, in Parquet. */
 object LinearRegressionDataGenerator {
+  case class Example(id: Long, label: Double, features: Vector)
+  case class Profile(seed: Long, examples: Long, dimensions: Int, partitions: Int,
+                     noiseStd: Double, weights: Vector)
 
-  /**
-   * Generate an RDD containing sample data for Linear Regression.
-   *
-   * @param sc SparkContext to use for creating the RDD.
-   * @param numExamples Number of examples that will be contained in the RDD.
-   * @param numFeatures Numer of features to gnerate for each example.
-   * @param eps Epsilon factor by which examples are scaled.
-   * @param numParts Number of partitions of the generated RDD. Default value is 3.
-   * @param seed Random seed for each partition
-   */
-  def generateLinearRDD(
-    sc: SparkContext,
-    numExamples: Int,
-    numFeatures: Int,
-    eps: Double,
-    numParts: Int = 3,
-    seed: Long = 42L): RDD[LabeledPoint] = {
-      val random = new Random(seed)
-      // Random values distributed uniformly in [-0.5, 0.5]
-      val weights = Array.fill(numFeatures)(random.nextDouble() - 0.5)
-
-      val data : RDD[LabeledPoint] = sc.parallelize(0 until numExamples, numParts).mapPartitionsWithIndex{
-        (partition, part) => val rnd = new Random(seed ^ partition.toLong)
-        // mean for each feature
-        val xMean = Array.fill[Double](weights.length)(0.0)
-        // variance for each feature
-        val xVariance = Array.fill[Double](weights.length)(1.0 / 3.0)
-        def rndElement(i: Int) = {(rnd.nextDouble() - 0.5) * math.sqrt(12.0 * xVariance(i)) + xMean(i)}
-
-        part.map{ _ =>
-          val features = Vectors.dense(weights.indices.map{rndElement(_)}.toArray)
-          val label = weights.indices.iterator.map(i => weights(i) * features(i)).sum + eps * rnd.nextGaussian()
-          LabeledPoint(label, features)
-        }
-      }
-    data
+  def weights(dimensions: Int, seed: Long): Array[Double] = {
+    val rng = new java.util.Random(seed)
+    Array.fill(dimensions)(rng.nextDouble() - 0.5)
   }
 
-  def main(args: Array[String]) {
-    val conf = new SparkConf().setAppName("LinearRegressionDataGenerator")
-    val sc = new SparkContext(conf)
+  def dataset(spark: SparkSession, count: Long, dimensions: Int, partitions: Int,
+              seed: Long, eps: Double): DataFrame = {
+    require(count > 0 && dimensions > 0 && partitions > 0, "Counts must be positive")
+    require(eps >= 0 && !eps.isNaN && !eps.isInfinity, "Noise standard deviation must be finite and nonnegative")
+    val coefficients = weights(dimensions, seed)
+    import spark.implicits._
+    spark.range(0, partitions.toLong, 1, partitions).as[Long].flatMap { partition =>
+      // Same floor boundaries and RNG stream as parallelize(0 until n, p).
+      val start = (BigInt(count) * partition / partitions).toLong
+      val end = (BigInt(count) * (partition + 1) / partitions).toLong
+      val rng = new java.util.Random(seed ^ partition)
+      new Iterator[Example] {
+        private var id = start
+        def hasNext: Boolean = id < end
+        def next(): Example = {
+          if (!hasNext) throw new NoSuchElementException("Linear partition exhausted")
+          val values = Array.fill(dimensions)((rng.nextDouble() - 0.5) * 2.0)
+          // Preserve feature traversal and floating-point summation order.
+          val label = coefficients.indices.iterator.map(i => coefficients(i) * values(i)).sum + eps * rng.nextGaussian()
+          val row = Example(id, label, Vectors.dense(values))
+          id += 1
+          row
+        }
+      }
+    }.toDF()
+  }
 
-    var outputPath = ""
-    var numExamples: Int = 1000
-    var numFeatures: Int = 50
-    var eps: Double = 1.0
-    val parallel = sc.getConf.getInt("spark.default.parallelism", sc.defaultParallelism)
-    val numPartitions = IOCommon.getProperty("hibench.default.shuffle.parallelism")
-      .getOrElse((parallel / 2).toString).toInt
-
-    if (args.length == 3) {
-      outputPath = args(0)
-      numExamples = args(1).toInt
-      numFeatures = args(2).toInt
-      println(s"Output Path: $outputPath")
-      println(s"Num of Examples: $numExamples")
-      println(s"Num of Features: $numFeatures")
-    } else {
-      System.err.println(
-        s"Usage: $LinearRegressionDataGenerator <OUTPUT_PATH> <NUM_EXAMPLES> <NUM_FEATURES>"
-      )
-      System.exit(1)
-    }
-
-    val data = generateLinearRDD(sc, numExamples, numFeatures, eps, numPartitions)
-
-    data.saveAsObjectFile(outputPath)
-
-    sc.stop()
+  def main(args: Array[String]): Unit = {
+    require(args.length == 6, "Usage: LinearRegressionDataGenerator <OUTPUT> <EXAMPLES> <FEATURES> <PARTITIONS> <SEED> <NOISE_STD>")
+    val spark = SparkSession.builder().appName("HiBench linear Parquet v1").getOrCreate()
+    try {
+      val count = args(1).toLong
+      val dimensions = args(2).toInt
+      val partitions = args(3).toInt
+      val seed = args(4).toLong
+      val eps = args(5).toDouble
+      dataset(spark, count, dimensions, partitions, seed, eps)
+        .write.mode("errorifexists").parquet(args(0))
+      import spark.implicits._
+      Seq(Profile(seed, count, dimensions, partitions, eps, Vectors.dense(weights(dimensions, seed))))
+        .toDS().write.mode("errorifexists").parquet(args(0) + "/_generator_profile")
+    } finally spark.stop()
   }
 }

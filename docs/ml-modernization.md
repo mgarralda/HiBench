@@ -20,7 +20,29 @@ Validation on 2026-10-08: Java 11 build succeeded, all 42 Python tests passed, a
 
 ## Remaining ML workloads
 
-ALS and KMeans/GMM are the first migrated ML blocks. Linear/PCA/correlation/summarizer, LR/RF/GBT, Bayes/LDA/SVM and SVD remain subject to the [migration strategy](remaining-workloads-strategy-2026-10-08.md). No RDD fallback is approved for the maintained modern suite.
+ALS, KMeans/GMM and linear regression are migrated. PCA/correlation/summarizer,
+LR/RF/GBT, Bayes/LDA/SVM and SVD remain subject to the
+[migration strategy](remaining-workloads-strategy-2026-10-08.md).
+No RDD fallback is approved for the maintained modern suite.
+
+## Linear regression: linear-parquet-v1
+
+The Dataset generator and SparkSession Parquet reader preserve the original
+dense linear synthetic model and all six row/dimension presets. The estimator
+already used Spark ML and retains its configuration. Generation seed, label noise
+and the existing excluded training fraction are now explicit experiment parameters.
+See [the full migration contract](ml-linear-modernization.md) and
+[validation receipt](ml-linear-validation-2026-10-08.json).
+
+Validation on 2026-10-08: all 11 default modules built with Java 11 and 49 Python
+tests passed. Four bounded fixtures matched the frozen original generator exactly.
+The conditional noise/feature profile and Parquet round trip passed. Full tiny
+preparation and training succeeded in YARN with 50,000 examples and 1,000 features;
+37,451 training rows, five optimizer iterations, training RMSE 4.946521740211151
+and R2 0.0940384157479559. Physical input including metadata was 400,962,056 bytes.
+The existing regularization is retained; these metrics are not predictive quality
+targets or held-out scores. A scheduler disconnect trace after metrics near
+shutdown is preserved in the receipt despite both applications finishing SUCCEEDED.
 
 ## KMeans and GMM: Gaussian Parquet v1
 
@@ -36,6 +58,8 @@ The `cluster` sibling directory now stores typed distribution metadata: clusterI
 
 Validation uses an independently run pre-migration JAR to freeze a conditional Gaussian reference. `tests/integration/verify_gaussian.py` checks standardized means, variances and tail frequency against that reference, every component/feature's moments, remainder cases, empty components, repeatability across partition counts, unique IDs, Parquet round trips and file row limits. Every preset is checked for planned allocation and dimensions; actual large-preset generation and training are not implied by these planning checks.
 
-The old GenKMeansDataset production source and its dedicated tests have been removed after the profile checks. Mahout and Uncommons dependencies have been removed from autogen and the maintained ML module. The optional DAL module retains its separate dependencies, but its launchers now fail with an explicit migration message: its old SequenceFile/RDD/native implementation cannot consume the new contract. DAL is outside the maintained catalog and default build. The historical reference runner under tests requires a pre-migration JAR and is not a retained executable workload generator.
+The old GenKMeansDataset production source and its dedicated tests have been removed after the profile checks. Mahout and Uncommons dependencies have been removed from autogen and the maintained ML module. The obsolete DAL variant was subsequently retired completely: its module, native integration, launchers and inactive Maven profiles were removed. It is not a supported option; historical references remain only as provenance. The historical reference runner under tests requires a pre-migration JAR and is not a retained executable workload generator.
 
 Validation on 2026-10-08: all 11 default modules built with Java 11, 46 Python tests passed, and both full tiny preparation/training workloads succeeded in YARN (four Spark applications). Each trained on 30,000 three-dimensional vectors with k=10 and five iterations. KMeans cost was 327075503.64038146; GMM log likelihood was -528069.8452813178. Conditional Gaussian variance was 1.0018814, two-sigma tail frequency 0.0452929 and maximum absolute conditional covariance 0.0139477, within the documented statistical checks. See [the validation record](ml-clustering-validation-2026-10-08.json). Physical input bytes were 853,829 per workload including profile metadata; these are not historical SequenceFile throughput measurements.
+
+The controller's actual prepared samples and distribution metadata were compared exactly with the new generator's reference output for both tiny workloads. This additional verifier uses a bounded 30,000-row collection; production generation remains distributed. An initial local distributed set-operation comparison stalled and was stopped; its cause is not established and is recorded in the validation notes.

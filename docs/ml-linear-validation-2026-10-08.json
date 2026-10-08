@@ -1,0 +1,147 @@
+{
+  "date": "2026-10-08",
+  "workload": "ml.linear",
+  "contract": "linear-parquet-v1",
+  "baseline_revision": "57473c3f8829d86f90d4e42d489f1c66eaf2b5f0",
+  "environment": {
+    "spark": "3.5.9",
+    "scala": "2.12.18",
+    "java": "11",
+    "hadoop": "3.3.6",
+    "execution": "Docker/YARN"
+  },
+  "build": "11 default Maven modules: Java 11 BUILD SUCCESS",
+  "python_tests": 49,
+  "generator_checks": [
+    {
+      "rows": 101,
+      "dimensions": 9,
+      "partitions": 7,
+      "seed": 42,
+      "noise_std": 1.0,
+      "original_formula_verified": true,
+      "frozen_original_exact_match": true
+    },
+    {
+      "rows": 3,
+      "dimensions": 5,
+      "partitions": 8,
+      "seed": 42,
+      "noise_std": 1.0,
+      "original_formula_verified": true,
+      "frozen_original_exact_match": true
+    },
+    {
+      "rows": 100,
+      "dimensions": 8,
+      "partitions": 2,
+      "seed": 17,
+      "noise_std": 0.0,
+      "original_formula_verified": true,
+      "frozen_original_exact_match": true
+    },
+    {
+      "rows": 100,
+      "dimensions": 8,
+      "partitions": 2,
+      "seed": 0,
+      "noise_std": 2.0,
+      "original_formula_verified": true,
+      "frozen_original_exact_match": true
+    },
+    {
+      "rows": 20001,
+      "dimensions": 8,
+      "noise_mean": 0.0030843989030507665,
+      "noise_variance": 1.010799432767984,
+      "conditional_profile_verified": true
+    }
+  ],
+  "controller_input": {
+    "input": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bcdaeb306b8f3e90aa82e67b-c3fa615d/Linear/linear-parquet-v1/Input/tiny",
+    "rows": 50000,
+    "dimensions": 1000,
+    "unique_ids": 50000,
+    "logical_feature_bytes": 400000000,
+    "physical_bytes_including_profile": 400962056,
+    "profile_verified": true,
+    "original_selected_rows_verified": 6
+  },
+  "run": {
+    "id": "1da6421b-e30c-499d-aa6f-3a0928e3c7af",
+    "request_key": "ed909f0a-78d2-4f1b-bb65-efb63f80c72d",
+    "state": "succeeded",
+    "spec": {
+      "mode": "prepare_and_run",
+      "name": "ml-linear-modern-validation",
+      "repetitions": 1,
+      "resources": {
+        "driver_memory": "2g",
+        "executor_cores": 1,
+        "executor_instances": 1,
+        "executor_memory": "2g",
+        "map_partitions": 2,
+        "shuffle_partitions": 2
+      },
+      "scale": "tiny",
+      "schema_version": 1,
+      "spark_conf": {
+        "spark.dynamicAllocation.enabled": false,
+        "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+        "spark.sql.adaptive.enabled": false,
+        "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+      },
+      "target": {
+        "container": "spark-cluster-master",
+        "deploy_mode": "client",
+        "hadoop_home": "/home/sparker/hadoop-3.3.6",
+        "hdfs_uri": "hdfs://spark-cluster-master:9000",
+        "kind": "docker",
+        "master": "yarn",
+        "spark_home": "/usr/local/spark",
+        "workers": [
+          "spark-cluster-slave-1",
+          "spark-cluster-slave-2",
+          "spark-cluster-slave-3"
+        ],
+        "workspace": "/home/sparker/HiBench"
+      },
+      "timeout_s": 1800,
+      "workloads": [
+        {
+          "id": "ml.linear",
+          "parameters": {}
+        }
+      ]
+    },
+    "created": 1791452526.7857738,
+    "updated": 1791452638.5018828,
+    "cancel": 0,
+    "detail": "All requested phases completed",
+    "worker_pid": 61000
+  },
+  "applications": [
+    "application_1791359074600_0076",
+    "application_1791359074600_0077"
+  ],
+  "training": {
+    "rows": 37451,
+    "dimensions": 1000,
+    "iterations": 5,
+    "rmse": 4.946521740211151,
+    "r2": 0.0940384157479559,
+    "metric_scope": "training; held-out rows not evaluated"
+  },
+  "limits": [
+    "Every preset retains its original row/dimension values; full generation and training exercised tiny only.",
+    "ObjectFile and Parquet physical I/O costs differ; no historical throughput equivalence or performance improvement asserted.",
+    "File ordering may change the original seeded training subset.",
+    "After metrics, a CoarseGrainedScheduler disconnect stack trace appeared near shutdown. Both YARN applications reported SUCCEEDED and controller completed successfully; no cause determination or Spark fix is claimed.",
+    "Cloud/serverless compatibility has not been certified."
+  ],
+  "original_source_hashes": {
+    "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LinearRegressionDataGenerator.scala": "6342d5afa2a657335262812d82693a530b0aa9a72bf1f68b61d1e140c3966fa9",
+    "conf/workloads/ml/linear.conf": "9d794eedd16a9615af2635d3a25549dff58f48adcf2b3a36d0062fc1c9fc0ba1"
+  },
+  "assembly_sha256": "32c1a683147c3d9eeb88b2d80fa912c16c2ccc5d7b00398ada752eabc5b79478"
+}
