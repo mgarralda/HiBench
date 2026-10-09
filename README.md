@@ -1,4 +1,4 @@
-# HiBench Batch — Spark 3.5.9
+# HiBench — Spark 3.5.9
 
 Build/runtime reference: Java 11, Spark 3.5.9, Scala 2.12.18, Python 3.10+. Default build is batch only. This community fork is not an official Intel release.
 
