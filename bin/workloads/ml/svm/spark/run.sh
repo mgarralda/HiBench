@@ -28,7 +28,7 @@ rmr_hdfs $OUTPUT_HDFS || true
 
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
-run_spark_job com.intel.hibench.sparkbench.ml.SVMWithSGDExample --numIterations $NUM_ITERATIONS_SVM --storageLevel $SVM_STORAGE_LEVEL --stepSize $STEPSIZE_SVM --regParam $REGPARAM_SVM $INPUT_HDFS
+run_spark_job org.hibench.sparkbench.ml.LinearSVMExample --numIterations $NUM_ITERATIONS_SVM --storageLevel $SVM_STORAGE_LEVEL  --tolerance "$TOLERANCE_SVM" --trainFraction "$TRAIN_FRACTION_SVM" --splitSeed "$SPLIT_SEED_SVM" --fitIntercept "$FIT_INTERCEPT_SVM" --standardization "$STANDARDIZATION_SVM" --regParam $REGPARAM_SVM $INPUT_HDFS
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

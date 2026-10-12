@@ -1,0 +1,736 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-09",
+  "policy": "docs/generator-migration-policy.md",
+  "records": [
+    {
+      "workload": "micro.wordcount",
+      "status": "migrated",
+      "contract": "RandomTextWriter-compatible text profile (see reference document)",
+      "generator_changes": "Preserved logical byte budgeting, vocabulary and sentence distributions; introduced deterministic generation and text storage.",
+      "workload_changes": "SparkSession text reader and DataFrame operations; removed SequenceFile/RDD boundary.",
+      "documentation": "docs/micro-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/randomtextwriter-reference.json",
+        "docs/micro-scale-reference.json"
+      ],
+      "validation": "docs/micro-modern-validation-2026-10-07.json",
+      "verifiers": [
+        "tests/integration/verify_text_profile.py",
+        "tests/integration/verify_text_generator.py"
+      ],
+      "limits": [
+        "Historical SequenceFile I/O timings are not directly comparable."
+      ]
+    },
+    {
+      "workload": "micro.sort",
+      "status": "migrated",
+      "contract": "RandomTextWriter-compatible text profile (see reference document)",
+      "generator_changes": "Preserved logical byte budgeting, vocabulary and sentence distributions; introduced deterministic generation and text storage.",
+      "workload_changes": "SparkSession text reader and DataFrame operations; removed SequenceFile/RDD boundary.",
+      "documentation": "docs/micro-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/randomtextwriter-reference.json",
+        "docs/micro-scale-reference.json"
+      ],
+      "validation": "docs/micro-modern-validation-2026-10-07.json",
+      "verifiers": [
+        "tests/integration/verify_text_profile.py",
+        "tests/integration/verify_text_generator.py"
+      ],
+      "limits": [
+        "Historical SequenceFile I/O timings are not directly comparable."
+      ]
+    },
+    {
+      "workload": "micro.terasort",
+      "status": "migrated",
+      "contract": "100-byte Tera payload in binary Parquet",
+      "generator_changes": "Preserved Tera record payload and count; binary Parquet replaces Hadoop Tera formats. Repartition retains its separate in-memory volume profile.",
+      "workload_changes": "DataFrame sort/repartition, explicit cached/no-op/output variants.",
+      "documentation": "docs/micro-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/micro-scale-reference.json"
+      ],
+      "validation": "docs/micro-modern-validation-2026-10-07.json",
+      "verifiers": [
+        "tests/integration/verify_tera.py",
+        "tests/integration/verify_in_memory.py"
+      ],
+      "limits": [
+        "Format/execution plans change physical I/O and timing; in-memory and file modes are separate profiles."
+      ]
+    },
+    {
+      "workload": "micro.repartition",
+      "status": "migrated",
+      "contract": "100-byte Tera payload in binary Parquet",
+      "generator_changes": "Preserved Tera record payload and count; binary Parquet replaces Hadoop Tera formats. Repartition retains its separate in-memory volume profile.",
+      "workload_changes": "DataFrame sort/repartition, explicit cached/no-op/output variants.",
+      "documentation": "docs/micro-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/micro-scale-reference.json"
+      ],
+      "validation": "docs/micro-modern-validation-2026-10-07.json",
+      "verifiers": [
+        "tests/integration/verify_tera.py",
+        "tests/integration/verify_in_memory.py"
+      ],
+      "limits": [
+        "Format/execution plans change physical I/O and timing; in-memory and file modes are separate profiles."
+      ]
+    },
+    {
+      "workload": "micro.sleep",
+      "status": "migrated",
+      "contract": "Dataset task scheduling and sleep durations",
+      "generator_changes": "No external dataset: SparkSession range generates one row per task; no MapReduce preparation.",
+      "workload_changes": "Dataset scheduling/sleep workload with original configured durations.",
+      "documentation": "docs/micro-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/micro-scale-reference.json"
+      ],
+      "validation": "docs/micro-modern-validation-2026-10-07.json",
+      "verifiers": [
+        "tests/integration/verify_micro.py"
+      ],
+      "limits": [
+        "Scheduling benchmark; not a data-throughput workload."
+      ]
+    },
+    {
+      "workload": "sql.scan",
+      "status": "migrated",
+      "contract": "sql-parquet-v1",
+      "generator_changes": "Preserved row profiles, Zipf link popularity, weighted vocabularies and original random sequences; typed dates/numbers and Parquet replace MR/Hive preparation.",
+      "workload_changes": "Spark SQL with direct Parquet readers; removed Hive metastore/SerDe requirement.",
+      "documentation": "docs/sql-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/sql-scale-reference.json",
+        "docs/sql-original-reference.json"
+      ],
+      "validation": "docs/sql-modern-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_sql.py",
+        "tests/integration/verify_sql_controller.py"
+      ],
+      "limits": [
+        "Candidate visits and retained visits differ when a page has no incoming links.",
+        "Physical encoding changes; tiny correctness and sampled distribution checks do not certify every large run."
+      ]
+    },
+    {
+      "workload": "sql.aggregation",
+      "status": "migrated",
+      "contract": "sql-parquet-v1",
+      "generator_changes": "Preserved row profiles, Zipf link popularity, weighted vocabularies and original random sequences; typed dates/numbers and Parquet replace MR/Hive preparation.",
+      "workload_changes": "Spark SQL with direct Parquet readers; removed Hive metastore/SerDe requirement.",
+      "documentation": "docs/sql-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/sql-scale-reference.json",
+        "docs/sql-original-reference.json"
+      ],
+      "validation": "docs/sql-modern-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_sql.py",
+        "tests/integration/verify_sql_controller.py"
+      ],
+      "limits": [
+        "Candidate visits and retained visits differ when a page has no incoming links.",
+        "Physical encoding changes; tiny correctness and sampled distribution checks do not certify every large run."
+      ]
+    },
+    {
+      "workload": "sql.join",
+      "status": "migrated",
+      "contract": "sql-parquet-v1",
+      "generator_changes": "Preserved row profiles, Zipf link popularity, weighted vocabularies and original random sequences; typed dates/numbers and Parquet replace MR/Hive preparation.",
+      "workload_changes": "Spark SQL with direct Parquet readers; removed Hive metastore/SerDe requirement.",
+      "documentation": "docs/sql-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/sql-scale-reference.json",
+        "docs/sql-original-reference.json"
+      ],
+      "validation": "docs/sql-modern-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_sql.py",
+        "tests/integration/verify_sql_controller.py"
+      ],
+      "limits": [
+        "Candidate visits and retained visits differ when a page has no incoming links.",
+        "Physical encoding changes; tiny correctness and sampled distribution checks do not certify every large run."
+      ]
+    },
+    {
+      "workload": "ml.als",
+      "status": "migrated",
+      "contract": "ratings-parquet-v1",
+      "generator_changes": "Preserved original partition-seeded Java Random, duplicate pairs, user/item universes and explicit/implicit rating values; Long counts and Parquet replace ObjectFile.",
+      "workload_changes": "Retained Spark ML ALS; replaced reader; explicit model seed and evaluable-rating checks.",
+      "documentation": "docs/ml-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-als-scale-reference.json"
+      ],
+      "validation": "docs/ml-als-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_als.py"
+      ],
+      "limits": [
+        "Full YARN training used tiny explicit and implicit modes; larger generator counts were verified separately."
+      ]
+    },
+    {
+      "workload": "ml.kmeans",
+      "status": "migrated",
+      "contract": "gaussian-parquet-v1",
+      "generator_changes": "Preserved samples/dimensions/component allocation and Gaussian mean/stddev ranges; introduced reproducible Java Random streams, unique IDs and distribution metadata. Removed MR/Mahout generator.",
+      "workload_changes": "Retained Spark ML estimators; Parquet VectorUDT readers; explicit GMM seed and finite-metric checks.",
+      "documentation": "docs/ml-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-clustering-scale-reference.json",
+        "tests/fixtures/gaussian-original-profile.json"
+      ],
+      "validation": "docs/ml-clustering-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_gaussian.py",
+        "tests/integration/verify_clustering_controller.py"
+      ],
+      "limits": [
+        "Original default RNG was nondeterministic; statistical equivalence is claimed, not identical original rows.",
+        "All presets planned allocations verified; actual full YARN runs used tiny.",
+        "Partition/file layout and encoding differ from SequenceFile."
+      ]
+    },
+    {
+      "workload": "ml.gmm",
+      "status": "migrated",
+      "contract": "gaussian-parquet-v1",
+      "generator_changes": "Preserved samples/dimensions/component allocation and Gaussian mean/stddev ranges; introduced reproducible Java Random streams, unique IDs and distribution metadata. Removed MR/Mahout generator.",
+      "workload_changes": "Retained Spark ML estimators; Parquet VectorUDT readers; explicit GMM seed and finite-metric checks.",
+      "documentation": "docs/ml-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-clustering-scale-reference.json",
+        "tests/fixtures/gaussian-original-profile.json"
+      ],
+      "validation": "docs/ml-clustering-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_gaussian.py",
+        "tests/integration/verify_clustering_controller.py"
+      ],
+      "limits": [
+        "Original default RNG was nondeterministic; statistical equivalence is claimed, not identical original rows.",
+        "All presets planned allocations verified; actual full YARN runs used tiny.",
+        "Partition/file layout and encoding differ from SequenceFile."
+      ]
+    },
+    {
+      "workload": "ml.linear",
+      "status": "migrated",
+      "contract": "linear-parquet-v1",
+      "generator_changes": "Preserved dense feature dimensions and row counts, uniform [-1,1) features, shared uniform [-0.5,0.5) weights, partition-seeded Java Random streams and additive zero-mean Gaussian label noise. Exposed seed/noise_std; fixed previously ignored partitions property without changing its effective default. Replaced ObjectFile with Parquet and added IDs/coefficient metadata.",
+      "workload_changes": "Retained Spark ML LinearRegression, ElasticNet/solver defaults and seeded training split; replaced RDD ObjectFile reader with SparkSession Parquet. Exposed existing excluded fraction, numeric tolerance overrides, empty-training/nonfinite-RMSE checks and cache release.",
+      "documentation": "docs/ml-linear-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-linear-scale-reference.json"
+      ],
+      "validation": "docs/ml-linear-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/test_linear.py",
+        "tests/integration/verify_linear.py",
+        "tests/integration/verify_linear_controller.py",
+        "tests/integration/LinearRegressionOriginalReference.scala"
+      ],
+      "limits": [
+        "Every preset retains its original row/dimension values; full generation and training exercised tiny only.",
+        "ObjectFile and Parquet physical I/O costs differ; no historical throughput equivalence or performance improvement asserted.",
+        "File ordering may change the original seeded training subset.",
+        "After metrics, a CoarseGrainedScheduler disconnect stack trace appeared near shutdown. Both YARN applications reported SUCCEEDED and controller completed successfully; no cause determination or Spark fix is claimed.",
+        "Cloud/serverless compatibility has not been certified."
+      ],
+      "implementation": [
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LinearRegressionDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LinearRegressionWithElasticNet.scala",
+        "conf/workloads/ml/linear.conf",
+        "conf/workloads/ml/linear.info",
+        "bin/workloads/ml/linear/prepare/prepare.sh",
+        "bin/workloads/ml/linear/spark/run.sh",
+        "bin/functions/hibench_prop_env_mapping.py",
+        "hibench/catalog.py",
+        "hibench/config.py",
+        "hibench/workload_parameters.py",
+        "hibench/ui/workloads.py"
+      ]
+    },
+    {
+      "workload": "ml.lr",
+      "status": "migrated",
+      "contract": "logistic-parquet-v1 / binary-logistic-v2",
+      "generator_changes": "Preserved alternating binary labels, row-seeded Gaussian features with class-dependent shift, all row/dimension presets and exact original data including empirical moment deviations. Introduced Parquet, IDs, typed profile metadata and explicit seed/class_shift. Removed ineffective probOne and corrected misleading generator comments.",
+      "workload_changes": "Replaced RDD MLlib estimator with Spark ML binomial LogisticRegression. Corrected ten requested classes to the two generated labels; retained effective LBFGS iteration/tolerance/regularization/intercept/scaling defaults, held-out accuracy and 60/40 seeded split. Exposed optimizer/split settings, checked empty splits, released caches and aggregated evaluation in one action.",
+      "documentation": "docs/ml-lr-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-lr-scale-reference.json"
+      ],
+      "validation": "docs/ml-lr-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/test_logistic.py",
+        "tests/integration/verify_logistic.py",
+        "tests/integration/verify_logistic_controller.py",
+        "tests/integration/LogisticRegressionOriginalReference.scala"
+      ],
+      "implementation": [
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LogisticRegressionDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LogisticRegression.scala",
+        "conf/workloads/ml/lr.conf",
+        "bin/workloads/ml/lr/prepare/prepare.sh",
+        "bin/workloads/ml/lr/spark/run.sh",
+        "bin/functions/hibench_prop_env_mapping.py",
+        "hibench/catalog.py",
+        "hibench/config.py",
+        "hibench/workload_parameters.py"
+      ],
+      "limits": [
+        "Only tiny and bounded fixtures were generated/trained; all six preset definitions and logical payloads were verified.",
+        "Original data has only two labels; retiring the legacy ten-class solver is an explicit algorithm change, not historical training-cost equivalence.",
+        "Original Gaussian routine with consecutive row seeds has nonideal first-feature empirical moments; new data preserves those observed values exactly.",
+        "Parquet/ObjectFile encoding, DataFrame split/caching/optimizer/evaluation plans differ; no historical speedup or identical coefficients claimed.",
+        "No cloud/serverless certification."
+      ]
+    },
+    {
+      "workload": "ml.rf",
+      "status": "migrated",
+      "contract": "binary-gaussian-parquet-v1 / spark-ml-rf-soft-vote-v1",
+      "generator_changes": "Preserved alternating labels, dense Gaussian row-seeded streams with class shift 0.3 and original sizes/empirical moments. Shared Dataset kernel with LR; Parquet, IDs and typed profile metadata. Effective generation parallelism remains shuffle-based; former unused property now effective. Old production RDD/ObjectFile generator replaced.",
+      "workload_changes": "Spark ML RandomForestClassifier; preserves tree settings and single-tree bootstrap exception; native probability aggregation replaces hard voting, explicitly versioned. Explicit split/model seeds, class metadata, finite nonempty evaluation and one-aggregate held-out error.",
+      "documentation": "docs/ml-trees-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-trees-scale-reference.json"
+      ],
+      "validation": "docs/ml-trees-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/test_trees.py",
+        "tests/integration/verify_trees.py",
+        "tests/integration/verify_trees_controller.py",
+        "tests/integration/RandomForestOriginalReference.scala",
+        "tests/integration/TreeAlgorithmOriginalReference.scala"
+      ],
+      "implementation": [
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/RandomForestDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/RandomForestClassification.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/BinaryGaussianDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/TreeBenchmarkData.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LogisticRegressionDataGenerator.scala",
+        "conf/workloads/ml/rf.conf",
+        "bin/workloads/ml/rf/prepare/prepare.sh",
+        "bin/workloads/ml/rf/spark/run.sh",
+        "bin/functions/hibench_prop_env_mapping.py",
+        "hibench/catalog.py",
+        "hibench/config.py",
+        "hibench/workload_parameters.py"
+      ],
+      "limits": [
+        "RF huge/gigantic/bigdata preset definitions and logical volume checked only; actual generation exercised RF tiny/small/large and all six GBT presets. Full YARN training used original tiny and explicitly customized fixtures only.",
+        "RF native Spark ML averages leaf probabilities; the former model hard-voted tree labels. Four of 40 controlled five-tree predictions differed; leaf probability reference and repeatability passed. No universal identical-tree/metric/runtime claim.",
+        "Split seed 11 now explicit; old splits were nondeterministic. RF model seed 1 now explicit; GBT effective seed 0 preserved. File/sample order may alter fitted models.",
+        "Original row-seeded empirical Gaussian deviations are preserved; theoretical ideal moments are not substituted for the original reference.",
+        "Parquet encoding, metadata and action/evaluation plans differ from ObjectFile; no historical throughput equivalence or performance superiority claimed.",
+        "Original tiny contains ten rows; two held-out rows in this run are not a reliable quality estimate.",
+        "Local verification ran during part of the YARN smoke campaign; timings are not a controlled performance study.",
+        "Cloud/serverless platforms not certified."
+      ]
+    },
+    {
+      "workload": "ml.gbt",
+      "status": "migrated",
+      "contract": "binary-gaussian-parquet-v1 / spark-ml-gbt-v1",
+      "generator_changes": "Preserved alternating labels, dense Gaussian row-seeded streams with class shift 0.3 and original sizes/empirical moments. Shared Dataset kernel with LR; Parquet, IDs and typed profile metadata. Effective generation parallelism remains shuffle-based; former unused property now effective. Old production RDD/ObjectFile generator replaced.",
+      "workload_changes": "Spark ML GBTClassifier; preserves binary logistic boosting, depth/bins/iterations/step-size, all-feature policy and effective training seed 0. Explicit split/model seeds, class metadata, finite nonempty evaluation and one-aggregate held-out error.",
+      "documentation": "docs/ml-trees-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-trees-scale-reference.json"
+      ],
+      "validation": "docs/ml-trees-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/test_trees.py",
+        "tests/integration/verify_trees.py",
+        "tests/integration/verify_trees_controller.py",
+        "tests/integration/GradientBoostedTreeOriginalReference.scala",
+        "tests/integration/TreeAlgorithmOriginalReference.scala"
+      ],
+      "implementation": [
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/GradientBoostedTreeDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/GradientBoostedTree.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/BinaryGaussianDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/TreeBenchmarkData.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LogisticRegressionDataGenerator.scala",
+        "conf/workloads/ml/gbt.conf",
+        "bin/workloads/ml/gbt/prepare/prepare.sh",
+        "bin/workloads/ml/gbt/spark/run.sh",
+        "bin/functions/hibench_prop_env_mapping.py",
+        "hibench/catalog.py",
+        "hibench/config.py",
+        "hibench/workload_parameters.py"
+      ],
+      "limits": [
+        "RF huge/gigantic/bigdata preset definitions and logical volume checked only; actual generation exercised RF tiny/small/large and all six GBT presets. Full YARN training used original tiny and explicitly customized fixtures only.",
+        "RF native Spark ML averages leaf probabilities; the former model hard-voted tree labels. Four of 40 controlled five-tree predictions differed; leaf probability reference and repeatability passed. No universal identical-tree/metric/runtime claim.",
+        "Split seed 11 now explicit; old splits were nondeterministic. RF model seed 1 now explicit; GBT effective seed 0 preserved. File/sample order may alter fitted models.",
+        "Original row-seeded empirical Gaussian deviations are preserved; theoretical ideal moments are not substituted for the original reference.",
+        "Parquet encoding, metadata and action/evaluation plans differ from ObjectFile; no historical throughput equivalence or performance superiority claimed.",
+        "Original tiny contains ten rows; two held-out rows in this run are not a reliable quality estimate.",
+        "Local verification ran during part of the YARN smoke campaign; timings are not a controlled performance study.",
+        "Cloud/serverless platforms not certified."
+      ]
+    },
+    {
+      "workload": "dal.kmeans",
+      "status": "retired",
+      "reason": "Obsolete native Intel DAAL/RDD variant outside maintained catalog; avoids unsupported duplicate implementation and dependencies.",
+      "removed": [
+        "sparkbench/dal",
+        "bin/workloads/dal",
+        "inactive Maven DAL profiles",
+        "unused mahout.version property"
+      ],
+      "historical_context": "docs/workload-status-2026-10-07.md"
+    },
+    {
+      "workload": "ml.pca",
+      "status": "migrated",
+      "contract": "Preserved six row/dimension presets and dense Gaussian data profiles; versioned Parquet schema.",
+      "generator_changes": "Exact original row RNG sequence and feature shift; explicit seed.",
+      "workload_changes": "SparkSession Parquet reader and Spark ML estimator/statistics; no maintained RDD or ObjectFile boundary.",
+      "documentation": "docs/ml-statistics-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-statistics-scale-reference.json"
+      ],
+      "validation": "docs/ml-statistics-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_statistics.py",
+        "tests/integration/verify_statistics_controller.py",
+        "tests/test_statistics.py"
+      ],
+      "implementation": [
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/PCADataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/PCAExample.scala",
+        "conf/workloads/ml/pca.conf",
+        "bin/workloads/ml/pca/prepare/prepare.sh",
+        "bin/functions/hibench_prop_env_mapping.py",
+        "hibench/catalog.py",
+        "hibench/config.py",
+        "hibench/workload_parameters.py"
+      ],
+      "limits": [
+        "Only original tiny and explicit custom shapes were executed end-to-end; larger presets are definition/volume checks only.",
+        "Summarizer RNG is statistically comparable, not historical row-identical; partition count participates in reproducibility.",
+        "Parquet physical encoding and I/O cost differ from ObjectFile.",
+        "Local verifiers overlapped parts of the smoke campaign: timing is not a controlled performance comparison.",
+        "No cloud/serverless certification."
+      ]
+    },
+    {
+      "workload": "ml.correlation",
+      "status": "migrated",
+      "contract": "Preserved six row/dimension presets and dense Gaussian data profiles; versioned Parquet schema.",
+      "generator_changes": "Exact binary Gaussian original profile; explicit seed and class shift.",
+      "workload_changes": "SparkSession Parquet reader and Spark ML estimator/statistics; no maintained RDD or ObjectFile boundary.",
+      "documentation": "docs/ml-statistics-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-statistics-scale-reference.json"
+      ],
+      "validation": "docs/ml-statistics-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_statistics.py",
+        "tests/integration/verify_statistics_controller.py",
+        "tests/test_statistics.py"
+      ],
+      "implementation": [
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/CorrelationDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/CorrelationExample.scala",
+        "conf/workloads/ml/correlation.conf",
+        "bin/workloads/ml/correlation/prepare/prepare.sh",
+        "bin/functions/hibench_prop_env_mapping.py",
+        "hibench/catalog.py",
+        "hibench/config.py",
+        "hibench/workload_parameters.py"
+      ],
+      "limits": [
+        "Only original tiny and explicit custom shapes were executed end-to-end; larger presets are definition/volume checks only.",
+        "Summarizer RNG is statistically comparable, not historical row-identical; partition count participates in reproducibility.",
+        "Parquet physical encoding and I/O cost differ from ObjectFile.",
+        "Local verifiers overlapped parts of the smoke campaign: timing is not a controlled performance comparison.",
+        "No cloud/serverless certification.",
+        "Dense correlation square-result memory and Spark/JVM dimension limits invalidate some unchanged wide historical presets."
+      ]
+    },
+    {
+      "workload": "ml.summarizer",
+      "status": "migrated",
+      "contract": "Preserved six row/dimension presets and dense Gaussian data profiles; versioned Parquet schema.",
+      "generator_changes": "Normal(0,1) Dataset partition streams; deterministic seed replaces clock seed; statistical profile verified.",
+      "workload_changes": "SparkSession Parquet reader and Spark ML estimator/statistics; no maintained RDD or ObjectFile boundary.",
+      "documentation": "docs/ml-statistics-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-statistics-scale-reference.json"
+      ],
+      "validation": "docs/ml-statistics-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_statistics.py",
+        "tests/integration/verify_statistics_controller.py",
+        "tests/test_statistics.py"
+      ],
+      "implementation": [
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SummarizerDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SummarizerExample.scala",
+        "conf/workloads/ml/summarizer.conf",
+        "bin/workloads/ml/summarizer/prepare/prepare.sh",
+        "bin/functions/hibench_prop_env_mapping.py",
+        "hibench/catalog.py",
+        "hibench/config.py",
+        "hibench/workload_parameters.py"
+      ],
+      "limits": [
+        "Only original tiny and explicit custom shapes were executed end-to-end; larger presets are definition/volume checks only.",
+        "Summarizer RNG is statistically comparable, not historical row-identical; partition count participates in reproducibility.",
+        "Parquet physical encoding and I/O cost differ from ObjectFile.",
+        "Local verifiers overlapped parts of the smoke campaign: timing is not a controlled performance comparison.",
+        "No cloud/serverless certification."
+      ]
+    },
+    {
+      "workload": "ml.bayes",
+      "status": "migrated",
+      "contract": "Original volume and workload data profile; versioned typed Parquet.",
+      "generator_changes": "Exact dense row RNG and original document Zipf/length/EOF dictionary profile; corpus-frequency sparse weighting retained.",
+      "workload_changes": "Spark ML multinomial NaiveBayes, Parquet input, effective smoothing and explicit split controls.",
+      "documentation": "docs/ml-final-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-final-scale-reference.json",
+        "tests/fixtures/pagerank-original-profile.json"
+      ],
+      "validation": "docs/ml-final-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_final_ml.py",
+        "tests/integration/verify_pagerank.py",
+        "tests/integration/verify_final_ml_controller.py",
+        "tests/integration/BayesOriginalKernel.java",
+        "tests/integration/BayesZipfReference.java",
+        "tests/integration/WebLinkReference.java",
+        "tests/test_pending_ml.py"
+      ],
+      "implementation": [
+        "conf/workloads/ml/bayes.conf",
+        "bin/workloads/ml/bayes/prepare/prepare.sh",
+        "bin/workloads/ml/bayes/spark/run.sh",
+        "hibench/ml_parameters.py",
+        "hibench/catalog.py",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/BayesDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/NaiveBayesExample.scala",
+        "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfCore.java",
+        "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfian.java"
+      ],
+      "limits": [
+        "Only original tiny and recorded custom profiles executed; larger sizes are profile definition checks.",
+        "Parquet storage and updated action plans change physical I/O/timing; SVM changes solver.",
+        "No cloud/serverless certification."
+      ]
+    },
+    {
+      "workload": "ml.svm",
+      "status": "migrated",
+      "contract": "Original volume and workload data profile; versioned typed Parquet.",
+      "generator_changes": "Exact original separating weights, uniform features, Gaussian margin noise and binary labels.",
+      "workload_changes": "Versioned Spark ML LinearSVC replaces SGD; no intercept or standardization by default; exact unbinned AUC.",
+      "documentation": "docs/ml-final-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-final-scale-reference.json",
+        "tests/fixtures/pagerank-original-profile.json"
+      ],
+      "validation": "docs/ml-final-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_final_ml.py",
+        "tests/integration/verify_pagerank.py",
+        "tests/integration/verify_final_ml_controller.py",
+        "tests/integration/BayesOriginalKernel.java",
+        "tests/integration/BayesZipfReference.java",
+        "tests/integration/WebLinkReference.java",
+        "tests/test_pending_ml.py"
+      ],
+      "implementation": [
+        "conf/workloads/ml/svm.conf",
+        "bin/workloads/ml/svm/prepare/prepare.sh",
+        "bin/workloads/ml/svm/spark/run.sh",
+        "hibench/ml_parameters.py",
+        "hibench/catalog.py",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SVMDataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LinearSVMExample.scala",
+        "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfCore.java",
+        "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfian.java"
+      ],
+      "limits": [
+        "Only original tiny and recorded custom profiles executed; larger sizes are profile definition checks.",
+        "Parquet storage and updated action plans change physical I/O/timing; SVM changes solver.",
+        "No cloud/serverless certification."
+      ]
+    },
+    {
+      "workload": "ml.lda",
+      "status": "migrated",
+      "contract": "Original volume and workload data profile; versioned typed Parquet.",
+      "generator_changes": "Uniform token-count corpus and historical length/shape profiles; explicit partition-dependent seed replaces clock.",
+      "workload_changes": "Spark ML LDA with online/EM, optimizer-aware model save/load and explicit model seed.",
+      "documentation": "docs/ml-final-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-final-scale-reference.json",
+        "tests/fixtures/pagerank-original-profile.json"
+      ],
+      "validation": "docs/ml-final-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_final_ml.py",
+        "tests/integration/verify_pagerank.py",
+        "tests/integration/verify_final_ml_controller.py",
+        "tests/integration/BayesOriginalKernel.java",
+        "tests/integration/BayesZipfReference.java",
+        "tests/integration/WebLinkReference.java",
+        "tests/test_pending_ml.py"
+      ],
+      "implementation": [
+        "conf/workloads/ml/lda.conf",
+        "bin/workloads/ml/lda/prepare/prepare.sh",
+        "bin/workloads/ml/lda/spark/run.sh",
+        "hibench/ml_parameters.py",
+        "hibench/catalog.py",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LDADataGenerator.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LDAExample.scala",
+        "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfCore.java",
+        "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfian.java"
+      ],
+      "limits": [
+        "Only original tiny and recorded custom profiles executed; larger sizes are profile definition checks.",
+        "Parquet storage and updated action plans change physical I/O/timing; SVM changes solver.",
+        "No cloud/serverless certification."
+      ]
+    },
+    {
+      "workload": "websearch.pagerank",
+      "status": "migrated",
+      "contract": "Original volume and workload data profile; versioned typed Parquet.",
+      "generator_changes": "Exact historical link RNG/Zipf slots with duplicate/self edges; all original node counts.",
+      "workload_changes": "DataFrame fixed-iteration propagation preserving distinct-edge and vertex-survival semantics; Parquet output.",
+      "documentation": "docs/ml-final-modernization.md",
+      "scale_or_profile_reference": [
+        "docs/ml-final-scale-reference.json",
+        "tests/fixtures/pagerank-original-profile.json"
+      ],
+      "validation": "docs/ml-final-validation-2026-10-08.json",
+      "verifiers": [
+        "tests/integration/verify_final_ml.py",
+        "tests/integration/verify_pagerank.py",
+        "tests/integration/verify_final_ml_controller.py",
+        "tests/integration/BayesOriginalKernel.java",
+        "tests/integration/BayesZipfReference.java",
+        "tests/integration/WebLinkReference.java",
+        "tests/test_pending_ml.py"
+      ],
+      "implementation": [
+        "conf/workloads/websearch/pagerank.conf",
+        "bin/workloads/websearch/pagerank/prepare/prepare.sh",
+        "bin/workloads/websearch/pagerank/spark/run.sh",
+        "hibench/ml_parameters.py",
+        "hibench/catalog.py",
+        "sparkbench/websearch/src/main/scala/org/hibench/sparkbench/websearch/PageRankDataGenerator.scala",
+        "sparkbench/websearch/src/main/scala/org/hibench/sparkbench/websearch/DataFramePageRank.scala",
+        "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfCore.java",
+        "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfian.java"
+      ],
+      "limits": [
+        "Only original tiny and recorded custom profiles executed; larger sizes are profile definition checks.",
+        "Parquet storage and updated action plans change physical I/O/timing; SVM changes solver.",
+        "No cloud/serverless certification."
+      ]
+    },
+    {
+      "workload": "ml.svd",
+      "status": "migrated",
+      "documentation": "docs/ml-svd-modernization.md",
+      "validation": "docs/ml-svd-validation-2026-10-09.json",
+      "contract": "Original shape/volume and documented corrected mathematical workload; versioned Parquet.",
+      "generator_changes": "Normal(0,1), unchanged shapes/volume; explicit deterministic partition seed replaces clock-seeded RandomRDDs.",
+      "workload_changes": "Dataset packed uncentered Gram aggregation, local eigendecomposition, numerical rank floor and lazy U contract.",
+      "scale_or_profile_reference": [
+        "docs/ml-final-scale-reference.json"
+      ],
+      "verifiers": [
+        "tests/integration/verify_svd.py",
+        "tests/integration/verify_svd_controller.py",
+        "tests/test_svd.py"
+      ],
+      "implementation": [
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/UncenteredSVD.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SVDExample.scala",
+        "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SVDDataGenerator.scala",
+        "conf/workloads/ml/svd.conf",
+        "bin/workloads/ml/svd/prepare/prepare.sh",
+        "bin/workloads/ml/svd/spark/run.sh",
+        "hibench/svd_parameters.py"
+      ],
+      "limits": [
+        "Tiny and explicit custom configurations executed; larger shapes retained as definitions only.",
+        "Storage/action plans/solver versions change physical cost; no historical timing equivalence.",
+        "Functional validation overlapped local verifier/build work; not a controlled performance campaign.",
+        "No cloud/serverless certification.",
+        "Gram roundoff floor truncates numerically unresolved tails; U remains lazy as in the original benchmark."
+      ]
+    },
+    {
+      "workload": "graph.nweight",
+      "status": "migrated",
+      "documentation": "docs/graph-nweight-modernization.md",
+      "validation": "docs/graph-nweight-validation-2026-10-09.json",
+      "contract": "Original shape/volume and documented corrected mathematical workload; versioned Parquet.",
+      "generator_changes": "Preserved pair budgets, uniform endpoint universe and original scalar feature products rounded to four decimals; exact symmetric expansion and deterministic independent RNG streams.",
+      "workload_changes": "Versioned immutable weighted path/top-K recurrence; corrected shared mutable state, duplicate aggregation and depth semantics; retired old GraphX/Pregel variants.",
+      "scale_or_profile_reference": [
+        "tests/fixtures/nweight-original-profile.json"
+      ],
+      "verifiers": [
+        "tests/integration/verify_nweight.py",
+        "tests/integration/verify_nweight_controller.py",
+        "tests/integration/capture_nweight_original.py",
+        "tests/test_nweight.py"
+      ],
+      "implementation": [
+        "sparkbench/graph/src/main/scala/org/hibench/sparkbench/graph/nweight/DataFrameNWeight.scala",
+        "sparkbench/graph/src/main/scala/org/hibench/sparkbench/graph/nweight/UniformWeightedGraphGenerator.scala",
+        "conf/workloads/graph/nweight.conf",
+        "bin/workloads/graph/nweight/prepare/prepare.sh",
+        "bin/workloads/graph/nweight/spark/run.sh",
+        "hibench/nweight_parameters.py",
+        "hibench/backend.py",
+        "sparkbench/graph/pom.xml",
+        "sparkbench/graph/src/main/resources/nweight-user-features"
+      ],
+      "limits": [
+        "Tiny and explicit custom configurations executed; larger shapes retained as definitions only.",
+        "Storage/action plans/solver versions change physical cost; no historical timing equivalence.",
+        "Functional validation overlapped local verifier/build work; not a controlled performance campaign.",
+        "No cloud/serverless certification."
+      ]
+    }
+  ],
+  "pending_workloads": [],
+  "platform_limit": "DataFrame APIs and Docker/YARN validation do not certify cloud/serverless platforms.",
+  "engineering_records": [
+    "docs/controlador-batch.md",
+    "docs/adaptadores.md",
+    "docs/gestion-cluster.md",
+    "docs/general-configuration-review.md",
+    "docs/workload-parameterization.md",
+    "docs/namespace-migration.md",
+    "docs/deferred-workloads-2026-10-08.md"
+  ],
+  "companion_cluster_revision": "379c801b92d3baf6b2c9e70532e21825107861a0",
+  "deferred_workloads_documentation": "docs/deferred-workloads-2026-10-08.md"
+}

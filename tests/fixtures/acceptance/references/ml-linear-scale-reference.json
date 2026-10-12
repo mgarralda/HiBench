@@ -1,0 +1,32 @@
+{
+  "tiny": {
+    "examples": 50000,
+    "features": 1000,
+    "feature_payload_bytes": 400000000
+  },
+  "small": {
+    "examples": 100000,
+    "features": 20000,
+    "feature_payload_bytes": 16000000000
+  },
+  "large": {
+    "examples": 200000,
+    "features": 30000,
+    "feature_payload_bytes": 48000000000
+  },
+  "huge": {
+    "examples": 300000,
+    "features": 50000,
+    "feature_payload_bytes": 120000000000
+  },
+  "gigantic": {
+    "examples": 500000,
+    "features": 80000,
+    "feature_payload_bytes": 320000000000
+  },
+  "bigdata": {
+    "examples": 1000000,
+    "features": 100000,
+    "feature_payload_bytes": 800000000000
+  }
+}

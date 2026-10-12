@@ -1,0 +1,40 @@
+{
+  "source": "Historical MapReduce SQL generator before retirement on upgrade branch",
+  "reference_runtime": {
+    "spark": "3.5.9",
+    "hadoop": "3.3.6",
+    "java": "11",
+    "timezone": "UTC",
+    "legacy_default_charset": "US-ASCII"
+  },
+  "case": {
+    "pages": 120,
+    "visits": 1000,
+    "maps": 2,
+    "reducers": 2
+  },
+  "source_sha256": {
+    "HiveData.java": "0a2f8ec867e8dc6055710d1d3046c3a820dfc77f20cb26aded2620ec0383e722",
+    "Visit.java": "9958832671008d8a1f5891b234a2373a6240bf22520b9832068c4ed0e3a0ee57",
+    "JoinBytesInt.java": "2cfe8359fd6540dda9854aa3ba618515a0db863bb9fa066ed447b9ca9133d5fb",
+    "HtmlCore.java": "20461ebf762e095461155324e7d29d9ba022643cf9d6532a68b2caddb5305207",
+    "ZipfCore.java": "4c67dc50f768fb7c220b2696149c4d2d2cac79c038cc968aed9fae6d8db9fc42",
+    "Zipfian.java": "26afe668b92f6b055dd0812cb150590fe8e6074e28a69f48cb25c080f4f8a14e",
+    "RawData.java": "50f4369b720dba3c678090dab3fd3f2e31e3a6cb5b49ba2e9081d8cb7ccbf3ba"
+  },
+  "vocabularies": {
+    "country_codes": {
+      "entries": 511,
+      "sha256": "f1cdb5c7e5e82132e242ebc5cac58b9d243c3a472c719a594728f77b273e5019"
+    },
+    "search_keys": {
+      "entries": 1000,
+      "sha256": "2b453d5231b303ce44123f45bac2cd05d512277571d4db78c91e2bccf8562faa"
+    },
+    "user_agents": {
+      "entries": 2000,
+      "sha256": "41a59c11da86baad90b13ebf53eb9b87020fea77465d9a7238ee6a658a06939e"
+    }
+  },
+  "fixture_sha256": "972e9154a443ae687bb765218717862c93e52dbdf399d549911594dc667ebf40"
+}

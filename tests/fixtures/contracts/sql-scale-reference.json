@@ -1,0 +1,80 @@
+{
+  "scan": {
+    "tiny": {
+      "pages": "120",
+      "uservisits": "1000"
+    },
+    "small": {
+      "pages": "12000",
+      "uservisits": "100000"
+    },
+    "large": {
+      "pages": "120000",
+      "uservisits": "1000000"
+    },
+    "huge": {
+      "pages": "1200000",
+      "uservisits": "10000000"
+    },
+    "gigantic": {
+      "pages": "12000000",
+      "uservisits": "100000000"
+    },
+    "bigdata": {
+      "pages": "10000000",
+      "uservisits": "2000000000"
+    }
+  },
+  "aggregation": {
+    "tiny": {
+      "pages": "120",
+      "uservisits": "1000"
+    },
+    "small": {
+      "pages": "12000",
+      "uservisits": "100000"
+    },
+    "large": {
+      "pages": "120000",
+      "uservisits": "1000000"
+    },
+    "huge": {
+      "pages": "1200000",
+      "uservisits": "10000000"
+    },
+    "gigantic": {
+      "pages": "12000000",
+      "uservisits": "100000000"
+    },
+    "bigdata": {
+      "pages": "100000000",
+      "uservisits": "1000000000"
+    }
+  },
+  "join": {
+    "tiny": {
+      "pages": "120",
+      "uservisits": "1000"
+    },
+    "small": {
+      "pages": "12000",
+      "uservisits": "100000"
+    },
+    "large": {
+      "pages": "120000",
+      "uservisits": "1000000"
+    },
+    "huge": {
+      "pages": "1200000",
+      "uservisits": "10000000"
+    },
+    "gigantic": {
+      "pages": "12000000",
+      "uservisits": "100000000"
+    },
+    "bigdata": {
+      "pages": "120000000",
+      "uservisits": "5000000000"
+    }
+  }
+}

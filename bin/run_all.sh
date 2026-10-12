@@ -16,9 +16,8 @@
 
 set -u
 
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/
-export HADOOP_HOME=/home/sparker/hadoop-3.3.2
-export PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:$PATH
+# Runtime versions are inherited from the environment and configuration.
+export HIBENCH_PYTHON=${HIBENCH_PYTHON:-python3}
 
 SKIP_PREPARE_IF_EXISTS=false
 
@@ -168,10 +167,9 @@ for benchmark in `cat $root_dir/conf/benchmarks.lst`; do
 
 		echo -e "${UYellow}${BYellow}Run ${Yellow}${UYellow}${benchmark}/${framework}${Color_Off}"
 		echo -e "${BCyan}Exec script: ${Cyan}$WORKLOAD/${framework}/run.sh${Color_Off}"
-		$WORKLOAD/${framework}/run.sh
-		echo -e "$WORKLOAD/${framework}/run.sh"
-
+		"$WORKLOAD/${framework}/run.sh"
 		result=$?
+		echo -e "$WORKLOAD/${framework}/run.sh"
 		if [ $result -ne 0 ]
 		then
 			echo -e "${On_IRed}ERROR: ${benchmark}/${framework} failed to run successfully.${Color_Off}"

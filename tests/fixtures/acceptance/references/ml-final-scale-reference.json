@@ -1,0 +1,166 @@
+{
+  "bayes": {
+    "tiny": {
+      "use_dense": "false",
+      "dense.examples": "100",
+      "dense.features": "100",
+      "pages": "25000",
+      "classes": "10",
+      "ngrams": "1"
+    },
+    "small": {
+      "use_dense": "false",
+      "dense.examples": "1000",
+      "dense.features": "100",
+      "pages": "30000",
+      "classes": "100",
+      "ngrams": "2"
+    },
+    "large": {
+      "use_dense": "false",
+      "dense.examples": "1000",
+      "dense.features": "1000",
+      "pages": "100000",
+      "classes": "100",
+      "ngrams": "2"
+    },
+    "huge": {
+      "use_dense": "false",
+      "dense.examples": "10000",
+      "dense.features": "1000",
+      "pages": "500000",
+      "classes": "100",
+      "ngrams": "2"
+    },
+    "gigantic": {
+      "use_dense": "false",
+      "dense.examples": "10000",
+      "dense.features": "10000",
+      "pages": "1000000",
+      "classes": "100",
+      "ngrams": "2"
+    },
+    "bigdata": {
+      "use_dense": "false",
+      "dense.examples": "10000",
+      "dense.features": "100000",
+      "pages": "20000000",
+      "classes": "20000",
+      "ngrams": "2"
+    }
+  },
+  "svm": {
+    "tiny": {
+      "examples": "1000",
+      "features": "1000"
+    },
+    "small": {
+      "examples": "10000",
+      "features": "10000"
+    },
+    "large": {
+      "examples": "50000",
+      "features": "100000"
+    },
+    "huge": {
+      "examples": "120000",
+      "features": "300000"
+    },
+    "gigantic": {
+      "examples": "140000",
+      "features": "300000"
+    },
+    "bigdata": {
+      "examples": "150000",
+      "features": "300000"
+    }
+  },
+  "lda": {
+    "tiny": {
+      "num_of_documents": "2000",
+      "num_of_vocabulary": "1000",
+      "num_of_topics": "10",
+      "doc_len_min": "50",
+      "doc_len_max": "10000",
+      "maxresultsize": "1g"
+    },
+    "small": {
+      "num_of_documents": "5000",
+      "num_of_vocabulary": "2000",
+      "num_of_topics": "20",
+      "doc_len_min": "50",
+      "doc_len_max": "10000",
+      "maxresultsize": "2g"
+    },
+    "large": {
+      "num_of_documents": "10000",
+      "num_of_vocabulary": "3000",
+      "num_of_topics": "30",
+      "doc_len_min": "50",
+      "doc_len_max": "10000",
+      "maxresultsize": "3g"
+    },
+    "huge": {
+      "num_of_documents": "20000",
+      "num_of_vocabulary": "5000",
+      "num_of_topics": "50",
+      "doc_len_min": "50",
+      "doc_len_max": "10000",
+      "maxresultsize": "4g"
+    },
+    "gigantic": {
+      "num_of_documents": "50000",
+      "num_of_vocabulary": "8000",
+      "num_of_topics": "80",
+      "doc_len_min": "50",
+      "doc_len_max": "10000",
+      "maxresultsize": "5g"
+    },
+    "bigdata": {
+      "num_of_documents": "100000",
+      "num_of_vocabulary": "10000",
+      "num_of_topics": "100",
+      "doc_len_min": "50",
+      "doc_len_max": "10000",
+      "maxresultsize": "6g"
+    }
+  },
+  "svd": {
+    "tiny": {
+      "examples": "100",
+      "features": "1000",
+      "singularvalues": "800",
+      "maxresultsize": "\"1g\""
+    },
+    "small": {
+      "examples": "1000",
+      "features": "2000",
+      "singularvalues": "1500",
+      "maxresultsize": "\"1g\""
+    },
+    "large": {
+      "examples": "2000",
+      "features": "4000",
+      "singularvalues": "3000",
+      "maxresultsize": "\"1g\""
+    },
+    "huge": {
+      "examples": "5000",
+      "features": "5000",
+      "singularvalues": "4000",
+      "maxresultsize": "\"4g\""
+    },
+    "gigantic": {
+      "examples": "6000",
+      "features": "6000",
+      "singularvalues": "5000",
+      "maxresultsize": "\"4g\""
+    },
+    "bigdata": {
+      "examples": "7000",
+      "features": "7000",
+      "singularvalues": "6000",
+      "maxresultsize": "\"4g\""
+    }
+  }
+}

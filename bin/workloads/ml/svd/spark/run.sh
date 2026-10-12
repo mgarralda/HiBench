@@ -22,13 +22,13 @@ workload_config=${root_dir}/conf/workloads/ml/svd.conf
 enter_bench SVD ${workload_config} ${current_dir}
 show_bannar start
 
-rmr_hdfs $OUTPUT_HDFS || true
-
 check_input_data_path "$INPUT_HDFS"
+
+rmr_hdfs $OUTPUT_HDFS || true
 
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
-run_spark_job com.intel.hibench.sparkbench.ml.SVDExample --numFeatures $NUM_FEATURES_SVD --numSingularValues $NUM_SINGULAR_VALUES_SVD --computeU $COMPUTEU_SVD --maxResultSize $MAXRESULTSIZE_SVD $INPUT_HDFS 
+run_spark_job org.hibench.sparkbench.ml.SVDExample "$INPUT_HDFS" "$NUM_FEATURES_SVD" "$NUM_SINGULAR_VALUES_SVD" "$COMPUTEU_SVD" "$RCOND_SVD" "$MATRIX_BUDGET_SVD" "$MAXRESULTSIZE_SVD"
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

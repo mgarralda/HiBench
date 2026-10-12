@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-08",
+  "spark": "3.5.9",
+  "java": "11",
+  "workload": "ml.als",
+  "contract": "ratings-parquet-v1",
+  "python_tests": 42,
+  "java_build": "11 modules successful; 2 generator tests passed",
+  "profile_checks": [
+    {
+      "ratings": 200,
+      "partitions": 2,
+      "implicit": false,
+      "exact_original_match": true
+    },
+    {
+      "ratings": 203,
+      "partitions": 7,
+      "implicit": false,
+      "exact_original_match": true
+    },
+    {
+      "ratings": 3,
+      "partitions": 8,
+      "implicit": false,
+      "exact_original_match": true
+    },
+    {
+      "ratings": 200,
+      "partitions": 2,
+      "implicit": true,
+      "exact_original_match": true
+    },
+    {
+      "ratings": 203,
+      "partitions": 7,
+      "implicit": true,
+      "exact_original_match": true
+    },
+    {
+      "ratings": 3,
+      "partitions": 8,
+      "implicit": true,
+      "exact_original_match": true
+    },
+    {
+      "scale": "tiny",
+      "ratings": 200,
+      "profile_verified": true,
+      "rating_counts": {
+        "2.5": 26,
+        "-0.5": 34,
+        "1.5": 46,
+        "0.5": 43,
+        "-1.5": 51
+      }
+    },
+    {
+      "scale": "small",
+      "ratings": 2000,
+      "profile_verified": true,
+      "rating_counts": {
+        "2.5": 381,
+        "-0.5": 411,
+        "1.5": 399,
+        "0.5": 397,
+        "-1.5": 412
+      }
+    },
+    {
+      "scale": "large",
+      "ratings": 20000,
+      "profile_verified": true,
+      "rating_counts": {
+        "2.5": 3973,
+        "-0.5": 4091,
+        "1.5": 3895,
+        "0.5": 4060,
+        "-1.5": 3981
+      }
+    },
+    {
+      "scale": "huge",
+      "ratings": 40000,
+      "profile_verified": true,
+      "rating_counts": {
+        "2.5": 7905,
+        "-0.5": 8052,
+        "1.5": 7936,
+        "0.5": 8088,
+        "-1.5": 8019
+      }
+    },
+    {
+      "scale": "gigantic",
+      "ratings": 80000,
+      "profile_verified": true,
+      "rating_counts": {
+        "2.5": 15876,
+        "-0.5": 16208,
+        "1.5": 15880,
+        "0.5": 16056,
+        "-1.5": 15980
+      }
+    },
+    {
+      "scale": "bigdata",
+      "ratings": 200000,
+      "profile_verified": true,
+      "rating_counts": {
+        "2.5": 39872,
+        "-0.5": 39655,
+        "1.5": 40203,
+        "0.5": 40113,
+        "-1.5": 40157
+      }
+    }
+  ],
+  "controller_run": {
+    "id": "94efac73-c77c-4fb4-a822-7466f4acc192",
+    "state": "succeeded"
+  },
+  "benchmark_results": [
+    {
+      "application_id": "application_1791359074600_0069",
+      "duration_s": 38.97,
+      "finished_at_ms": 1791446515308,
+      "input_bytes": 3508,
+      "run_id": "94efac73-c77c-4fb4-a822-7466f4acc192",
+      "scale": "tiny",
+      "schema_version": 2,
+      "started_at_ms": 1791446476338,
+      "throughput_bytes_s": 90.01796253528356,
+      "workload": "ALS"
+    }
+  ],
+  "evaluation_count": 23,
+  "rmse": 1.2902038838281749,
+  "limits": [
+    "Six preset generator counts validated in local Spark; full YARN benchmarks used tiny implicit and explicit modes.",
+    "Serverless platform support is not certified by this validation."
+  ],
+  "explicit_controller_run": {
+    "id": "8c61aca2-5034-4901-8686-f01c988de0dc",
+    "state": "succeeded",
+    "evaluation_count": 23,
+    "rmse": 2.95880545474169,
+    "benchmark_results": [
+      {
+        "application_id": "application_1791359074600_0071",
+        "duration_s": 35.907,
+        "finished_at_ms": 1791446752722,
+        "input_bytes": 3507,
+        "run_id": "8c61aca2-5034-4901-8686-f01c988de0dc",
+        "scale": "tiny",
+        "schema_version": 2,
+        "started_at_ms": 1791446716815,
+        "throughput_bytes_s": 97.66897819366699,
+        "workload": "ALS"
+      }
+    ]
+  },
+  "cluster_applications": {
+    "implicit": [
+      "application_1791359074600_0068",
+      "application_1791359074600_0069"
+    ],
+    "explicit": [
+      "application_1791359074600_0070",
+      "application_1791359074600_0071"
+    ]
+  }
+}

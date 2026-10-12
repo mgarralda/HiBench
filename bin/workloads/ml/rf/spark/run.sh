@@ -33,8 +33,9 @@ OPTION="--numTrees $NUM_TREES_RF \
         --featureSubsetStrategy $FEATURE_SUBSET_STRATEGY_RF \
         --impurity $IMPURITY_RF \
         --maxDepth $MAX_DEPTH_RF \
-        --maxBins $MAX_BINS_RF"
-run_spark_job com.intel.hibench.sparkbench.ml.RandomForestClassification $OPTION $INPUT_HDFS
+        --maxBins $MAX_BINS_RF \
+        --modelSeed $MODEL_SEED_RF --splitSeed $SPLIT_SEED_RF --trainFraction $TRAIN_FRACTION_RF"
+run_spark_job org.hibench.sparkbench.ml.RandomForestClassification $OPTION $INPUT_HDFS
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

@@ -30,7 +30,7 @@ rmr_hdfs $OUTPUT_HDFS || true
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
 
-run_spark_job com.intel.hibench.sparkbench.ml.GaussianMixtureModel -k $K_GMM --numIterations $MAX_ITERATION_GMM --storageLevel $STORAGE_LEVEL_GMM $INPUT_HDFS/samples
+run_spark_job org.hibench.sparkbench.ml.GaussianMixtureModel -k $K_GMM --numIterations $MAX_ITERATION_GMM --storageLevel $STORAGE_LEVEL_GMM $INPUT_HDFS/samples
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

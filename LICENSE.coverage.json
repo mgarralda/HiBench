@@ -1,0 +1,1926 @@
+{
+  "license": "Apache-2.0",
+  "contributor": "Mariano Garralda-Barrio",
+  "preserved": [
+    "docs/",
+    "docs_internal/",
+    "report/",
+    "third-party notices",
+    "scientific input data bytes"
+  ],
+  "files": [
+    {
+      "path": "hibench/backend.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/campaign_archive.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/campaign_measurement.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/campaign_validation.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/catalog.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/cli.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/config.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/measurement.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ml_parameters.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/nweight_parameters.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/preset_verification.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/recovery.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/scale_verification.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/server.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/spark_configuration.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/store.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/svd_parameters.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/web.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/worker.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/workload_parameters.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/__init__.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/adapters/base.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/adapters/classic.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/adapters/__init__.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/api/app.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/api/models.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/api/routes.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/api/__init__.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/services/clusters.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/services/configuration.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/services/experiments.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/services/monitoring.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/services/__init__.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/benchmark_settings.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/clusters.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/executions.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/experiments.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/general.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/help_page.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/monitoring.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/profiles.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/spark_history.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/spark_settings.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/workloads.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/__init__.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "bin/build-java11.ps1",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/build_acceptance_matrix.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "bin/build_all.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/report_gen_plot.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/reproducibility_snapshot.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "bin/run_all.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "tests/tools/run_candidate_acceptance.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/run_intermediate_campaign.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/run_preset_campaign.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/update_evidence_manifest.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/tools/verify_candidate_resilience.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "bin/functions/assert.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/functions/chart-template.html",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "bin/functions/color.disabled.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/functions/color.enabled.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/functions/color.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/functions/execute_with_log.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "bin/functions/hibench_prop_env_mapping.py",
+      "coverage": "original header plus modification notice"
+    },
+    {
+      "path": "bin/functions/load_bench_config.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/functions/load_config.py",
+      "coverage": "original header plus modification notice"
+    },
+    {
+      "path": "bin/functions/monitor.py",
+      "coverage": "original header plus modification notice"
+    },
+    {
+      "path": "bin/functions/monitor_replot.py",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/functions/spark_scale.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "bin/functions/workload_functions.sh",
+      "coverage": "original header plus modification notice"
+    },
+    {
+      "path": "bin/functions/write_report.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "bin/workloads/graph/nweight/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/graph/nweight/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/repartition/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/repartition/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/sleep/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/sleep/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/sort/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/sort/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/terasort/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/terasort/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/wordcount/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/micro/wordcount/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/als/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/als/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/bayes/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/bayes/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/correlation/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/correlation/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/gbt/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/gbt/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/gmm/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/gmm/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/kmeans/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/kmeans/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/lda/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/lda/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/linear/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/linear/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/lr/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/lr/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/pca/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/pca/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/rf/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/rf/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/summarizer/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/summarizer/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/svd/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/svd/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/svm/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/ml/svm/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/sql/aggregation/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/sql/aggregation/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/sql/join/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/sql/join/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/sql/scan/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/sql/scan/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/websearch/pagerank/prepare/prepare.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "bin/workloads/websearch/pagerank/spark/run.sh",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "conf/benchmarks.lst",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/frameworks.lst",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/hadoop.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/hadoop.conf.azure.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/hadoop.conf.docker.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/hibench.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/hibench.conf.azure.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/hibench.conf.docker.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/spark.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/spark.conf.azure.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/spark.conf.docker.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/graph/nweight.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/micro/repartition.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/micro/sleep.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/micro/sort.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/micro/terasort.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/micro/wordcount.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/als.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/bayes.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/correlation.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/gbt.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/gbt.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/gmm.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/kmeans.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/lda.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/lda.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/linear.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/linear.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/lr.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/pca.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/pca.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/rf.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/rf.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/summarizer.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/svd.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/svd.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/svm.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/ml/svm.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/sql/aggregation.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/sql/join.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/sql/scan.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/websearch/nutchindexing.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "conf/workloads/websearch/pagerank.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/pom.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/assembly/pom.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/assembly/src/main/assembly/assembly.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/common/pom.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfCore.java",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/LegacyZipfian.java",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/common/src/main/java/org/hibench/sparkbench/common/datagen/WebLinkGenerator.java",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/common/src/main/resources/hibench-words",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "sparkbench/common/src/main/scala/org/hibench/sparkbench/common/BenchmarkListener.scala",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/graph/.gitignore",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/graph/pom.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/graph/src/main/resources/nweight-user-features",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "sparkbench/graph/src/main/scala/org/hibench/sparkbench/graph/nweight/DataFrameNWeight.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/graph/src/main/scala/org/hibench/sparkbench/graph/nweight/UniformWeightedGraphGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/pom.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/micro/src/main/java/org/hibench/sparkbench/micro/terasort/Random16.java",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/java/org/hibench/sparkbench/micro/terasort/TeraRecordGenerator.java",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/java/org/hibench/sparkbench/micro/terasort/Unsigned16.java",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/MicroDataFrameIO.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/OriginalTextVocabulary.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaRepartition.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaSleep.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaSort.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaTeraSort.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaWordCount.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/TeraDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/TextDataFrameIO.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/TextDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/pom.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/ALSExample.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/BayesDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/BinaryGaussianDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/CorrelationDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/CorrelationExample.scala",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/DenseKMeans.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/GaussianDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/GaussianMixtureModel.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/GradientBoostedTree.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/GradientBoostedTreeDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LDADataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LDAExample.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LinearRegressionDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LinearRegressionWithElasticNet.scala",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LinearSVMExample.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LogisticRegression.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/LogisticRegressionDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/NaiveBayesExample.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/PCADataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/PCAExample.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/RandomForestClassification.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/RandomForestDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/RatingDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SummarizerDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SummarizerExample.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SVDDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SVDExample.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/SVMDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/TreeBenchmarkData.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/UncenteredSVD.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/sql/.gitignore",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/sql/pom.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/sql/src/main/java/org/hibench/sparkbench/sql/datagen/SqlPageGenerator.java",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/sql/src/main/java/org/hibench/sparkbench/sql/datagen/SqlVisitGenerator.java",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/sql/src/main/java/org/hibench/sparkbench/sql/datagen/SqlVocabulary.java",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/sql/src/main/resources/org/hibench/sql/country_codes",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "sparkbench/sql/src/main/resources/org/hibench/sql/search_keys",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "sparkbench/sql/src/main/resources/org/hibench/sql/user_agents",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "sparkbench/sql/src/main/scala/org/hibench/sparkbench/sql/ScalaSparkSQLBench.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/sql/src/main/scala/org/hibench/sparkbench/sql/SqlDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/websearch/.gitignore",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/websearch/pom.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/websearch/src/main/scala/org/hibench/sparkbench/websearch/DataFramePageRank.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "sparkbench/websearch/src/main/scala/org/hibench/sparkbench/websearch/PageRankDataGenerator.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "tests/test_acceptance_matrix.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_adapters.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_als.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_api.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_clustering.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_clusters.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_control.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_general.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_linear.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_logistic.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_measurement.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_micro.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_monitor.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_monitoring_service.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_nweight.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_ml_contracts.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_preset_campaign.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_recovery.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_scale_verification.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_spark_base.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_spark_configuration.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_spark_history.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_spark_properties.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_spark_scales.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_sql.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_statistics.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_svd.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_trees.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_workload_defaults.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_workload_parameters.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/gaussian-original-profile.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/nweight-original-profile.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/pagerank-original-profile.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/README.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/sql-original-tiny.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/benchmarks.lst",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/frameworks.lst",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/hadoop.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/hadoop.conf.azure.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/hadoop.conf.docker.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/hibench.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/hibench.conf.azure.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/hibench.conf.docker.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/spark.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/spark.conf.azure.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/spark.conf.docker.template",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/graph/nweight.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/graph/pagerank.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/micro/repartition.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/micro/sleep.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/micro/sort.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/micro/terasort.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/micro/wordcount.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/als.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/bayes.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/correlation.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/gbt.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/gbt.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/gmm.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/kmeans.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/lda.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/lda.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/linear.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/linear.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/lr.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/pca.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/pca.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/rf.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/rf.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/summarizer.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/svd.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/svd.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/svm.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/svm.info",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/ml/xgboost.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/sql/aggregation.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/sql/join.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/sql/scan.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/websearch/nutchindexing.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/conf/workloads/websearch/pagerank.conf",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/graph-nweight-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/graph-nweight-validation-2026-10-09.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/micro-modern-validation-2026-10-07.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/micro-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/micro-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-als-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-als-validation-2026-10-08.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-clustering-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-clustering-validation-2026-10-08.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-final-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-final-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-final-validation-2026-10-08.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-linear-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-linear-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-linear-validation-2026-10-08.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-lr-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-lr-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-lr-validation-2026-10-08.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-statistics-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-statistics-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-statistics-validation-2026-10-08.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-svd-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-svd-validation-2026-10-09.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-trees-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-trees-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/ml-trees-validation-2026-10-08.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/randomtextwriter-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/sql-modern-validation-2026-10-08.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/sql-modernization.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/sql-original-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/sql-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/acceptance/references/reproducibility/migrations.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/micro-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/ml-als-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/ml-clustering-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/ml-final-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/ml-linear-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/ml-lr-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/ml-statistics-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/ml-trees-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/sql-original-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/contracts/sql-scale-reference.json",
+      "coverage": "sidecar"
+    },
+    {
+      "path": "tests/fixtures/experiments/intermediate-representative.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/preset-bigdata.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/preset-gigantic.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/preset-huge.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/preset-large-selected.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/preset-large.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/preset-small-feasible.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/preset-small.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/preset-tiny.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/README.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-als.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-bayes-dense.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-bayes-overrides.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-bayes.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-clustering.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-extended.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-final-ml-overrides.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-final-ml.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-kmeans-count.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-lda-em.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-lda.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-linear-overrides.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-linear.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-lr-overrides.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-lr.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-micro.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-nweight-overrides.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-nweight.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-pagerank.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-sql.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-statistics-overrides.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-statistics.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-svd-overrides.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-svd.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-svm-overrides.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-svm.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-text-micro.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-trees-overrides.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/fixtures/experiments/smoke-trees.yaml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/BayesOriginalKernel.java",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/BayesZipfReference.java",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/capture_nweight_original.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/GaussianOriginalReference.java",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/GradientBoostedTreeOriginalReference.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "tests/integration/LinearRegressionOriginalReference.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "tests/integration/LogisticRegressionOriginalReference.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "tests/integration/micro_modern_smoke.scala",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/RandomForestOriginalReference.scala",
+      "coverage": "original header retained"
+    },
+    {
+      "path": "tests/integration/SqlZipfReference.java",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/sql_original_reference.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/text_generator_smoke.scala",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/TreeAlgorithmOriginalReference.scala",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_als.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_api_lifecycle.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_candidate_data.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_clustering_controller.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_final_ml.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_final_ml_controller.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_gaussian.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_intermediate_data.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_intermediate_svd.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_in_memory.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_linear.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_linear_controller.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_logistic.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_logistic_controller.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_micro.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_nweight.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_nweight_controller.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_pagerank.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_scale_data.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_sequence_copy.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_sql.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_sql_controller.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_statistics.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_statistics_controller.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_svd.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_svd_controller.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_tera.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_text_generator.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_text_profile.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_trees.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_trees_controller.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/WebLinkReference.java",
+      "coverage": "Apache header"
+    },
+    {
+      "path": ".github/workflows/batch.yml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "deployment/.env.example",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "deployment/compose.yml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "deployment/Dockerfile",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "deployment/README.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "README.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "AGENTS.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "pyproject.toml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "pom.xml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "CITATION.cff",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "MANIFEST.in",
+      "coverage": "Apache header"
+    },
+    {
+      "path": ".gitignore",
+      "coverage": "Apache header"
+    },
+    {
+      "path": ".gitattributes",
+      "coverage": "Apache header"
+    },
+    {
+      "path": ".dockerignore",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/integration/verify_deployment.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_deployment.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/micro/src/main/scala/org/hibench/sparkbench/micro/ScalaInMemRepartition.scala",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/services/runtime.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/spark_history.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/about.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_ui.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": ".streamlit/config.toml",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "docs/release-validation-2026-10-11.md",
+      "coverage": "SPDX header"
+    },
+    {
+      "path": "docs/release-validation-2026-10-11.json",
+      "coverage": "Adjacent .license sidecar"
+    },
+    {
+      "path": "docs/version-lineage.md",
+      "coverage": "SPDX header"
+    },
+    {
+      "path": "docs/version-alignment-2.0.0.json",
+      "coverage": "Adjacent .license sidecar"
+    },
+    {
+      "path": "hibench/adapters/ssh.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/spark_scale.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "hibench/ui/assets/hibench-next-icon.png",
+      "coverage": "SPDX sidecar"
+    },
+    {
+      "path": "hibench/ui/assets/hibench-next-icon.ico",
+      "coverage": "SPDX sidecar"
+    },
+    {
+      "path": "docs/release-hardening-2026-10-11.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "docs/release-hardening-2026-10-11.json",
+      "coverage": "SPDX sidecar"
+    },
+    {
+      "path": "hibench/adapters/ssh_password.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "poetry.lock",
+      "coverage": "Apache sidecar"
+    },
+    {
+      "path": "docs/ssh-password-validation-2026-10-11.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "docs/ssh-password-validation-2026-10-11.json",
+      "coverage": "Apache sidecar"
+    }
+  ],
+  "reference_source_note": "Added source notices retain original license blocks; annotations change source file hashes and must not be interpreted as unchanged original source. Historical archives and raw dataset bytes are not rewritten."
+}

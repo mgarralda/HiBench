@@ -1,4 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
+# Modifications Copyright 2026 Mariano Garralda-Barrio (HiBench Next).
+
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -18,11 +20,12 @@
 Mapping from properties to environment variable names
 """
 HiBenchEnvPropMappingMandatory=dict(
+    HIBENCH_MONITOR_DEFAULT="hibench.monitor.enabled",
+    HIBENCH_MONITOR_INTERVAL_DEFAULT="hibench.monitor.interval.seconds",
     JAVA_BIN="java.bin",
     HADOOP_HOME="hibench.hadoop.home",
     HDFS_MASTER="hibench.hdfs.master",
     HADOOP_RELEASE="hibench.hadoop.release",
-    HADOOP_EXAMPLES_JAR="hibench.hadoop.examples.jar",
     HADOOP_EXECUTABLE="hibench.hadoop.executable",
     HADOOP_CONF_DIR="hibench.hadoop.configure.dir",
     HIBENCH_HOME="hibench.home",
@@ -30,37 +33,27 @@ HiBenchEnvPropMappingMandatory=dict(
 
     REPORT_COLUMN_FORMATS="hibench.report.formats",
     SPARKBENCH_JAR="hibench.sparkbench.jar",
-    NUM_MAPS="hibench.default.map.parallelism",
-    NUM_REDS="hibench.default.shuffle.parallelism",
+    NUM_MAPS="hibench.generator.partitions",
+    NUM_REDS="hibench.generator.shuffle.partitions",
     INPUT_HDFS="hibench.workload.input",
     OUTPUT_HDFS="hibench.workload.output",
     SCALE_PROFILE="hibench.scale.profile",
 
-    REDUCER_CONFIG_NAME="hibench.hadoop.reducer.name",
-    MAP_CONFIG_NAME="hibench.hadoop.mapper.name",
 
     MASTERS="hibench.masters.hostnames",
     SLAVES="hibench.slaves.hostnames",
     )
 
 HiBenchEnvPropMapping=dict(
+    TEXT_SEED="hibench.text.seed",
     SPARK_HOME="hibench.spark.home",
     SPARK_MASTER="hibench.spark.master",
     SPARK_EXAMPLES_JAR="hibench.spark.examples.jar",
 
-    HIVE_HOME="hibench.hive.home",
-    HIVE_RELEASE="hibench.hive.release",
-    HIVEBENCH_TEMPLATE="hibench.hivebench.template.dir",
-    MAHOUT_HOME="hibench.mahout.home",
-    MAHOUT_RELEASE="hibench.mahout.release",
-    NUTCH_HOME="hibench.nutch.home",
-    NUTCH_BASE_HDFS="hibench.nutch.base.hdfs",
-    NUTCH_INPUT="hibench.nutch.dir.name.input",
-    NUTCH_DIR="hibench.nutch.nutchindexing.dir",
     HIBENCH_REPORT="hibench.report.dir", # set in default
     HIBENCH_REPORT_NAME="hibench.report.name", # set in default
-    YARN_NUM_EXECUTORS="hibench.yarn.executor.num",
-    YARN_EXECUTOR_CORES="hibench.yarn.executor.cores",
+    YARN_NUM_EXECUTORS="spark.executor.instances",
+    YARN_EXECUTOR_CORES="spark.executor.cores",
     SPARK_YARN_EXECUTOR_MEMORY="spark.executor.memory",
 
     SPARK_YARN_DRIVER_MEMORY="spark.driver.memory",
@@ -70,8 +63,6 @@ HiBenchEnvPropMapping=dict(
     DATA_HDFS="hibench.hdfs.data.dir",
     # For Sleep workload
     MAP_SLEEP_TIME="hibench.sleep.mapper.seconds",
-    RED_SLEEP_TIME="hibench.sleep.reducer.seconds",
-    HADOOP_SLEEP_JAR="hibench.sleep.job.jar",
     # For Sort, Terasort, Wordcount, Repartition
     DATASIZE="hibench.workload.datasize",
     # For repartition
@@ -79,21 +70,29 @@ HiBenchEnvPropMapping=dict(
     DISABLE_OUTPUT="hibench.repartition.disableoutput",
     FROM_HDFS="hibench.repartition.fromhdfs",
 
-    # For hive related workload, data scale
+    # SQL workload data scale
     PAGES="hibench.workload.pages",
     USERVISITS="hibench.workload.uservisits",
-    HIVE_INPUT="hibench.workload.dir.name.input",
-    HIVE_BASE_HDFS="hibench.hive.base.hdfs",
     # For bayes
     CLASSES="hibench.workload.classes",
     BAYES_INPUT="hibench.bayes.dir.name.input",
-    DATATOOLS="hibench.hibench.datatool.dir",
     BAYES_BASE_HDFS="hibench.bayes.base.hdfs",
     NGRAMS="hibench.bayes.ngrams",
+    BAYES_DENSE_SEED="hibench.bayes.dense_seed",
+    BAYES_DOCUMENT_SEED="hibench.bayes.document_seed",
+    BAYES_CLASS_SHIFT="hibench.bayes.class_shift",
+    BAYES_SMOOTHING="hibench.bayes.smoothing",
+    BAYES_TRAIN_FRACTION="hibench.bayes.train_fraction",
+    BAYES_SPLIT_SEED="hibench.bayes.split_seed",
     BAYES_USE_DENSE="hibench.bayes.use_dense",
     BAYES_DENSE_EXAMPLES="hibench.bayes.dense.examples",
     BAYES_DENSE_FEATURES="hibench.bayes.dense.features",
     # For kmeans
+    KMEANS_SEED="hibench.kmeans.seed",
+    KMEANS_MEAN_MIN="hibench.kmeans.mean_min",
+    KMEANS_MEAN_MAX="hibench.kmeans.mean_max",
+    KMEANS_STD_MIN="hibench.kmeans.std_min",
+    KMEANS_STD_MAX="hibench.kmeans.std_max",
     INPUT_SAMPLE="hibench.kmeans.input.sample",
     INPUT_CLUSTER="hibench.kmeans.input.cluster",
     NUM_OF_CLUSTERS="hibench.kmeans.num_of_clusters",
@@ -105,6 +104,11 @@ HiBenchEnvPropMapping=dict(
     K_STORAGE_LEVEL="hibench.kmeans.storage.level",
     K_INIT_MODE="hibench.kmeans.initializationmode",
     # For gmm
+    GMM_SEED="hibench.gmm.seed",
+    GMM_MEAN_MIN="hibench.gmm.mean_min",
+    GMM_MEAN_MAX="hibench.gmm.mean_max",
+    GMM_STD_MIN="hibench.gmm.std_min",
+    GMM_STD_MAX="hibench.gmm.std_max",
     INPUT_SAMPLE_GMM="hibench.gmm.input.sample",
     INPUT_CLUSTER_GMM="hibench.gmm.input.cluster",
     NUM_OF_CLUSTERS_GMM="hibench.gmm.num_of_clusters",
@@ -115,13 +119,33 @@ HiBenchEnvPropMapping=dict(
     K_GMM="hibench.gmm.k",
     STORAGE_LEVEL_GMM="hibench.gmm.storage.level",
     # For Logistic Regression
+    NUM_PARTITIONS_LR="hibench.lr.partitions",
+    SEED_LR="hibench.lr.seed",
+    CLASS_SHIFT_LR="hibench.lr.class_shift",
+    MAX_ITER_LR="hibench.lr.num_iterations",
+    TOL_LR="hibench.lr.tolerance",
+    REG_PARAM_LR="hibench.lr.regularization_param",
+    FIT_INTERCEPT_LR="hibench.lr.fit_intercept",
+    STANDARDIZATION_LR="hibench.lr.standardization",
+    TRAIN_FRACTION_LR="hibench.lr.train_fraction",
+    SPLIT_SEED_LR="hibench.lr.split_seed",
+    THRESHOLD_LR="hibench.lr.threshold",
     NUM_EXAMPLES_LR="hibench.lr.examples",
     NUM_FEATURES_LR="hibench.lr.features",
     # For SVM
+    PARTITIONS_SVM="hibench.svm.partitions",
+    SEED_SVM="hibench.svm.seed",
+    WEIGHT_SEED_SVM="hibench.svm.weight_seed",
+    NOISE_STD_SVM="hibench.svm.noise_std",
+    TOLERANCE_SVM="hibench.svm.tolerance",
+    TRAIN_FRACTION_SVM="hibench.svm.train_fraction",
+    SPLIT_SEED_SVM="hibench.svm.split_seed",
+    FIT_INTERCEPT_SVM="hibench.svm.fit_intercept",
+    STANDARDIZATION_SVM="hibench.svm.standardization",
+
     NUM_EXAMPLES_SVM="hibench.svm.examples",
     NUM_FEATURES_SVM="hibench.svm.features",
     NUM_ITERATIONS_SVM="hibench.svm.numIterations",
-    STEPSIZE_SVM="hibench.svm.stepSize",
     SVM_STORAGE_LEVEL="hibench.svm.storage.level",
     REGPARAM_SVM="hibench.svm.regParam",
     # For ALS
@@ -135,11 +159,19 @@ HiBenchEnvPropMapping=dict(
     USERBLOCKS_ALS="hibench.als.numUserBlocks",
     PRODUCTBLOCKS_ALS="hibench.als.numProductBlocks",
     # For PCA
+    NUM_PARTITIONS_PCA="hibench.pca.partitions",
+    SEED_PCA="hibench.pca.seed",
     NUM_EXAMPLES_PCA="hibench.pca.examples",
     NUM_FEATURES_PCA="hibench.pca.features",
     PCA_K="hibench.pca.k",
     MAX_RESULT_SIZE_PCA ="hibench.pca.maxresultsize",
     # For Gradient Boosting Tree
+    NUM_PARTITIONS_GBT="hibench.gbt.partitions",
+    SEED_GBT="hibench.gbt.seed",
+    CLASS_SHIFT_GBT="hibench.gbt.class_shift",
+    MODEL_SEED_GBT="hibench.gbt.model_seed",
+    SPLIT_SEED_GBT="hibench.gbt.split_seed",
+    TRAIN_FRACTION_GBT="hibench.gbt.train_fraction",
     NUM_EXAMPLES_GBT="hibench.gbt.examples",
     NUM_FEATURES_GBT="hibench.gbt.features",
     NUM_CLASSES_GBT="hibench.gbt.numClasses",
@@ -148,14 +180,13 @@ HiBenchEnvPropMapping=dict(
     NUM_ITERATIONS_GBT="hibench.gbt.numIterations",
     LEARNING_RATE_GBT="hibench.gbt.learningRate",
     # For XGBoost
-    NUM_EXAMPLES_XGBOOST="hibench.xgboost.examples",
-    NUM_FEATURES_XGBOOST="hibench.xgboost.features",
-    NUM_CLASSES_XGBOOST="hibench.xgboost.numClasses",
-    MAX_DEPTH_XGBOOST="hibench.xgboost.maxDepth",
-    MAX_BINS_XGBOOST="hibench.xgboost.maxBins",
-    NUM_ITERATIONS_XGBOOST="hibench.xgboost.numIterations",
-    LEARNING_RATE_XGBOOST="hibench.xgboost.learningRate",
     # For Random Forest
+    NUM_PARTITIONS_RF="hibench.rf.partitions",
+    SEED_RF="hibench.rf.seed",
+    CLASS_SHIFT_RF="hibench.rf.class_shift",
+    MODEL_SEED_RF="hibench.rf.model_seed",
+    SPLIT_SEED_RF="hibench.rf.split_seed",
+    TRAIN_FRACTION_RF="hibench.rf.train_fraction",
     NUM_EXAMPLES_RF="hibench.rf.examples",
     NUM_FEATURES_RF="hibench.rf.features",
     NUM_TREES_RF="hibench.rf.numTrees",
@@ -165,6 +196,10 @@ HiBenchEnvPropMapping=dict(
     MAX_DEPTH_RF="hibench.rf.maxDepth",
     MAX_BINS_RF="hibench.rf.maxBins",
     # For SVD
+    SEED_SVD="hibench.svd.seed",
+    NUM_PARTITIONS_SVD="hibench.svd.partitions",
+    RCOND_SVD="hibench.svd.rcond",
+    MATRIX_BUDGET_SVD="hibench.svd.matrix_budget_bytes",
     NUM_EXAMPLES_SVD="hibench.svd.examples",
     NUM_FEATURES_SVD="hibench.svd.features",
     NUM_SINGULAR_VALUES_SVD="hibench.svd.singularvalues",
@@ -172,19 +207,32 @@ HiBenchEnvPropMapping=dict(
     MAXRESULTSIZE_SVD="hibench.svd.maxresultsize",
     # For Linear Regression
     NUM_EXAMPLES_LINEAR="hibench.linear.examples",
+    NUM_PARTITIONS_LINEAR="hibench.linear.partitions",
+    SEED_LINEAR="hibench.linear.seed",
+    NOISE_STD_LINEAR="hibench.linear.noise_std",
     NUM_FEATURES_LINEAR="hibench.linear.features",
     NUM_ITERATIONS_LINEAR="hibench.linear.num_iterations",
     REG_PARAM_LINEAR="hibench.linear.regularization_param",
     ELASTICNET_PARAM_LINEAR="hibench.linear.elasticnet_param",
+    TEST_FRACTION_LINEAR="hibench.linear.test_fraction",
     TOL_LINEAR="hibench.linear.tolerance",
     # For Correlation
+    NUM_PARTITIONS_CORRELATION="hibench.correlation.partitions",
+    SEED_CORRELATION="hibench.correlation.seed",
+    CLASS_SHIFT_CORRELATION="hibench.correlation.class_shift",
     NUM_EXAMPLES_CORRELATION="hibench.correlation.examples",
     NUM_FEATURES_CORRELATION="hibench.correlation.features",
     CORR_TYPE="hibench.correlation.corrType",
     # For Summarizer
+    NUM_PARTITIONS_SUMMARIZER="hibench.summarizer.partitions",
+    SEED_SUMMARIZER="hibench.summarizer.seed",
     NUM_EXAMPLES_SUMMARIZER="hibench.summarizer.examples",
     NUM_FEATURES_SUMMARIZER="hibench.summarizer.features",
     # For LDA
+    PARTITIONS_LDA="hibench.lda.partitions",
+    SEED_LDA="hibench.lda.seed",
+    MODEL_SEED_LDA="hibench.lda.model_seed",
+
     NUM_DOCUMENTS_LDA="hibench.lda.num_of_documents",
     NUM_VOCABULARY_LDA="hibench.lda.num_of_vocabulary",
     NUM_TOPICS_LDA="hibench.lda.num_of_topics",
@@ -194,6 +242,7 @@ HiBenchEnvPropMapping=dict(
     OPTIMIZER_LDA="hibench.lda.optimizer",
     MAXRESULTSIZE_LDA="hibench.lda.maxresultsize",
     # For Pagerank
+    PAGERANK_SEED="hibench.pagerank.seed",
     PAGERANK_BASE_HDFS="hibench.pagerank.base.hdfs",
     PAGERANK_INPUT="hibench.pagerank.dir.name.input",
     BLOCK="hibench.pagerank.block",
@@ -208,16 +257,14 @@ HiBenchEnvPropMapping=dict(
     MAP_JAVA_OPTS="hibench.dfsioe.map.java_opts",
     RED_JAVA_OPTS="hibench.dfsioe.red.java_opts",
     # For NWeight
+    SEED_NWEIGHT="hibench.nweight.seed",
+    GENERATION_PARTITIONS_NWEIGHT="hibench.nweight.generation_partitions",
     MODEL_INPUT="hibench.nweight.model_path",
     EDGES="hibench.workload.edges",
     DEGREE="hibench.nweight.degree",
     MAX_OUT_EDGES="hibench.nweight.max_out_edges",
-    NUM_PARTITION="hibench.nweight.partitions",
-    STORAGE_LEVEL="hibench.nweight.storage_level",
-    DISABLE_KRYO="hibench.nweight.disable_kryo",
-    MODEL="hibench.nweight.model",
 
     )
 
-HiBenchPropEnvMapping=dict([(v,k) for k, v in HiBenchEnvPropMapping.items()])
-HiBenchPropEnvMappingMandatory=dict([(v,k) for k, v in HiBenchEnvPropMappingMandatory.items()])
+HiBenchPropEnvMapping=dict([(v,k) for k, v in list(HiBenchEnvPropMapping.items())])
+HiBenchPropEnvMappingMandatory=dict([(v,k) for k, v in list(HiBenchEnvPropMappingMandatory.items())])

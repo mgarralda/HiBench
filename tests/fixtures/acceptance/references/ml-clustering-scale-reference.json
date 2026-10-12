@@ -1,0 +1,116 @@
+{
+  "kmeans": {
+    "tiny": {
+      "num_of_clusters": "5",
+      "dimensions": "3",
+      "num_of_samples": "30000",
+      "samples_per_inputfile": "6000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "small": {
+      "num_of_clusters": "5",
+      "dimensions": "20",
+      "num_of_samples": "3000000",
+      "samples_per_inputfile": "600000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "large": {
+      "num_of_clusters": "5",
+      "dimensions": "20",
+      "num_of_samples": "20000000",
+      "samples_per_inputfile": "4000000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "huge": {
+      "num_of_clusters": "5",
+      "dimensions": "20",
+      "num_of_samples": "100000000",
+      "samples_per_inputfile": "20000000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "gigantic": {
+      "num_of_clusters": "5",
+      "dimensions": "20",
+      "num_of_samples": "200000000",
+      "samples_per_inputfile": "40000000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "bigdata": {
+      "num_of_clusters": "5",
+      "dimensions": "20",
+      "num_of_samples": "1200000000",
+      "samples_per_inputfile": "40000000",
+      "max_iteration": "10",
+      "k": "10"
+    }
+  },
+  "gmm": {
+    "tiny": {
+      "num_of_clusters": "5",
+      "dimensions": "3",
+      "num_of_samples": "30000",
+      "samples_per_inputfile": "6000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "small": {
+      "num_of_clusters": "5",
+      "dimensions": "20",
+      "num_of_samples": "3000000",
+      "samples_per_inputfile": "600000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "large": {
+      "num_of_clusters": "5",
+      "dimensions": "20",
+      "num_of_samples": "20000000",
+      "samples_per_inputfile": "4000000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "huge": {
+      "num_of_clusters": "5",
+      "dimensions": "20",
+      "num_of_samples": "100000000",
+      "samples_per_inputfile": "20000000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "gigantic": {
+      "num_of_clusters": "5",
+      "dimensions": "20",
+      "num_of_samples": "200000000",
+      "samples_per_inputfile": "40000000",
+      "max_iteration": "5",
+      "k": "10"
+    },
+    "bigdata": {
+      "num_of_clusters": "200",
+      "dimensions": "100",
+      "num_of_samples": "2000000",
+      "samples_per_inputfile": "50000",
+      "max_iteration": "20",
+      "k": "200"
+    }
+  },
+  "original_generator": {
+    "path": "autogen/src/main/java/org/apache/mahout/clustering/kmeans/GenKMeansDataset.java",
+    "sha256": "2792a4bd9e2f51e2dd0b001c9d467ade0be3e23e05b3d218adce2f78a3a0fdc0",
+    "mean_range": [
+      0,
+      1000
+    ],
+    "stddev_range": [
+      0.01,
+      100
+    ],
+    "rng": "MersenneTwisterRNG; nondeterministic defaults",
+    "cluster_allocation": "floor(total/clusters), first remainder clusters receive one extra"
+  }
+}

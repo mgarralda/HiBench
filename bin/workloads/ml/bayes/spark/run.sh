@@ -27,11 +27,11 @@ check_input_data_path "$INPUT_HDFS"
 rmr_hdfs $OUTPUT_HDFS || true
 
 # Use converted parquet file as input
-INPUT_PARQUET_FILE=${INPUT_HDFS}.parquet
+INPUT_PARQUET_FILE=${INPUT_HDFS}
 
 SIZE=`dir_size $INPUT_PARQUET_FILE`
 START_TIME=`timestamp`
-run_spark_job com.intel.hibench.sparkbench.ml.NaiveBayesExample ${INPUT_PARQUET_FILE}
+run_spark_job org.hibench.sparkbench.ml.NaiveBayesExample --lambda "$BAYES_SMOOTHING" --trainFraction "$BAYES_TRAIN_FRACTION" --splitSeed "$BAYES_SPLIT_SEED" "$INPUT_PARQUET_FILE"
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

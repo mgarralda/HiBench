@@ -1,0 +1,761 @@
+{
+  "date": "2026-10-08",
+  "runtime": {
+    "spark": "3.5.9",
+    "scala": "2.12.18",
+    "java": 11,
+    "hadoop": "3.3.6",
+    "target": "Docker/YARN"
+  },
+  "build": {
+    "log": "docs/reproducibility/evidence/2026-10-08/ml-final-java11-build.log",
+    "modules": 11,
+    "result": "BUILD SUCCESS"
+  },
+  "python_tests": {
+    "count": 66,
+    "result": "passed",
+    "log": "docs/reproducibility/evidence/2026-10-08/ml-final-python-tests-final.log"
+  },
+  "references": [
+    {
+      "fixture": "original-tiny",
+      "iterations": 0,
+      "reference_ranks": true,
+      "vertices": 50
+    },
+    {
+      "fixture": "original-tiny",
+      "iterations": 1,
+      "reference_ranks": true,
+      "vertices": 50
+    },
+    {
+      "fixture": "original-tiny",
+      "iterations": 3,
+      "reference_ranks": true,
+      "vertices": 50
+    },
+    {
+      "fixture": "dangling-duplicate-self",
+      "iterations": 0,
+      "reference_ranks": true,
+      "vertices": 3
+    },
+    {
+      "fixture": "dangling-duplicate-self",
+      "iterations": 1,
+      "reference_ranks": true,
+      "vertices": 4
+    },
+    {
+      "fixture": "dangling-duplicate-self",
+      "iterations": 3,
+      "reference_ranks": true,
+      "vertices": 3
+    },
+    {
+      "fixture": "cycle",
+      "iterations": 0,
+      "reference_ranks": true,
+      "vertices": 3
+    },
+    {
+      "fixture": "cycle",
+      "iterations": 1,
+      "reference_ranks": true,
+      "vertices": 3
+    },
+    {
+      "fixture": "cycle",
+      "iterations": 3,
+      "reference_ranks": true,
+      "vertices": 3
+    },
+    {
+      "exact_original_raw_edges": true,
+      "raw_edges": 1995,
+      "distinct_edges": 1275,
+      "self_edges": 39
+    },
+    {
+      "rows": 100,
+      "features": 8,
+      "partitions": 3,
+      "bayes_svm_lda_original_formulas": true
+    },
+    {
+      "rows": 103,
+      "features": 9,
+      "partitions": 7,
+      "bayes_svm_lda_original_formulas": true
+    },
+    {
+      "rows": 3,
+      "features": 5,
+      "partitions": 8,
+      "bayes_svm_lda_original_formulas": true
+    },
+    {
+      "bayes_document_original_tokens_and_weights": true,
+      "rows": 240,
+      "historical_generator_pages": 25000,
+      "vocabulary": 30832,
+      "tokens": 120524
+    },
+    {
+      "bayes_independent_multinomial_parameters": true
+    },
+    {
+      "svm_auc_reference": true,
+      "auc": 0.998998998998999
+    },
+    {
+      "lda_optimizer": "online",
+      "save_load_topics": true
+    },
+    {
+      "lda_optimizer": "em",
+      "save_load_topics": true
+    }
+  ],
+  "campaigns": [
+    {
+      "run_id": "68f954b5-5fff-4b70-a1a9-80ad844ed8e2",
+      "name": "final-ml-and-pagerank-original-tiny",
+      "workloads": [
+        {
+          "id": "ml.bayes",
+          "parameters": {}
+        },
+        {
+          "id": "ml.svm",
+          "parameters": {}
+        },
+        {
+          "id": "ml.lda",
+          "parameters": {}
+        },
+        {
+          "id": "websearch.pagerank",
+          "parameters": {}
+        }
+      ],
+      "application_ids": [
+        "application_1791359074600_0106",
+        "application_1791359074600_0107",
+        "application_1791359074600_0108",
+        "application_1791359074600_0109",
+        "application_1791359074600_0110",
+        "application_1791359074600_0111",
+        "application_1791359074600_0112",
+        "application_1791359074600_0113"
+      ],
+      "state": "succeeded",
+      "detail": "All requested phases completed",
+      "phases": [
+        {
+          "at": 1791492169.1961312,
+          "kind": "phase_finished",
+          "workload": "ml.bayes",
+          "phase": "prepare",
+          "index": 0
+        },
+        {
+          "at": 1791492217.6813004,
+          "kind": "phase_finished",
+          "workload": "ml.bayes",
+          "phase": "run",
+          "index": 1
+        },
+        {
+          "at": 1791492248.8730311,
+          "kind": "phase_finished",
+          "workload": "ml.svm",
+          "phase": "prepare",
+          "index": 0
+        },
+        {
+          "at": 1791492311.641411,
+          "kind": "phase_finished",
+          "workload": "ml.svm",
+          "phase": "run",
+          "index": 1
+        },
+        {
+          "at": 1791492347.9605107,
+          "kind": "phase_finished",
+          "workload": "ml.lda",
+          "phase": "prepare",
+          "index": 0
+        },
+        {
+          "at": 1791492412.2608063,
+          "kind": "phase_finished",
+          "workload": "ml.lda",
+          "phase": "run",
+          "index": 1
+        },
+        {
+          "at": 1791492444.757876,
+          "kind": "phase_finished",
+          "workload": "websearch.pagerank",
+          "phase": "prepare",
+          "index": 0
+        },
+        {
+          "at": 1791492480.9474788,
+          "kind": "phase_finished",
+          "workload": "websearch.pagerank",
+          "phase": "run",
+          "index": 1
+        }
+      ]
+    },
+    {
+      "run_id": "f263bcc8-a59d-43ea-98fb-db1a9c21c4fd",
+      "name": "ml-bayes-dense-pending-validation",
+      "workloads": [
+        {
+          "id": "ml.bayes",
+          "parameters": {
+            "use_dense": true
+          }
+        }
+      ],
+      "application_ids": [
+        "application_1791359074600_0114",
+        "application_1791359074600_0115"
+      ],
+      "state": "succeeded",
+      "detail": "All requested phases completed",
+      "phases": [
+        {
+          "at": 1791492560.5909107,
+          "kind": "phase_finished",
+          "workload": "ml.bayes",
+          "phase": "prepare",
+          "index": 0
+        },
+        {
+          "at": 1791492601.2298455,
+          "kind": "phase_finished",
+          "workload": "ml.bayes",
+          "phase": "run",
+          "index": 1
+        }
+      ]
+    },
+    {
+      "run_id": "408ffcdb-c840-49c1-a1c2-cfae95682900",
+      "name": "final-ml-and-pagerank-custom-parameters",
+      "workloads": [
+        {
+          "id": "ml.bayes",
+          "parameters": {
+            "pages": 25000,
+            "classes": 3,
+            "document_seed": 17,
+            "smoothing": 0.5,
+            "split_seed": 23,
+            "train_fraction": 0.7
+          }
+        },
+        {
+          "id": "ml.svm",
+          "parameters": {
+            "examples": 1000,
+            "features": 8,
+            "seed": 17,
+            "weight_seed": 23,
+            "noise_std": 0.0,
+            "numIterations": 20,
+            "train_fraction": 0.7,
+            "split_seed": 23,
+            "fit_intercept": true,
+            "tolerance": 1e-05
+          }
+        },
+        {
+          "id": "ml.lda",
+          "parameters": {
+            "optimizer": "em",
+            "num_of_documents": 101,
+            "num_of_vocabulary": 20,
+            "num_of_topics": 3,
+            "doc_len_min": 5,
+            "doc_len_max": 20,
+            "num_iterations": 3,
+            "seed": 17,
+            "model_seed": 7
+          }
+        },
+        {
+          "id": "websearch.pagerank",
+          "parameters": {
+            "pages": 101,
+            "seed": 17,
+            "num_iterations": 3
+          }
+        }
+      ],
+      "application_ids": [
+        "application_1791359074600_0116",
+        "application_1791359074600_0117",
+        "application_1791359074600_0118",
+        "application_1791359074600_0119",
+        "application_1791359074600_0120",
+        "application_1791359074600_0121",
+        "application_1791359074600_0122",
+        "application_1791359074600_0123"
+      ],
+      "state": "succeeded",
+      "detail": "All requested phases completed",
+      "phases": [
+        {
+          "at": 1791492777.677178,
+          "kind": "phase_finished",
+          "workload": "ml.bayes",
+          "phase": "prepare",
+          "index": 0
+        },
+        {
+          "at": 1791492825.048747,
+          "kind": "phase_finished",
+          "workload": "ml.bayes",
+          "phase": "run",
+          "index": 1
+        },
+        {
+          "at": 1791492857.467785,
+          "kind": "phase_finished",
+          "workload": "ml.svm",
+          "phase": "prepare",
+          "index": 0
+        },
+        {
+          "at": 1791492904.6504502,
+          "kind": "phase_finished",
+          "workload": "ml.svm",
+          "phase": "run",
+          "index": 1
+        },
+        {
+          "at": 1791492938.051417,
+          "kind": "phase_finished",
+          "workload": "ml.lda",
+          "phase": "prepare",
+          "index": 0
+        },
+        {
+          "at": 1791492984.3190365,
+          "kind": "phase_finished",
+          "workload": "ml.lda",
+          "phase": "run",
+          "index": 1
+        },
+        {
+          "at": 1791493018.667029,
+          "kind": "phase_finished",
+          "workload": "websearch.pagerank",
+          "phase": "prepare",
+          "index": 0
+        },
+        {
+          "at": 1791493082.9106402,
+          "kind": "phase_finished",
+          "workload": "websearch.pagerank",
+          "phase": "run",
+          "index": 1
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Only original tiny and recorded custom profiles executed; larger presets retain definitions, not runtime certification.",
+    "Parquet replaces legacy storage; physical byte sizes and I/O timings differ.",
+    "SVM uses LinearSVC instead of SGD; solver costs and coefficients are versioned.",
+    "Bayes dictionary EOF padding and minimum original Zipf sample budget are preserved.",
+    "Local verification overlapped part of the campaign; these are functional checks, not performance measurements.",
+    "SVD and NWeight unavailable pending distributed numerical/reference validation; optional XGBoost is outside the default catalog.",
+    "No cloud/serverless certification."
+  ],
+  "queue_attempts": [
+    {
+      "run_id": "8ab44046-dbd7-49ed-8082-d6e84a7a8341",
+      "state": "failed",
+      "detail": "Timed out waiting for another experiment on this destination",
+      "workload_started": false
+    },
+    {
+      "run_id": "28b6b57a-b076-437c-ba71-3eeaf84fb2a9",
+      "state": "failed",
+      "detail": "Timed out waiting for another experiment on this destination",
+      "workload_started": false
+    }
+  ],
+  "actual_inputs": [
+    {
+      "workload": "ml.bayes",
+      "run_id": "68f954b5-5fff-4b70-a1a9-80ad844ed8e2",
+      "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/b5bd6f787459c971c355fa80-3ab41c0b/Bayes/features-parquet-v1/Input/tiny",
+      "rows": 25000,
+      "classes": 10,
+      "profile": {
+        "mode": "documents",
+        "seed": 1,
+        "classes": 10,
+        "partitions": 2
+      },
+      "observed": {
+        "rows": 25000,
+        "dimensions": 99171,
+        "labels": {
+          "8.0": 2469,
+          "0.0": 2566,
+          "7.0": 2477,
+          "1.0": 2535,
+          "4.0": 2499,
+          "3.0": 2500,
+          "2.0": 2535,
+          "6.0": 2479,
+          "5.0": 2496,
+          "9.0": 2444
+        }
+      },
+      "verified": true
+    },
+    {
+      "workload": "ml.svm",
+      "run_id": "68f954b5-5fff-4b70-a1a9-80ad844ed8e2",
+      "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/2b09d25aa858d00b973e8ec0-69ad3552/SVM/linear-margin-parquet-v1/Input/tiny",
+      "rows": 1000,
+      "dimensions": 1000,
+      "classes": 2,
+      "profile": {
+        "examples": 1000,
+        "dimensions": 1000,
+        "seed": 42,
+        "weightSeed": 94720,
+        "noiseStd": 0.1,
+        "partitions": 2
+      },
+      "observed": {
+        "rows": 1000,
+        "dimensions": 1000,
+        "labels": {
+          "0.0": 507,
+          "1.0": 493
+        }
+      },
+      "verified": true
+    },
+    {
+      "workload": "ml.lda",
+      "run_id": "68f954b5-5fff-4b70-a1a9-80ad844ed8e2",
+      "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bf893661ab57703d6dba2639-0501e4fa/LDA/word-count-parquet-v1/Input/tiny",
+      "rows": 2000,
+      "dimensions": 1000,
+      "profile": {
+        "documents": 2000,
+        "vocabulary": 1000,
+        "seed": 42,
+        "lengthMin": 50,
+        "lengthMax": 10000,
+        "partitions": 2
+      },
+      "observed": {
+        "rows": 2000,
+        "dimensions": 1000,
+        "tokens": 10165178,
+        "min_tokens": 53,
+        "max_tokens": 10000
+      },
+      "verified": true
+    },
+    {
+      "workload": "websearch.pagerank",
+      "run_id": "68f954b5-5fff-4b70-a1a9-80ad844ed8e2",
+      "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/e78e60bd782c01bdf1a47ad2-955c22de/Pagerank/zipf-edges-parquet-v1/Input/tiny",
+      "rows": 50,
+      "profile": {
+        "pages": 50,
+        "partitions": 2,
+        "seed": 1
+      },
+      "observed": {
+        "vertices": 50,
+        "raw_edges": 1995,
+        "distinct_edges": 1275,
+        "self_edges": 39
+      },
+      "verified": true
+    },
+    {
+      "workload": "ml.bayes",
+      "run_id": "f263bcc8-a59d-43ea-98fb-db1a9c21c4fd",
+      "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/9f1c1d7efec7098972e2eeda-7ce02973/Bayes/features-parquet-v1/Input/tiny",
+      "rows": 100,
+      "classes": 10,
+      "profile": {
+        "mode": "dense",
+        "seed": 1234,
+        "classes": 10,
+        "partitions": 2
+      },
+      "dimensions": 100,
+      "observed": {
+        "rows": 100,
+        "dimensions": 100,
+        "labels": {
+          "8.0": 8,
+          "0.0": 12,
+          "7.0": 8,
+          "1.0": 12,
+          "4.0": 11,
+          "3.0": 11,
+          "2.0": 11,
+          "6.0": 10,
+          "5.0": 10,
+          "9.0": 7
+        }
+      },
+      "verified": true
+    },
+    {
+      "workload": "ml.bayes",
+      "run_id": "408ffcdb-c840-49c1-a1c2-cfae95682900",
+      "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/305a06d3d891628fefc91557-c76cea63/Bayes/features-parquet-v1/Input/tiny",
+      "rows": 25000,
+      "classes": 3,
+      "profile": {
+        "mode": "documents",
+        "seed": 17,
+        "classes": 3,
+        "partitions": 3
+      },
+      "observed": {
+        "rows": 25000,
+        "dimensions": 99171,
+        "labels": {
+          "0.0": 8365,
+          "1.0": 8362,
+          "2.0": 8273
+        }
+      },
+      "verified": true
+    },
+    {
+      "workload": "ml.svm",
+      "run_id": "408ffcdb-c840-49c1-a1c2-cfae95682900",
+      "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/1d359c1bc860ab91dd143f88-fd1c032a/SVM/linear-margin-parquet-v1/Input/tiny",
+      "rows": 1000,
+      "dimensions": 8,
+      "classes": 2,
+      "profile": {
+        "examples": 1000,
+        "dimensions": 8,
+        "seed": 17,
+        "weightSeed": 23,
+        "noiseStd": 0.0,
+        "partitions": 3
+      },
+      "observed": {
+        "rows": 1000,
+        "dimensions": 8,
+        "labels": {
+          "0.0": 637,
+          "1.0": 363
+        }
+      },
+      "verified": true
+    },
+    {
+      "workload": "ml.lda",
+      "run_id": "408ffcdb-c840-49c1-a1c2-cfae95682900",
+      "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/64d177543aaac086b24c9153-2dbf1bf2/LDA/word-count-parquet-v1/Input/tiny",
+      "rows": 101,
+      "dimensions": 20,
+      "profile": {
+        "documents": 101,
+        "vocabulary": 20,
+        "seed": 17,
+        "lengthMin": 5,
+        "lengthMax": 20,
+        "partitions": 3
+      },
+      "observed": {
+        "rows": 101,
+        "dimensions": 20,
+        "tokens": 1323,
+        "min_tokens": 5,
+        "max_tokens": 20
+      },
+      "verified": true
+    },
+    {
+      "workload": "websearch.pagerank",
+      "run_id": "408ffcdb-c840-49c1-a1c2-cfae95682900",
+      "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/cf73d0a5f5fd57b91bdd8d8b-22311e67/Pagerank/zipf-edges-parquet-v1/Input/tiny",
+      "rows": 101,
+      "profile": {
+        "pages": 101,
+        "partitions": 3,
+        "seed": 17
+      },
+      "observed": {
+        "vertices": 101,
+        "raw_edges": 3932,
+        "distinct_edges": 3107,
+        "self_edges": 36
+      },
+      "verified": true
+    }
+  ],
+  "yarn_applications": [
+    {
+      "id": "application_1791359074600_0106",
+      "name": "BayesDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492083140,
+      "finishedTime": 1791492164838
+    },
+    {
+      "id": "application_1791359074600_0107",
+      "name": "NaiveBayesExample with Params(hdfs://spark-cluster-master:9000/HiBench-Control/datasets/b5bd6f787459c971c355fa80-3ab41c0b/Bayes/features-parquet-v1/Input/tiny,1.0,0.8,1234)",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492185247,
+      "finishedTime": 1791492215029
+    },
+    {
+      "id": "application_1791359074600_0108",
+      "name": "SVMDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492228264,
+      "finishedTime": 1791492244257
+    },
+    {
+      "id": "application_1791359074600_0109",
+      "name": "LinearSVMExample",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492263568,
+      "finishedTime": 1791492307525
+    },
+    {
+      "id": "application_1791359074600_0110",
+      "name": "LDADataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492324632,
+      "finishedTime": 1791492343422
+    },
+    {
+      "id": "application_1791359074600_0111",
+      "name": "LDAExample",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492364744,
+      "finishedTime": 1791492410041
+    },
+    {
+      "id": "application_1791359074600_0112",
+      "name": "PageRankDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492423172,
+      "finishedTime": 1791492439442
+    },
+    {
+      "id": "application_1791359074600_0113",
+      "name": "DataFramePageRank",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492458429,
+      "finishedTime": 1791492478336
+    },
+    {
+      "id": "application_1791359074600_0114",
+      "name": "BayesDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492534218,
+      "finishedTime": 1791492556250
+    },
+    {
+      "id": "application_1791359074600_0115",
+      "name": "NaiveBayesExample with Params(hdfs://spark-cluster-master:9000/HiBench-Control/datasets/9f1c1d7efec7098972e2eeda-7ce02973/Bayes/features-parquet-v1/Input/tiny,1.0,0.8,1234)",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492577131,
+      "finishedTime": 1791492599129
+    },
+    {
+      "id": "application_1791359074600_0116",
+      "name": "BayesDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492675216,
+      "finishedTime": 1791492773218
+    },
+    {
+      "id": "application_1791359074600_0117",
+      "name": "NaiveBayesExample with Params(hdfs://spark-cluster-master:9000/HiBench-Control/datasets/305a06d3d891628fefc91557-c76cea63/Bayes/features-parquet-v1/Input/tiny,0.5,0.7,23)",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492794153,
+      "finishedTime": 1791492822927
+    },
+    {
+      "id": "application_1791359074600_0118",
+      "name": "SVMDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492837607,
+      "finishedTime": 1791492852839
+    },
+    {
+      "id": "application_1791359074600_0119",
+      "name": "LinearSVMExample",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492873239,
+      "finishedTime": 1791492902595
+    },
+    {
+      "id": "application_1791359074600_0120",
+      "name": "LDADataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492916850,
+      "finishedTime": 1791492933810
+    },
+    {
+      "id": "application_1791359074600_0121",
+      "name": "LDAExample",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492954024,
+      "finishedTime": 1791492982190
+    },
+    {
+      "id": "application_1791359074600_0122",
+      "name": "PageRankDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791492996310,
+      "finishedTime": 1791493014441
+    },
+    {
+      "id": "application_1791359074600_0123",
+      "name": "DataFramePageRank",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791493035245,
+      "finishedTime": 1791493076284
+    }
+  ]
+}

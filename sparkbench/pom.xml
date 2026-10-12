@@ -1,3 +1,20 @@
+<!--
+Modifications Copyright 2026 Mariano Garralda-Barrio (HiBench Next).
+SPDX-License-Identifier: Apache-2.0
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -5,15 +22,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.intel.hibench</groupId>
+    <groupId>org.hibench</groupId>
     <artifactId>hibench</artifactId>
-    <version>8.0-SNAPSHOT</version>
+    <version>2.0.0</version>
   </parent>
 
-  <groupId>com.intel.hibench</groupId>
+  <groupId>org.hibench</groupId>
   <artifactId>sparkbench</artifactId>
   <packaging>pom</packaging>
-  <version>8.0-SNAPSHOT</version>
+  <version>2.0.0</version>
   <name>sparkbench</name>
 
   <modules>
@@ -26,7 +43,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <!-- Version inherited from parent -->
+
       </plugin>
       <plugin>
         <groupId>net.alchim31.maven</groupId>
@@ -56,50 +73,7 @@
     </plugins>
   </build>
 
-<!--    &lt;!&ndash; Workloads selection &ndash;&gt;-->
-<!--    <profile>-->
-<!--      <id>micro</id>-->
-<!--      <modules>-->
-<!--        <module>micro</module>-->
-<!--      </modules>-->
-<!--    </profile>-->
-
-<!--    <profile>-->
-<!--      <id>graph</id>-->
-<!--      <modules>-->
-<!--        <module>graph</module>-->
-<!--      </modules>-->
-<!--    </profile>-->
-
-<!--    <profile>-->
-<!--      <id>ml</id>-->
-<!--      <modules>-->
-<!--        <module>ml</module>-->
-<!--      </modules>-->
-<!--    </profile>-->
-
-<!--    <profile>-->
-<!--      <id>websearch</id>-->
-<!--      <modules>-->
-<!--        <module>websearch</module>-->
-<!--      </modules>-->
-<!--    </profile>-->
-
-<!--    <profile>-->
-<!--      <id>sql</id>-->
-<!--      <modules>-->
-<!--        <module>sql</module>-->
-<!--      </modules>-->
-<!--    </profile>-->
-
-<!--    <profile>-->
-<!--      <id>dal</id>-->
-<!--      <modules>-->
-<!--        <module>dal</module>-->
-<!--      </modules>-->
-<!--    </profile>-->
-
-  <profiles>
+<profiles>
     <profile>
       <id>SparkBench</id>
       <modules>

@@ -28,7 +28,7 @@ rmr_hdfs $OUTPUT_HDFS || true
 
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
-run_spark_job com.intel.hibench.sparkbench.ml.CorrelationExample \
+run_spark_job org.hibench.sparkbench.ml.CorrelationExample \
     --corrType ${CORR_TYPE} ${INPUT_HDFS}
 END_TIME=`timestamp`
 

@@ -1,0 +1,395 @@
+{
+  "date": "2026-10-09",
+  "runtime": {
+    "spark": "3.5.9",
+    "scala": "2.12.18",
+    "java": 11,
+    "hadoop": "3.3.6",
+    "target": "Docker/YARN"
+  },
+  "campaigns": [
+    {
+      "run_id": "a6c77bf1-cc13-4fae-a359-ed8e74a719a8",
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "nweight-original-tiny",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "2g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "2g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "graph.nweight",
+            "parameters": {}
+          }
+        ]
+      },
+      "application_ids": [
+        "application_1791359074600_0128",
+        "application_1791359074600_0129"
+      ]
+    },
+    {
+      "run_id": "66a3c5a6-cf44-402b-9e0a-b6e442702a97",
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "nweight-custom-parameters",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "2g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "2g",
+          "map_partitions": 2,
+          "shuffle_partitions": 3
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "graph.nweight",
+            "parameters": {
+              "degree": 2,
+              "edges": 256,
+              "max_out_edges": 3,
+              "seed": 17
+            }
+          }
+        ]
+      },
+      "application_ids": [
+        "application_1791359074600_0130",
+        "application_1791359074600_0131"
+      ]
+    }
+  ],
+  "checks": {
+    "nweight-reference-2026-10-09.log": [
+      {
+        "fixture": "chain",
+        "degree": 1,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "chain",
+        "degree": 1,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "chain",
+        "degree": 2,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "chain",
+        "degree": 2,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "chain",
+        "degree": 3,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "chain",
+        "degree": 3,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "cycle-self",
+        "degree": 1,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "cycle-self",
+        "degree": 1,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "cycle-self",
+        "degree": 2,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "cycle-self",
+        "degree": 2,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "cycle-self",
+        "degree": 3,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "cycle-self",
+        "degree": 3,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "duplicates-ties",
+        "degree": 1,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "duplicates-ties",
+        "degree": 1,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "duplicates-ties",
+        "degree": 2,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "duplicates-ties",
+        "degree": 2,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "duplicates-ties",
+        "degree": 3,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "duplicates-ties",
+        "degree": 3,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "signed-weights",
+        "degree": 1,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "signed-weights",
+        "degree": 1,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "signed-weights",
+        "degree": 2,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "signed-weights",
+        "degree": 2,
+        "topk": 3,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "signed-weights",
+        "degree": 3,
+        "topk": 1,
+        "weighted_recurrence": true
+      },
+      {
+        "fixture": "signed-weights",
+        "degree": 3,
+        "topk": 3,
+        "weighted_recurrence": true
+      }
+    ],
+    "nweight-controller-reference-all-2026-10-09.log": [
+      {
+        "run_id": "a6c77bf1-cc13-4fae-a359-ed8e74a719a8",
+        "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/c301360fe7b66c08995d236f-a258957b/Nweight/uniform-weighted-parquet-v1/Input/tiny",
+        "output": "hdfs://spark-cluster-master:9000/HiBench-Control/runs/a6c77bf1-cc13-4fae-a359-ed8e74a719a8/graph.nweight/1",
+        "pairs": 100000,
+        "seed": 42,
+        "partitions": 2,
+        "degree": 3,
+        "topk": 30,
+        "rows": 200000,
+        "vertices": 191862,
+        "distinct_directed_edges": 200000,
+        "zero_edges": 3774,
+        "symmetry": true,
+        "original_feature_products": true,
+        "recurrence_output": true,
+        "node_histogram": [
+          12610,
+          12439,
+          12687,
+          12317,
+          12538,
+          12398,
+          12450,
+          12651,
+          12567,
+          12687,
+          12490,
+          12331,
+          12408,
+          12450,
+          12590,
+          12387
+        ]
+      },
+      {
+        "run_id": "66a3c5a6-cf44-402b-9e0a-b6e442702a97",
+        "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/84b28e830adca295556c9fc8-01a094e1/Nweight/uniform-weighted-parquet-v1/Input/tiny",
+        "output": "hdfs://spark-cluster-master:9000/HiBench-Control/runs/66a3c5a6-cf44-402b-9e0a-b6e442702a97/graph.nweight/1",
+        "pairs": 256,
+        "seed": 17,
+        "partitions": 3,
+        "degree": 2,
+        "topk": 3,
+        "rows": 512,
+        "vertices": 512,
+        "distinct_directed_edges": 512,
+        "zero_edges": 4,
+        "symmetry": true,
+        "original_feature_products": true,
+        "recurrence_output": true,
+        "node_histogram": [
+          37,
+          36,
+          31,
+          25,
+          27,
+          41,
+          43,
+          23,
+          30,
+          43,
+          26,
+          34,
+          30,
+          31,
+          24,
+          31
+        ]
+      }
+    ]
+  },
+  "limits": [
+    "Tiny and explicit custom configurations executed; larger shapes retained as definitions only.",
+    "Storage/action plans/solver versions change physical cost; no historical timing equivalence.",
+    "Functional validation overlapped local verifier/build work; not a controlled performance campaign.",
+    "No cloud/serverless certification."
+  ],
+  "initial_failure": {
+    "run_id": "f23cbc21-9d47-45a4-bce1-277a07440377",
+    "reason": "Fixed model was not deployed by the installer; deployment and doctor SHA-256 checks now include the model.",
+    "before_spark_submission": true
+  },
+  "yarn_applications": [
+    {
+      "id": "application_1791359074600_0128",
+      "name": "NWeight uniform weighted graph generator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791525800184,
+      "finishedTime": 1791525827794
+    },
+    {
+      "id": "application_1791359074600_0129",
+      "name": "NWeight weighted-path-topk-v1",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791525850292,
+      "finishedTime": 1791525875573
+    },
+    {
+      "id": "application_1791359074600_0130",
+      "name": "NWeight uniform weighted graph generator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791526014169,
+      "finishedTime": 1791526039498
+    },
+    {
+      "id": "application_1791359074600_0131",
+      "name": "NWeight weighted-path-topk-v1",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791526061866,
+      "finishedTime": 1791526081558
+    }
+  ],
+  "python_tests": {
+    "count": 77,
+    "result": "passed",
+    "log": "docs/reproducibility/evidence/2026-10-09/final-workloads-python-tests-2026-10-09.log"
+  },
+  "build": {
+    "result": "BUILD SUCCESS",
+    "java": 11,
+    "modules": 11,
+    "log": "docs/reproducibility/evidence/2026-10-09/nweight-independent-streams-build-2026-10-09.log"
+  }
+}

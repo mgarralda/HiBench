@@ -19,17 +19,13 @@ current_dir=`cd "$current_dir"; pwd`
 root_dir=${current_dir}/../../../../../
 workload_config=${root_dir}/conf/workloads/graph/nweight.conf
 . "${root_dir}/bin/functions/load_bench_config.sh"
-
 enter_bench NWeightPrepare ${workload_config} ${current_dir}
 show_bannar start
-
-rmr_hdfs $INPUT_HDFS || true
-START_TIME=`timestamp`
-
-run_spark_job com.intel.hibench.sparkbench.graph.nweight.NWeightDataGenerator $MODEL_INPUT $INPUT_HDFS $EDGES
-
-END_TIME=`timestamp`
-
+rmr_hdfs "$INPUT_HDFS" || true
+rmr_hdfs "${INPUT_HDFS}.model" || true
+"$HADOOP_EXECUTABLE" --config "$HADOOP_CONF_DIR" fs -mkdir -p "${INPUT_HDFS}.model" || exit 1
+"$HADOOP_EXECUTABLE" --config "$HADOOP_CONF_DIR" fs -put "$MODEL_INPUT" "${INPUT_HDFS}.model/features.bin" || exit 1
+run_spark_job org.hibench.sparkbench.graph.nweight.UniformWeightedGraphGenerator "$INPUT_HDFS" "$EDGES" "$GENERATION_PARTITIONS_NWEIGHT" "$SEED_NWEIGHT" "${INPUT_HDFS}.model/features.bin" || exit 1
+rmr_hdfs "${INPUT_HDFS}.model" || true
 show_bannar finish
 leave_bench
-

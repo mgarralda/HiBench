@@ -28,7 +28,9 @@ rmr_hdfs $OUTPUT_HDFS || true
 
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
-run_spark_job com.intel.hibench.sparkbench.ml.LogisticRegression ${INPUT_HDFS}
+run_spark_job org.hibench.sparkbench.ml.LogisticRegression ${INPUT_HDFS} \
+    ${MAX_ITER_LR} ${TOL_LR} ${REG_PARAM_LR} ${FIT_INTERCEPT_LR} ${STANDARDIZATION_LR} \
+    ${TRAIN_FRACTION_LR} ${SPLIT_SEED_LR} ${THRESHOLD_LR}
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

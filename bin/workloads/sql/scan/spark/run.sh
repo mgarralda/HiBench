@@ -22,28 +22,12 @@ workload_config=${root_dir}/conf/workloads/sql/scan.conf
 
 enter_bench ScalaSparkScan ${workload_config} ${current_dir}
 show_bannar start
-
-# prepare SQL
-HIVEBENCH_SQL_FILE=${WORKLOAD_RESULT_FOLDER}/rankings_uservisits_scan.hive
-prepare_sql_scan ${HIVEBENCH_SQL_FILE}
-
-START_TIME=`timestamp`
-
 check_input_data_path "$INPUT_HDFS"
-
-if [[ "$INPUT_HDFS" == wasbs:* ]]; then
-    grant_hive_permissions_wasbs "$INPUT_HDFS"
-fi
-
 SIZE=`dir_size $INPUT_HDFS`
-rmr_hdfs $OUTPUT_HDFS
-
-run_spark_job com.intel.hibench.sparkbench.sql.ScalaSparkSQLBench ScalaScan ${HIVEBENCH_SQL_FILE}
+rmr_hdfs "$OUTPUT_HDFS"
+START_TIME=`timestamp`
+run_spark_job org.hibench.sparkbench.sql.ScalaSparkSQLBench scan "$INPUT_HDFS" "$OUTPUT_HDFS"
 END_TIME=`timestamp`
-
-sleep 5
-SIZE=`dir_size $OUTPUT_HDFS`
 gen_report ${START_TIME} ${END_TIME} ${SIZE:-0}
 show_bannar finish
 leave_bench
-

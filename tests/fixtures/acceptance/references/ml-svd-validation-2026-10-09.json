@@ -1,0 +1,275 @@
+{
+  "date": "2026-10-09",
+  "runtime": {
+    "spark": "3.5.9",
+    "scala": "2.12.18",
+    "java": 11,
+    "hadoop": "3.3.6",
+    "target": "Docker/YARN"
+  },
+  "campaigns": [
+    {
+      "run_id": "38c8321c-2f2b-4f80-9cba-f9265a7c9498",
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "svd-original-tiny",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "2g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "2g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "ml.svd",
+            "parameters": {}
+          }
+        ]
+      },
+      "application_ids": [
+        "application_1791359074600_0124",
+        "application_1791359074600_0125"
+      ]
+    },
+    {
+      "run_id": "74cee479-4514-4430-98f8-c5013f2b5777",
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "svd-custom-parameters",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "2g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "2g",
+          "map_partitions": 2,
+          "shuffle_partitions": 3
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "ml.svd",
+            "parameters": {
+              "computeU": false,
+              "examples": 101,
+              "features": 7,
+              "seed": 17,
+              "singularvalues": 3
+            }
+          }
+        ]
+      },
+      "application_ids": [
+        "application_1791359074600_0126",
+        "application_1791359074600_0127"
+      ]
+    }
+  ],
+  "checks": {
+    "svd-numerical-reference-2026-10-09.log": [
+      {
+        "fixture": "tall",
+        "shape": [
+          31,
+          7
+        ],
+        "rank": 7,
+        "residual": 6.722528368156819e-16
+      },
+      {
+        "fixture": "wide",
+        "shape": [
+          7,
+          31
+        ],
+        "rank": 7,
+        "residual": 7.86460686225666e-16
+      },
+      {
+        "fixture": "offset",
+        "shape": [
+          23,
+          6
+        ],
+        "rank": 6,
+        "residual": 3.3631258520200466e-16
+      },
+      {
+        "fixture": "rank-deficient",
+        "shape": [
+          4,
+          3
+        ],
+        "rank": 1,
+        "residual": 1.3269703217737503e-16
+      },
+      {
+        "fixture": "repeated",
+        "shape": [
+          5,
+          5
+        ],
+        "rank": 5,
+        "residual": 0.0
+      },
+      {
+        "fixture": "zero",
+        "shape": [
+          4,
+          3
+        ],
+        "rank": 0,
+        "residual": 0.0
+      },
+      {
+        "fixture": "small-tail",
+        "shape": [
+          3,
+          3
+        ],
+        "rank": 2,
+        "residual": 3.1622776601683794e-11
+      },
+      {
+        "fixture": "truncated",
+        "components": 3,
+        "best_rank_residual": true
+      }
+    ],
+    "svd-controller-reference-2026-10-09.log": [
+      {
+        "run_id": "38c8321c-2f2b-4f80-9cba-f9265a7c9498",
+        "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/71e65f87865b471c899b952c-fe1abece/SVD/normal-parquet-v1/Input/tiny",
+        "examples": 100,
+        "dimensions": 1000,
+        "components": 800,
+        "seed": 42,
+        "partitions": 2,
+        "shape_verified": true,
+        "numerical_singular_values": true,
+        "mean": 0.001971838239593614,
+        "std": 0.9986483637225796,
+        "retained": 100,
+        "logical_feature_bytes": 800000
+      },
+      {
+        "run_id": "74cee479-4514-4430-98f8-c5013f2b5777",
+        "path": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/ae4eb3966ede45700fb42ac2-d53b13ec/SVD/normal-parquet-v1/Input/tiny",
+        "examples": 101,
+        "dimensions": 7,
+        "components": 3,
+        "seed": 17,
+        "partitions": 3,
+        "shape_verified": true,
+        "numerical_singular_values": true,
+        "mean": 0.012474340835598303,
+        "std": 1.0110514323418043,
+        "retained": 3,
+        "logical_feature_bytes": 5656
+      }
+    ]
+  },
+  "limits": [
+    "Tiny and explicit custom configurations executed; larger shapes retained as definitions only.",
+    "Storage/action plans/solver versions change physical cost; no historical timing equivalence.",
+    "Functional validation overlapped local verifier/build work; not a controlled performance campaign.",
+    "No cloud/serverless certification."
+  ],
+  "yarn_applications": [
+    {
+      "id": "application_1791359074600_0124",
+      "name": "SVDDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791524522605,
+      "finishedTime": 1791524540710
+    },
+    {
+      "id": "application_1791359074600_0125",
+      "name": "SVD packed-gram-v1",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791524561578,
+      "finishedTime": 1791524581315
+    },
+    {
+      "id": "application_1791359074600_0126",
+      "name": "SVDDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791524670783,
+      "finishedTime": 1791524687094
+    },
+    {
+      "id": "application_1791359074600_0127",
+      "name": "SVD packed-gram-v1",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "startedTime": 1791524706682,
+      "finishedTime": 1791524725478
+    }
+  ],
+  "python_tests": {
+    "count": 77,
+    "result": "passed",
+    "log": "docs/reproducibility/evidence/2026-10-09/final-workloads-python-tests-2026-10-09.log"
+  },
+  "build": {
+    "result": "BUILD SUCCESS",
+    "java": 11,
+    "modules": 11,
+    "log": "docs/reproducibility/evidence/2026-10-09/nweight-independent-streams-build-2026-10-09.log"
+  }
+}

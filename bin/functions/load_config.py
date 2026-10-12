@@ -1,4 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
+# Modifications Copyright 2026 Mariano Garralda-Barrio (HiBench Next).
+
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -18,8 +20,9 @@ import sys
 import os
 import glob
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import socket
+import shlex
 
 from contextlib import closing
 from collections import defaultdict
@@ -74,7 +77,8 @@ def execute_cmd(cmdline, timeout):
         bufsize=0,  # default value of 0 (unbuffered) is best
         shell=True,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        stderr=subprocess.PIPE,
+        text=True, encoding='utf-8', errors='replace'
     )
 
     t_begin = time.time()  # Monitor execution time
@@ -148,11 +152,23 @@ def read_file_content(filepath):
 
 def parse_conf(conf_root, workload_config_file):
     conf_files = sorted(glob.glob(conf_root + "/*.conf")) + sorted(glob.glob(workload_config_file))
+    override_file = os.environ.get("HIBENCH_OVERRIDE_FILE")
+    if override_file:
+        if not os.path.isfile(override_file):
+            raise ValueError("Override file does not exist: " + override_file)
+        conf_files.append(override_file)
 
     # load values from conf files
     for filename in conf_files:
         log("Parsing conf: %s" % filename)
-        with open(filename) as f:
+        if os.path.basename(filename) == 'spark.conf':
+            from spark_scale import parse_spark
+            with open(filename, encoding='utf-8') as stream:
+                parsed = parse_spark(stream.read())
+            HibenchConf.update(parsed)
+            HibenchConfRef.update({key: filename for key in parsed})
+            continue
+        with open(filename, encoding='utf-8') as f:
             for line in f.readlines():
                 line = line.strip()
                 if not line:
@@ -170,7 +186,7 @@ def parse_conf(conf_root, workload_config_file):
 
 def override_conf_from_environment():
     # override values from os environment variable settings
-    for env_name, prop_name in HiBenchEnvPropMappingMandatory.items() + HiBenchEnvPropMapping.items():
+    for env_name, prop_name in list(HiBenchEnvPropMappingMandatory.items()) + list(HiBenchEnvPropMapping.items()):
         # The overrides from environments has 2 premises, the second one is either
         # the prop_name is not set in advance by config files or the conf line
         # itself set an env variable to a hibench conf
@@ -181,7 +197,7 @@ def override_conf_from_environment():
             HibenchConfRef[prop_name] = "OS environment variable:%s" % env_name
 
 
-def override_conf_by_paching_conf():
+def override_conf_by_paching_conf(patching_config):
     # override values from os environment variable settings
     # for env_name, prop_name in HiBenchEnvPropMappingMandatory.items() + HiBenchEnvPropMapping.items():
     #     if env_name in os.environ:
@@ -209,7 +225,24 @@ def load_config(conf_root, workload_config_file, workload_folder, patching_confi
 
     override_conf_from_environment()
 
-    override_conf_by_paching_conf()
+    override_conf_by_paching_conf(patching_config)
+
+    # Resolve exactly the same flat scale keys as the controller. Explicit run
+    # overrides and parent-script patches take priority over scale defaults.
+    from spark_scale import resolve_scale, PREFIX
+    scale_values, scale_sources = resolve_scale(HibenchConf, HibenchConf['hibench.scale.profile'])
+    override_path = os.environ.get('HIBENCH_OVERRIDE_FILE')
+    for key, value in scale_values.items():
+        if not scale_sources[key].startswith('scale:'):
+            continue
+        source = HibenchConfRef.get(key, '')
+        if source == override_path or source.startswith('Overrided by parent script'):
+            continue
+        HibenchConf[key] = value
+        HibenchConfRef[key] = 'Spark ' + scale_sources[key]
+    for key in list(HibenchConf):
+        if key.startswith(PREFIX):
+            del HibenchConf[key]
 
     # generate ref values, replace "${xxx}" to its values
     waterfall_config()
@@ -221,16 +254,16 @@ def load_config(conf_root, workload_config_file, workload_folder, patching_confi
     check_config()
     #import pdb;pdb.set_trace()
     # Export config to file, let bash script to import as local variables.
-    print export_config(workload_name, framework_name)
+    print(export_config(workload_name, framework_name))
 
 
 def check_config():             # check configures
     # Ensure mandatory configures are available
-    for _, prop_name in HiBenchEnvPropMappingMandatory.items():
+    for _, prop_name in list(HiBenchEnvPropMappingMandatory.items()):
         assert HibenchConf.get(
             prop_name, None) is not None, "Mandatory configure missing: %s" % prop_name
     # Ensure all ref values in configure has been expanded
-    for _, prop_name in HiBenchEnvPropMappingMandatory.items() + HiBenchEnvPropMapping.items():
+    for _, prop_name in list(HiBenchEnvPropMappingMandatory.items()) + list(HiBenchEnvPropMapping.items()):
         assert "${" not in HibenchConf.get(prop_name, ""), "Unsolved ref key: %s. \n    Defined at %s:\n    Unsolved value:%s\n" % (
             prop_name, HibenchConfRef.get(prop_name, "unknown"), HibenchConf.get(prop_name, "unknown"))
 
@@ -272,7 +305,7 @@ def waterfall_config(force=False):         # replace "${xxx}" to its values
             if len(key.split("*")) == len(value.split("*")):
                 key_searcher = re.compile("^" + "(.*)".join(key.split("*")) + "$")
                 matched_keys_to_remove = []
-                for k in HibenchConf.keys():
+                for k in list(HibenchConf.keys()):
                     matched_keys = key_searcher.match(k)
                     if matched_keys:
                         matched_keys_to_remove.append(k)
@@ -299,7 +332,7 @@ def waterfall_config(force=False):         # replace "${xxx}" to its values
     while True:
         while not finish:
             finish = True
-            for key, value in HibenchConf.items():
+            for key, value in list(HibenchConf.items()):
                 old_value = value
                 old_key = key
                 key = p.sub(process_replace, key)
@@ -378,47 +411,6 @@ def probe_hadoop_release():
         assert HibenchConf["hibench.hadoop.release"] in ["apache"], "Unknown hadoop release. Auto probe failed, please override `hibench.hadoop.release` to explicitly define this property, only apache is supported"
         
 
-def probe_hadoop_examples_jars():
-    # probe hadoop example jars
-    if not HibenchConf.get("hibench.hadoop.examples.jar", ""):
-        examples_jars_candidate_apache0 = HibenchConf[
-            'hibench.hadoop.home'] + "/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar"
-
-        examples_jars_candidate_list = [
-            examples_jars_candidate_apache0
-            ]
-
-        HibenchConf["hibench.hadoop.examples.jar"] = exactly_one_file(
-            examples_jars_candidate_list, "hibench.hadoop.examples.jar")
-        HibenchConfRef["hibench.hadoop.examples.jar"] = "Inferred by " + \
-            HibenchConf["hibench.hadoop.examples.jar"]
-
-
-def probe_hadoop_examples_test_jars():
-    # probe hadoop examples test jars
-    if not HibenchConf.get("hibench.hadoop.examples.test.jar", ""):
-        examples_test_jars_candidate_apache0 = HibenchConf[
-            'hibench.hadoop.home'] + "/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient*-tests.jar"
-
-        examples_test_jars_candidate_list = [
-            examples_test_jars_candidate_apache0
-            ]
-
-        HibenchConf["hibench.hadoop.examples.test.jar"] = exactly_one_file(
-            examples_test_jars_candidate_list, "hibench.hadoop.examples.test.jar")
-        HibenchConfRef["hibench.hadoop.examples.test.jar"] = "Inferred by " + \
-            HibenchConf["hibench.hadoop.examples.test.jar"]
-
-
-def probe_sleep_job_jar():
-    # set hibench.sleep.job.jar
-    if not HibenchConf.get('hibench.sleep.job.jar', ''):
-        log("probe sleep jar:", HibenchConf['hibench.hadoop.examples.test.jar'])
-        HibenchConf["hibench.sleep.job.jar"] = HibenchConf['hibench.hadoop.examples.test.jar']
-        HibenchConfRef[
-            "hibench.sleep.job.jar"] = "Refer to `hibench.hadoop.examples.test.jar` according to the evidence of `hibench.hadoop.release`"
-
-
 def probe_hadoop_configure_dir():
     # probe hadoop configuration files
     if not HibenchConf.get("hibench.hadoop.configure.dir", ""):
@@ -427,15 +419,6 @@ def probe_hadoop_configure_dir():
             HibenchConf["hibench.hadoop.home"], "etc", "hadoop")
         HibenchConfRef["hibench.hadoop.configure.dir"] = "Inferred by: `hibench.hadoop.home`"
 
-
-def probe_mapper_reducer_names():
-    # set hadoop mapper/reducer property names
-    if not HibenchConf.get("hibench.hadoop.mapper.name", ""):
-        HibenchConf["hibench.hadoop.mapper.name"] = "mapreduce.job.maps"
-        HibenchConfRef["hibench.hadoop.mapper.name"] = "Use default mapper name"
-    if not HibenchConf.get("hibench.hadoop.reducer.name", ""):
-        HibenchConf["hibench.hadoop.reducer.name"] = "mapreduce.job.reduces"
-        HibenchConfRef["hibench.hadoop.reducer.name"] = "Use default reducer name"
 
 
 def probe_spark_conf_value(conf_name, default_value):
@@ -532,7 +515,7 @@ def probe_masters_slaves_hostnames():
                     worker_port = probe_spark_worker_webui_port()
                     # Make the assumption that the master is in internal network, and force
                     # not to use any proxies
-                    with closing(urllib.urlopen('http://%s:%s' % (HibenchConf['hibench.masters.hostnames'], master_port), proxies={})) as page:
+                    with closing(urllib.request.urlopen('http://%s:%s' % (HibenchConf['hibench.masters.hostnames'], master_port), proxies={})) as page:
                         worker_hostnames = []
                         for x in page.readlines():
                             matches = re.findall("http:\/\/([a-zA-Z\-\._0-9]+):%s" % worker_port, x)
@@ -548,6 +531,7 @@ def probe_masters_slaves_hostnames():
             elif spark_master.startswith("yarn"):
                 probe_masters_slaves_by_Yarn()
     # reset hostnames according to gethostbyaddr
+    HibenchConf['hibench.slaves.hostnames'] = HibenchConf['hibench.slaves.hostnames'].replace(',', ' ')
     names = set(HibenchConf['hibench.masters.hostnames'].split() +
                 HibenchConf['hibench.slaves.hostnames'].split())
     new_name_mapping = {}
@@ -556,43 +540,11 @@ def probe_masters_slaves_hostnames():
             new_name_mapping[name] = socket.gethostbyaddr(name)[0]
         except:  # host name lookup failure?
             new_name_mapping[name] = name
-    HibenchConf['hibench.masters.hostnames'] = repr(" ".join(
+    HibenchConf['hibench.masters.hostnames'] = (" ".join(
         [new_name_mapping[x] for x in HibenchConf['hibench.masters.hostnames'].split()]))
-    HibenchConf['hibench.slaves.hostnames'] = repr(" ".join(
+    HibenchConf['hibench.slaves.hostnames'] = (" ".join(
         [new_name_mapping[x] for x in HibenchConf['hibench.slaves.hostnames'].split()]))
 
-
-def probe_java_opts():
-    file_name = os.path.join(HibenchConf['hibench.hadoop.configure.dir'], 'mapred-site.xml')
-    cnt = 0
-    map_java_opts_line = ""
-    reduce_java_opts_line = ""
-    lines = read_file_content(file_name)
-    content = ""
-    for line in lines:
-        content = content + line
-    # Do the split for itself so as to deal with any weird xml style
-    content = content.split("<value>")
-    for line in content:
-        if "mapreduce.map.java.opts" in line and cnt + 1 < len(content):
-            map_java_opts_line = content[cnt + 1]
-        if "mapreduce.reduce.java.opts" in line and cnt + 1 < len(content):
-            reduce_java_opts_line = content[cnt + 1]
-        cnt += 1
-
-    def add_quotation_marks(line):
-        if not (line.startswith("'") or line.startswith("\"")):
-            return repr(line)
-    if map_java_opts_line != "":
-        HibenchConf['hibench.dfsioe.map.java_opts'] = add_quotation_marks(
-            map_java_opts_line.split("<")[0].strip())
-        HibenchConfRef['hibench.dfsioe.map.java_opts'] = "Probed by configuration file:'%s'" % os.path.join(
-            HibenchConf['hibench.hadoop.configure.dir'], 'mapred-site.xml')
-    if reduce_java_opts_line != "":
-        HibenchConf['hibench.dfsioe.red.java_opts'] = add_quotation_marks(
-            reduce_java_opts_line.split("<")[0].strip())
-        HibenchConfRef['hibench.dfsioe.red.java_opts'] = "Probed by configuration file:'%s'" % os.path.join(
-            HibenchConf['hibench.hadoop.configure.dir'], 'mapred-site.xml')
 
 
 def generate_optional_value():
@@ -605,13 +557,8 @@ def generate_optional_value():
 
     probe_java_bin()
     probe_hadoop_release()
-    probe_hadoop_examples_jars()
-    probe_hadoop_examples_test_jars()
-    probe_sleep_job_jar()
     probe_hadoop_configure_dir()
-    probe_mapper_reducer_names()
     probe_masters_slaves_hostnames()
-    probe_java_opts()
 
 
 def export_config(workload_name, framework_name):
@@ -634,9 +581,9 @@ def export_config(workload_name, framework_name):
 
     # generate configure for hibench
     sources = defaultdict(list)
-    for env_name, prop_name in HiBenchEnvPropMappingMandatory.items() + HiBenchEnvPropMapping.items():
+    for env_name, prop_name in list(HiBenchEnvPropMappingMandatory.items()) + list(HiBenchEnvPropMapping.items()):
         source = HibenchConfRef.get(prop_name, 'None')
-        sources[source].append('%s=%s' % (env_name, HibenchConf.get(prop_name, '')))
+        sources[source].append('%s=%s' % (env_name, shlex.quote(HibenchConf.get(prop_name, ''))))
 
     with open(conf_filename, 'w') as f:
         for source in sorted(sources.keys()):
@@ -653,7 +600,7 @@ def export_config(workload_name, framework_name):
 
     # generate properties for spark & sparkbench
     sources = defaultdict(list)
-    for prop_name, prop_value in HibenchConf.items():
+    for prop_name, prop_value in list(HibenchConf.items()):
         source = HibenchConfRef.get(prop_name, 'None')
         sources[source].append('%s\t%s' % (prop_name, prop_value))
     # generate configure for sparkbench
@@ -683,7 +630,7 @@ def add_custom_properties(workload_name, framework_name):
     """
 
 
-    #sabgi = f"{HibenchConf.get('hibench.yarn.executor.num', '')} | {HibenchConf.get('hibench.yarn.executor.cores', '')} | "\
+    #sabgi = f"{HibenchConf.get('spark.executor.instances', '')} | {HibenchConf.get('spark.executor.cores', '')} | "\
     #        f"{HibenchConf.get('spark.driver.memory', '')} | {HibenchConf.get('spark.driver.memory', '')}"
     #HibenchConf['spark.app.name'] = f"{workload_name}: {sabgi}"
 

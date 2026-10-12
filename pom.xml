@@ -1,41 +1,52 @@
+<!--
+Modifications Copyright 2026 Mariano Garralda-Barrio (HiBench Next).
+SPDX-License-Identifier: Apache-2.0
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.intel.hibench</groupId>
+  <groupId>org.hibench</groupId>
   <artifactId>hibench</artifactId>
-  <version>8.0-SNAPSHOT</version>
+  <version>2.0.0</version>
   <packaging>pom</packaging>
   <name>hibench</name>
   <url>http://maven.apache.org</url>
 
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
     <encoding>UTF-8</encoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <spark.version>3.3.1</spark.version> <!-- Default value always visible -->
-    <spark.bin.version>3.3</spark.bin.version>
+    <spark.version>3.5.9</spark.version>
+    <spark.bin.version>3.5</spark.bin.version>
 
-    <scala.version>2.12.15</scala.version> <!-- Default value always visible -->
+    <scala.version>2.12.18</scala.version>
     <scala.binary.version>2.12</scala.binary.version>
-
-    <hadoop.mr2.version>3.2.2</hadoop.mr2.version> <!-- Default value always visible -->
 
     <slf4j.version>1.7.5</slf4j.version>
     <scopt.version>3.7.0</scopt.version>
-    <mahout.version>0.9</mahout.version>
-    <uncommons-maths.version>1.2.2a</uncommons-maths.version>
     <junit.version>3.8.1</junit.version>
-    <hadoop.mr1.version>1.2.1</hadoop.mr1.version>
-    <scala-maven-plugin.version>3.2.0</scala-maven-plugin.version>
-    <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
-    <maven-assembly-plugin.version>2.5.3</maven-assembly-plugin.version>
-    <maven-jar-plugin.version>2.3.2</maven-jar-plugin.version>
-    <build-helper-maven-plugin.version>1.9.1</build-helper-maven-plugin.version>
-    <download-maven-plugin.version>1.2.0</download-maven-plugin.version>
-    <jetty.version>8.1.14.v20131031</jetty.version>
+    <scala-maven-plugin.version>4.9.2</scala-maven-plugin.version>
+    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
+    <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
 	<scalatest.version>3.0.8</scalatest.version>
 	<scalacheck.version>1.16.0 </scalacheck.version>
     <fastutil.version>6.5.15</fastutil.version>
@@ -50,7 +61,6 @@
     </dependency>
   </dependencies>
 
-
   <repositories>
     <repository>
       <id>central</id>
@@ -58,7 +68,6 @@
       <url>https://repo1.maven.org/maven2</url>
     </repository>
   </repositories>
-
 
   <build>
     <pluginManagement>
@@ -78,56 +87,6 @@
   </build>
 
   <modules>
-    <module>common</module>
-    <module>autogen</module>
     <module>sparkbench</module>
   </modules>
-
-  <profiles>
-
-<!--    <profile>-->
-<!--      <id>sparkbench</id>-->
-<!--      <modules>-->
-<!--        <module>sparkbench</module>-->
-<!--      </modules>-->
-<!--    </profile>-->
-
-<!--    <profile>-->
-<!--      <id>sparkbench</id>-->
-<!--      <modules>-->
-<!--        <module>sparkbench</module>-->
-<!--      </modules>-->
-<!--      <activation>-->
-<!--        <property>-->
-<!--          <name>!bench</name>-->
-<!--        </property>-->
-<!--      </activation>-->
-<!--    </profile>-->
-
-<!--    <profile>-->
-<!--      <id>defaulthadoop</id>-->
-<!--      <properties>-->
-<!--        <hadoop.mr2.version>3.3.2</hadoop.mr2.version>-->
-<!--      </properties>-->
-<!--      <activation>-->
-<!--        <property>-->
-<!--          <name>!hadoop</name>-->
-<!--        </property>-->
-<!--      </activation>-->
-<!--    </profile>-->
-
-<!--    <profile>-->
-<!--      <id>haoop3.2</id>-->
-<!--      <properties>-->
-<!--        <hadoop.mr2.version>3.2.2</hadoop.mr2.version>-->
-<!--      </properties>-->
-<!--      <activation>-->
-<!--        <property>-->
-<!--          <name>hadoop</name>-->
-<!--          <value>3.2</value>-->
-<!--        </property>-->
-<!--      </activation>-->
-<!--    </profile>-->
-
-  </profiles>
 </project>

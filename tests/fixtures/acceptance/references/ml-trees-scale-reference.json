@@ -1,0 +1,66 @@
+{
+  "rf": {
+    "tiny": {
+      "examples": 10,
+      "features": 100,
+      "feature_payload_bytes": 8000
+    },
+    "small": {
+      "examples": 100,
+      "features": 500,
+      "feature_payload_bytes": 400000
+    },
+    "large": {
+      "examples": 1000,
+      "features": 1000,
+      "feature_payload_bytes": 8000000
+    },
+    "huge": {
+      "examples": 10000,
+      "features": 200000,
+      "feature_payload_bytes": 16000000000
+    },
+    "gigantic": {
+      "examples": 10000,
+      "features": 300000,
+      "feature_payload_bytes": 24000000000
+    },
+    "bigdata": {
+      "examples": 20000,
+      "features": 220000,
+      "feature_payload_bytes": 35200000000
+    }
+  },
+  "gbt": {
+    "tiny": {
+      "examples": 10,
+      "features": 100,
+      "feature_payload_bytes": 8000
+    },
+    "small": {
+      "examples": 100,
+      "features": 500,
+      "feature_payload_bytes": 400000
+    },
+    "large": {
+      "examples": 1000,
+      "features": 2000,
+      "feature_payload_bytes": 16000000
+    },
+    "huge": {
+      "examples": 1000,
+      "features": 4000,
+      "feature_payload_bytes": 32000000
+    },
+    "gigantic": {
+      "examples": 1000,
+      "features": 8000,
+      "feature_payload_bytes": 64000000
+    },
+    "bigdata": {
+      "examples": 1000,
+      "features": 12000,
+      "feature_payload_bytes": 96000000
+    }
+  }
+}

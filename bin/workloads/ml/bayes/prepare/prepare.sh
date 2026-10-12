@@ -20,34 +20,15 @@ root_dir=${current_dir}/../../../../../
 workload_config=${root_dir}/conf/workloads/ml/bayes.conf
 . "${root_dir}/bin/functions/load_bench_config.sh"
 
-enter_bench HadoopPrepareBayes ${workload_config} ${current_dir}
+enter_bench SparkPrepareBayes ${workload_config} ${current_dir}
 show_bannar start
-
-rmr_hdfs ${INPUT_HDFS} || true
-rmr_hdfs ${INPUT_HDFS}.parquet || true
-
+rmr_hdfs "$INPUT_HDFS" || true
 START_TIME=`timestamp`
-
-INPUT_PATH=${INPUT_HDFS#${BAYES_BASE_HDFS}/}
-
-if [ ${BAYES_USE_DENSE} != "true" ]; then
-  OPTION="-t bayes \
-          -b ${BAYES_BASE_HDFS} \
-          -n ${INPUT_PATH} \
-          -m ${NUM_MAPS} \
-          -r ${NUM_REDS} \
-          -p ${PAGES} \
-          -class ${CLASSES} \
-          -o sequence"
-  run_hadoop_job ${DATATOOLS} HiBench.DataGen ${OPTION}
+SEED=$BAYES_DOCUMENT_SEED
+if [ "$BAYES_USE_DENSE" = "true" ]; then
+  SEED=$BAYES_DENSE_SEED
 fi
-run_spark_job --jars ${DATATOOLS} HiBench.BayesDataGen --input ${INPUT_HDFS} --output ${INPUT_HDFS}.parquet \
-  --useDense ${BAYES_USE_DENSE} \
-  --examples ${BAYES_DENSE_EXAMPLES} \
-  --features ${BAYES_DENSE_FEATURES} \
-  --classes ${CLASSES}
-
+run_spark_job org.hibench.sparkbench.ml.BayesDataGenerator "$INPUT_HDFS" "$BAYES_USE_DENSE" "$BAYES_DENSE_EXAMPLES" "$BAYES_DENSE_FEATURES" "$PAGES" "$CLASSES" "$NUM_MAPS" "$SEED" "$BAYES_CLASS_SHIFT"
 END_TIME=`timestamp`
-
 show_bannar finish
 leave_bench

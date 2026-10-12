@@ -20,25 +20,11 @@ root_dir=${current_dir}/../../../../..
 workload_config=${root_dir}/conf/workloads/websearch/pagerank.conf
 . "${root_dir}/bin/functions/load_bench_config.sh"
 
-enter_bench HadoopPreparePagerank ${workload_config} ${current_dir}
+enter_bench SparkPreparePagerank ${workload_config} ${current_dir}
 show_bannar start
-
-rmr_hdfs $INPUT_HDFS || true
+rmr_hdfs "$INPUT_HDFS" || true
 START_TIME=`timestamp`
-
-OPTION="-t pagerank \
-        -b ${PAGERANK_BASE_HDFS} \
-        -n ${INPUT_HDFS} \
-        -m ${NUM_MAPS} \
-        -r ${NUM_REDS} \
-        -p ${PAGES} \
-        -pbalance -pbalance \
-        -o text"
-
-run_hadoop_job ${DATATOOLS} HiBench.DataGen ${OPTION}
-
+run_spark_job org.hibench.sparkbench.websearch.PageRankDataGenerator "$INPUT_HDFS" "$PAGES" "$NUM_MAPS" "$PAGERANK_SEED"
 END_TIME=`timestamp`
-
 show_bannar finish
 leave_bench
-

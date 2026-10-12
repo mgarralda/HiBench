@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Modifications Copyright 2026 Mariano Garralda-Barrio (HiBench Next).
+SPDX-License-Identifier: Apache-2.0
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.intel.hibench</groupId>
+    <groupId>org.hibench</groupId>
     <artifactId>sparkbench</artifactId>
-    <version>8.0-SNAPSHOT</version>
+    <version>2.0.0</version>
   </parent>
 
-  <groupId>com.intel.hibench.sparkbench</groupId>
+  <groupId>org.hibench.sparkbench</groupId>
   <artifactId>sparkbench-sql</artifactId>
   <packaging>jar</packaging>
-  <version>8.0-SNAPSHOT</version>
+  <version>2.0.0</version>
   <name>sparkbench-sql</name>
 
   <dependencies>
     <dependency>
-      <groupId>com.intel.hibench.sparkbench</groupId>
+      <groupId>org.hibench.sparkbench</groupId>
       <artifactId>sparkbench-common</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -40,7 +57,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.spark</groupId>
-      <artifactId>spark-hive_${scala.binary.version}</artifactId>
+      <artifactId>spark-sql_${scala.binary.version}</artifactId>
       <version>${spark.version}</version>
       <scope>provided</scope>
       <exclusions>

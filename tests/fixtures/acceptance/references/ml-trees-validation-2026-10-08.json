@@ -1,0 +1,642 @@
+{
+  "date": "2026-10-08",
+  "workloads": [
+    "ml.rf",
+    "ml.gbt"
+  ],
+  "data_contract": "binary-gaussian-parquet-v1",
+  "algorithm_versions": {
+    "rf": "spark-ml-rf-soft-vote-v1",
+    "gbt": "spark-ml-gbt-v1"
+  },
+  "baseline_revision": "810a9b74723580b2c7f8ef5d86fa4bd2d503f3ef",
+  "environment": {
+    "spark": "3.5.9",
+    "scala": "2.12.18",
+    "java": "11",
+    "hadoop": "3.3.6",
+    "execution": "Docker/YARN"
+  },
+  "build": "11 default Maven modules: Java 11 BUILD SUCCESS",
+  "python_tests": 55,
+  "integration_checks": [
+    {
+      "family": "rf",
+      "rows": 10,
+      "dimensions": 100,
+      "partitions": 2,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "family": "rf",
+      "rows": 100,
+      "dimensions": 500,
+      "partitions": 2,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "family": "rf",
+      "rows": 103,
+      "dimensions": 9,
+      "partitions": 7,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "family": "rf",
+      "rows": 3,
+      "dimensions": 5,
+      "partitions": 8,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "family": "gbt",
+      "rows": 10,
+      "dimensions": 100,
+      "partitions": 2,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "family": "gbt",
+      "rows": 100,
+      "dimensions": 500,
+      "partitions": 2,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "family": "gbt",
+      "rows": 103,
+      "dimensions": 9,
+      "partitions": 7,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "family": "gbt",
+      "rows": 3,
+      "dimensions": 5,
+      "partitions": 8,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "family": "rf",
+      "scale": "tiny",
+      "rows": 10,
+      "dimensions": 100,
+      "logical_feature_bytes": 8000,
+      "evidence": "actual_generated_count_and_dimensions"
+    },
+    {
+      "family": "rf",
+      "scale": "small",
+      "rows": 100,
+      "dimensions": 500,
+      "logical_feature_bytes": 400000,
+      "evidence": "actual_generated_count_and_dimensions"
+    },
+    {
+      "family": "rf",
+      "scale": "large",
+      "rows": 1000,
+      "dimensions": 1000,
+      "logical_feature_bytes": 8000000,
+      "evidence": "actual_generated_count_and_dimensions"
+    },
+    {
+      "family": "rf",
+      "scale": "huge",
+      "rows": 10000,
+      "dimensions": 200000,
+      "logical_feature_bytes": 16000000000,
+      "evidence": "preset_definition_checked_only"
+    },
+    {
+      "family": "rf",
+      "scale": "gigantic",
+      "rows": 10000,
+      "dimensions": 300000,
+      "logical_feature_bytes": 24000000000,
+      "evidence": "preset_definition_checked_only"
+    },
+    {
+      "family": "rf",
+      "scale": "bigdata",
+      "rows": 20000,
+      "dimensions": 220000,
+      "logical_feature_bytes": 35200000000,
+      "evidence": "preset_definition_checked_only"
+    },
+    {
+      "family": "gbt",
+      "scale": "tiny",
+      "rows": 10,
+      "dimensions": 100,
+      "logical_feature_bytes": 8000,
+      "evidence": "actual_generated_count_and_dimensions"
+    },
+    {
+      "family": "gbt",
+      "scale": "small",
+      "rows": 100,
+      "dimensions": 500,
+      "logical_feature_bytes": 400000,
+      "evidence": "actual_generated_count_and_dimensions"
+    },
+    {
+      "family": "gbt",
+      "scale": "large",
+      "rows": 1000,
+      "dimensions": 2000,
+      "logical_feature_bytes": 16000000,
+      "evidence": "actual_generated_count_and_dimensions"
+    },
+    {
+      "family": "gbt",
+      "scale": "huge",
+      "rows": 1000,
+      "dimensions": 4000,
+      "logical_feature_bytes": 32000000,
+      "evidence": "actual_generated_count_and_dimensions"
+    },
+    {
+      "family": "gbt",
+      "scale": "gigantic",
+      "rows": 1000,
+      "dimensions": 8000,
+      "logical_feature_bytes": 64000000,
+      "evidence": "actual_generated_count_and_dimensions"
+    },
+    {
+      "family": "gbt",
+      "scale": "bigdata",
+      "rows": 1000,
+      "dimensions": 12000,
+      "logical_feature_bytes": 96000000,
+      "evidence": "actual_generated_count_and_dimensions"
+    },
+    {
+      "rows": 20001,
+      "dimensions": 8,
+      "exact_original_joint_profile": true,
+      "conditional_moments": [
+        {
+          "label": 0.0,
+          "rows": 10001,
+          "means": [
+            -0.21608219230111841,
+            1.9854522582765424e-06,
+            0.0016372997191996138,
+            0.00014841038160736176,
+            0.0009722548000368444,
+            -0.0011349787506583057,
+            0.0001754307602677403,
+            -0.0019906668549770044
+          ],
+          "variances": [
+            0.9374942898421603,
+            0.8818774277176463,
+            0.9940659854686065,
+            1.0098937760031943,
+            0.9889820579441694,
+            0.9991033920437362,
+            1.0051339690083818,
+            1.005595405394906
+          ]
+        },
+        {
+          "label": 1.0,
+          "rows": 10000,
+          "means": [
+            0.0887373572726545,
+            0.2995557186370865,
+            0.2970465991612502,
+            0.29857511856685753,
+            0.3007088944232037,
+            0.3134599209035975,
+            0.30249721418759784,
+            0.2965748122448074
+          ],
+          "variances": [
+            0.9353434803922153,
+            0.8758402668457337,
+            0.9995061525331844,
+            0.9945410204137405,
+            0.999580651205516,
+            1.0108616080468846,
+            1.0006748721783147,
+            1.0058872428380672
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 17,
+      "class_shift": 1.5,
+      "custom_formula_verified": true
+    },
+    {
+      "family": "rf",
+      "trees": 5,
+      "training_rows": 160,
+      "test_rows": 40,
+      "legacy_hard_vote_differences": 4,
+      "legacy_leaf_probability_reference_match": true,
+      "exact_legacy_predictions": false,
+      "repeatable_predictions": true
+    },
+    {
+      "family": "rf",
+      "trees": 1,
+      "training_rows": 160,
+      "test_rows": 40,
+      "legacy_hard_vote_differences": 0,
+      "legacy_leaf_probability_reference_match": true,
+      "exact_legacy_predictions": true,
+      "repeatable_predictions": true
+    },
+    {
+      "family": "gbt",
+      "trees": 5,
+      "training_rows": 160,
+      "test_rows": 40,
+      "legacy_hard_vote_differences": 0,
+      "legacy_leaf_probability_reference_match": false,
+      "exact_legacy_predictions": true,
+      "repeatable_predictions": true
+    }
+  ],
+  "actual_controller_inputs": [
+    {
+      "family": "rf",
+      "input": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/f7aa88615a8fbab1bd32a074-1a869de7/RF/binary-gaussian-parquet-v1/Input/tiny",
+      "rows": 10,
+      "dimensions": 100,
+      "class_counts": {
+        "0": 5,
+        "1": 5
+      },
+      "logical_feature_bytes": 8000,
+      "physical_bytes_including_profile": 14297,
+      "exact_original_data_match": true,
+      "profile_verified": true
+    },
+    {
+      "family": "gbt",
+      "input": "hdfs://spark-cluster-master:9000/HiBench-Control/datasets/87a9239eef5b472267363d33-596eb130/GBT/binary-gaussian-parquet-v1/Input/tiny",
+      "rows": 10,
+      "dimensions": 100,
+      "class_counts": {
+        "0": 5,
+        "1": 5
+      },
+      "logical_feature_bytes": 8000,
+      "physical_bytes_including_profile": 14297,
+      "exact_original_data_match": true,
+      "profile_verified": true
+    }
+  ],
+  "original_tiny": {
+    "run": {
+      "id": "1e35f490-5024-47e4-aff5-b8e515d8e35c",
+      "request_key": "5f5f4886-ba35-4338-8a93-ed40948f40ce",
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "ml-rf-gbt-modern-validation",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "ml.rf",
+            "parameters": {}
+          },
+          {
+            "id": "ml.gbt",
+            "parameters": {}
+          }
+        ]
+      },
+      "created": 1791468618.5753458,
+      "updated": 1791468811.1892,
+      "cancel": 0,
+      "detail": "All requested phases completed",
+      "worker_pid": 40232
+    },
+    "applications": [
+      "application_1791359074600_0084",
+      "application_1791359074600_0085",
+      "application_1791359074600_0086",
+      "application_1791359074600_0087"
+    ],
+    "results": {
+      "rf": {
+        "training_rows": 8,
+        "test_rows": 2,
+        "dimensions": 100,
+        "classes": 2,
+        "trees": 100,
+        "nodes": 308,
+        "model_seed": 1,
+        "split_seed": 11,
+        "held_out_error": 1.0
+      },
+      "gbt": {
+        "training_rows": 8,
+        "test_rows": 2,
+        "dimensions": 100,
+        "classes": 2,
+        "trees": 20,
+        "nodes": 60,
+        "model_seed": 0,
+        "split_seed": 11,
+        "held_out_error": 0.5
+      }
+    }
+  },
+  "customized_execution": {
+    "run": {
+      "id": "1637e1d7-6ebb-431d-ad87-5f6ae2445335",
+      "request_key": "e83e827e-5de1-4549-ab38-5556661c138c",
+      "state": "succeeded",
+      "spec": {
+        "mode": "prepare_and_run",
+        "name": "ml-rf-gbt-custom-validation",
+        "repetitions": 1,
+        "resources": {
+          "driver_memory": "1g",
+          "executor_cores": 1,
+          "executor_instances": 1,
+          "executor_memory": "1g",
+          "map_partitions": 2,
+          "shuffle_partitions": 2
+        },
+        "scale": "tiny",
+        "schema_version": 1,
+        "spark_conf": {
+          "spark.dynamicAllocation.enabled": false,
+          "spark.eventLog.dir": "hdfs://spark-cluster-master:9000/shared/spark-logs",
+          "spark.sql.adaptive.enabled": false,
+          "spark.yarn.historyServer.address": "spark-cluster-master:18080"
+        },
+        "target": {
+          "container": "spark-cluster-master",
+          "deploy_mode": "client",
+          "hadoop_home": "/home/sparker/hadoop-3.3.6",
+          "hdfs_uri": "hdfs://spark-cluster-master:9000",
+          "kind": "docker",
+          "master": "yarn",
+          "spark_home": "/usr/local/spark",
+          "workers": [
+            "spark-cluster-slave-1",
+            "spark-cluster-slave-2",
+            "spark-cluster-slave-3"
+          ],
+          "workspace": "/home/sparker/HiBench"
+        },
+        "timeout_s": 1800,
+        "workloads": [
+          {
+            "id": "ml.rf",
+            "parameters": {
+              "class_shift": 3.0,
+              "examples": 1000,
+              "featureSubsetStrategy": "all",
+              "features": 8,
+              "impurity": "entropy",
+              "maxBins": 16,
+              "maxDepth": 3,
+              "model_seed": 7,
+              "numTrees": 10,
+              "seed": 17,
+              "split_seed": 23,
+              "train_fraction": 0.7
+            }
+          },
+          {
+            "id": "ml.gbt",
+            "parameters": {
+              "class_shift": 3.0,
+              "examples": 1000,
+              "features": 8,
+              "learningRate": 0.2,
+              "maxBins": 16,
+              "maxDepth": 3,
+              "model_seed": 7,
+              "numIterations": 5,
+              "seed": 17,
+              "split_seed": 23,
+              "train_fraction": 0.7
+            }
+          }
+        ]
+      },
+      "created": 1791468850.0223536,
+      "updated": 1791469004.6576495,
+      "cancel": 0,
+      "detail": "All requested phases completed",
+      "worker_pid": 67956
+    },
+    "applications": [
+      "application_1791359074600_0088",
+      "application_1791359074600_0089",
+      "application_1791359074600_0090",
+      "application_1791359074600_0091"
+    ],
+    "results": {
+      "rf": {
+        "training_rows": 718,
+        "test_rows": 282,
+        "dimensions": 8,
+        "classes": 2,
+        "trees": 10,
+        "nodes": 78,
+        "model_seed": 7,
+        "split_seed": 23,
+        "held_out_error": 0.010638297872340425
+      },
+      "gbt": {
+        "training_rows": 718,
+        "test_rows": 282,
+        "dimensions": 8,
+        "classes": 2,
+        "trees": 5,
+        "nodes": 45,
+        "model_seed": 7,
+        "split_seed": 23,
+        "held_out_error": 0.010638297872340425
+      }
+    }
+  },
+  "logistic_shared_kernel_regression": [
+    {
+      "rows": 100,
+      "dimensions": 1000,
+      "partitions": 2,
+      "class_shift": 3.0,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "rows": 103,
+      "dimensions": 9,
+      "partitions": 7,
+      "class_shift": 3.0,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "rows": 3,
+      "dimensions": 5,
+      "partitions": 8,
+      "class_shift": 0.0,
+      "exact_original_match": true,
+      "partition_invariant": true
+    },
+    {
+      "rows": 101,
+      "seed": 17,
+      "class_shift": 1.5,
+      "custom_seed_formula_verified": true
+    },
+    {
+      "rows": 20001,
+      "dimensions": 8,
+      "exact_original_profile_match": true,
+      "conditional_moments": [
+        {
+          "label": 0.0,
+          "count": 10001,
+          "means": [
+            -0.21608219230111841,
+            1.9854522582765424e-06,
+            0.0016372997191996138,
+            0.00014841038160736176,
+            0.0009722548000368444,
+            -0.0011349787506583057,
+            0.0001754307602677403,
+            -0.0019906668549770044
+          ],
+          "variances": [
+            0.9374942898421603,
+            0.8818774277176463,
+            0.9940659854686065,
+            1.0098937760031943,
+            0.9889820579441694,
+            0.9991033920437362,
+            1.0051339690083818,
+            1.005595405394906
+          ],
+          "two_sigma_tail_rates": [
+            0.03799620037996201,
+            0.038196180381961806,
+            0.04459554044595541,
+            0.04709529047095291,
+            0.043995600439956005,
+            0.04459554044595541,
+            0.045295470452954706,
+            0.04509549045095491
+          ],
+          "max_abs_covariance": 0.012255975544231218
+        },
+        {
+          "label": 1.0,
+          "count": 10000,
+          "means": [
+            2.7887373572726553,
+            2.999555718637098,
+            2.997046599161256,
+            2.998575118566849,
+            3.000708894423198,
+            3.0134599209035953,
+            3.0024972141876076,
+            2.9965748122447984
+          ],
+          "variances": [
+            0.9353434803922153,
+            0.8758402668457329,
+            0.9995061525331855,
+            0.9945410204137385,
+            0.9995806512055159,
+            1.0108616080468844,
+            1.000674872178313,
+            1.0058872428380663
+          ],
+          "two_sigma_tail_rates": [
+            0.0394,
+            0.0374,
+            0.0467,
+            0.0433,
+            0.0445,
+            0.0471,
+            0.045,
+            0.0477
+          ],
+          "max_abs_covariance": 0.02111869609148792
+        }
+      ]
+    }
+  ],
+  "ui_validation": "AppTest edited RF/GBT class shift, model seeds, tree/iteration counts and learning rate; values persisted from Workloads back to Experiments.",
+  "limitations": [
+    "RF huge/gigantic/bigdata preset definitions and logical volume checked only; actual generation exercised RF tiny/small/large and all six GBT presets. Full YARN training used original tiny and explicitly customized fixtures only.",
+    "RF native Spark ML averages leaf probabilities; the former model hard-voted tree labels. Four of 40 controlled five-tree predictions differed; leaf probability reference and repeatability passed. No universal identical-tree/metric/runtime claim.",
+    "Split seed 11 now explicit; old splits were nondeterministic. RF model seed 1 now explicit; GBT effective seed 0 preserved. File/sample order may alter fitted models.",
+    "Original row-seeded empirical Gaussian deviations are preserved; theoretical ideal moments are not substituted for the original reference.",
+    "Parquet encoding, metadata and action/evaluation plans differ from ObjectFile; no historical throughput equivalence or performance superiority claimed.",
+    "Original tiny contains ten rows; two held-out rows in this run are not a reliable quality estimate.",
+    "Local verification ran during part of the YARN smoke campaign; timings are not a controlled performance study.",
+    "Cloud/serverless platforms not certified."
+  ],
+  "correction_notes": [
+    "Inspected runtime bytecode before final build: preserved RF bootstrap only when trees > 1 and GBT legacy model seed 0.",
+    "Historical test adapter initially attempted a non-public two-argument GBT constructor; switched to the original public constructor, whose effective seed 0 was verified. Production code was unaffected.",
+    "Initial universal prediction-equality assertion failed for RF; investigation established hard-versus-probability voting. Added an independent leaf-confidence oracle, retained native Spark ML behavior and documented algorithm revision.",
+    "Removed duplicated pipe character from parameter character-class regex after Python FutureWarning; accepted characters unchanged."
+  ],
+  "original_source_hashes": {
+    "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/RandomForestDataGenerator.scala": "5e0f29f2a936893ad6c15332bfd4dc4101420fc89a3453e007bfcf2fbc7bcbd1",
+    "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/RandomForestClassification.scala": "37d3eb10c33d0be89213fe336f7d8c32e1ea5eaaf0dc71e300cd8bf7460fe7e2",
+    "conf/workloads/ml/rf.conf": "bf08e8c7354187fa6c3eea9dbb602484db3392b46b2bd0f79ac83bf9b4d77812",
+    "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/GradientBoostedTreeDataGenerator.scala": "28f6a486ca1bdf654de80c060fd4b630724229907037ee793afc58cdcd367718",
+    "sparkbench/ml/src/main/scala/org/hibench/sparkbench/ml/GradientBoostedTree.scala": "6fdd0e2ef321de4e1e4be08349fa3a8c64292c92559e3ae1344d43c30cdfce40",
+    "conf/workloads/ml/gbt.conf": "f0de096f945cc90307f84476a0f77ea2d4df2d359695bac09548f70e06be379b"
+  },
+  "assembly_sha256": "841814a2d1528a93c84328f451b7f59d02f39fc902147a8457213e346245b741"
+}

@@ -1,0 +1,116 @@
+{
+  "pca": {
+    "tiny": {
+      "examples": 10,
+      "features": 10,
+      "feature_payload_bytes": 800,
+      "definition_preserved": true
+    },
+    "small": {
+      "examples": 100,
+      "features": 100,
+      "feature_payload_bytes": 80000,
+      "definition_preserved": true
+    },
+    "large": {
+      "examples": 1000,
+      "features": 1000,
+      "feature_payload_bytes": 8000000,
+      "definition_preserved": true
+    },
+    "huge": {
+      "examples": 10000,
+      "features": 10000,
+      "feature_payload_bytes": 800000000,
+      "definition_preserved": true
+    },
+    "gigantic": {
+      "examples": 50000,
+      "features": 50000,
+      "feature_payload_bytes": 20000000000,
+      "definition_preserved": true
+    },
+    "bigdata": {
+      "examples": 10000,
+      "features": 100000,
+      "feature_payload_bytes": 8000000000,
+      "definition_preserved": true
+    }
+  },
+  "correlation": {
+    "tiny": {
+      "examples": 50000,
+      "features": 1000,
+      "feature_payload_bytes": 400000000,
+      "definition_preserved": true
+    },
+    "small": {
+      "examples": 100000,
+      "features": 20000,
+      "feature_payload_bytes": 16000000000,
+      "definition_preserved": true
+    },
+    "large": {
+      "examples": 200000,
+      "features": 30000,
+      "feature_payload_bytes": 48000000000,
+      "definition_preserved": true
+    },
+    "huge": {
+      "examples": 300000,
+      "features": 50000,
+      "feature_payload_bytes": 120000000000,
+      "definition_preserved": true
+    },
+    "gigantic": {
+      "examples": 500000,
+      "features": 80000,
+      "feature_payload_bytes": 320000000000,
+      "definition_preserved": true
+    },
+    "bigdata": {
+      "examples": 1000000,
+      "features": 100000,
+      "feature_payload_bytes": 800000000000,
+      "definition_preserved": true
+    }
+  },
+  "summarizer": {
+    "tiny": {
+      "examples": 5000,
+      "features": 1000,
+      "feature_payload_bytes": 40000000,
+      "definition_preserved": true
+    },
+    "small": {
+      "examples": 100000,
+      "features": 20000,
+      "feature_payload_bytes": 16000000000,
+      "definition_preserved": true
+    },
+    "large": {
+      "examples": 200000,
+      "features": 30000,
+      "feature_payload_bytes": 48000000000,
+      "definition_preserved": true
+    },
+    "huge": {
+      "examples": 300000,
+      "features": 50000,
+      "feature_payload_bytes": 120000000000,
+      "definition_preserved": true
+    },
+    "gigantic": {
+      "examples": 500000,
+      "features": 80000,
+      "feature_payload_bytes": 320000000000,
+      "definition_preserved": true
+    },
+    "bigdata": {
+      "examples": 1000000,
+      "features": 100000,
+      "feature_payload_bytes": 800000000000,
+      "definition_preserved": true
+    }
+  }
+}

@@ -1,0 +1,391 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-08",
+  "baseline_revision": "810a9b74723580b2c7f8ef5d86fa4bd2d503f3ef",
+  "runtime": {
+    "spark": "3.5.9",
+    "java": "11",
+    "scala": "2.12.18",
+    "execution": "Docker/YARN"
+  },
+  "build": {
+    "modules": 11,
+    "result": "BUILD SUCCESS"
+  },
+  "python_tests": 58,
+  "numerical_profile_checks": [
+    {
+      "workload": "pca",
+      "rows": 10,
+      "dimensions": 10,
+      "partitions": 2,
+      "profile_and_roundtrip": true
+    },
+    {
+      "workload": "pca",
+      "rows": 103,
+      "dimensions": 9,
+      "partitions": 7,
+      "profile_and_roundtrip": true
+    },
+    {
+      "workload": "pca",
+      "rows": 3,
+      "dimensions": 5,
+      "partitions": 8,
+      "profile_and_roundtrip": true
+    },
+    {
+      "workload": "pca",
+      "numerical_reference": "numpy",
+      "rows": 401,
+      "dimensions": 6,
+      "passed": true
+    },
+    {
+      "workload": "correlation",
+      "rows": 10,
+      "dimensions": 10,
+      "partitions": 2,
+      "profile_and_roundtrip": true
+    },
+    {
+      "workload": "correlation",
+      "rows": 103,
+      "dimensions": 9,
+      "partitions": 7,
+      "profile_and_roundtrip": true
+    },
+    {
+      "workload": "correlation",
+      "rows": 3,
+      "dimensions": 5,
+      "partitions": 8,
+      "profile_and_roundtrip": true
+    },
+    {
+      "workload": "correlation",
+      "numerical_reference": "numpy",
+      "rows": 401,
+      "dimensions": 6,
+      "passed": true
+    },
+    {
+      "workload": "summarizer",
+      "rows": 10,
+      "dimensions": 10,
+      "partitions": 2,
+      "profile_and_roundtrip": true
+    },
+    {
+      "workload": "summarizer",
+      "rows": 103,
+      "dimensions": 9,
+      "partitions": 7,
+      "profile_and_roundtrip": true
+    },
+    {
+      "workload": "summarizer",
+      "rows": 3,
+      "dimensions": 5,
+      "partitions": 8,
+      "profile_and_roundtrip": true
+    },
+    {
+      "workload": "summarizer",
+      "normal_profiles": [
+        {
+          "source": "historical_fixed_test_seed",
+          "means": [
+            -0.00802713426896978,
+            -0.006454393970596164,
+            0.01337596788386806,
+            0.0013723514616715952,
+            0.010805039751739359,
+            0.0042473836140043955,
+            0.006068261291881415,
+            -0.011806012626104737
+          ],
+          "variances": [
+            1.001205045254129,
+            1.011631234280022,
+            1.006117978169831,
+            1.0129139019333468,
+            1.003044231330613,
+            0.9941945057459769,
+            1.0002667783058161,
+            0.9967735023982848
+          ],
+          "tail_gt_2": 0.04602269886505675,
+          "max_off_diagonal_covariance": 0.021632494447287074
+        },
+        {
+          "source": "modern",
+          "means": [
+            0.011700242065356962,
+            -0.0016773338646327105,
+            0.004307494786799665,
+            0.0010413516878589456,
+            -0.001714512676919314,
+            -0.0005637126633568066,
+            0.004457693316931393,
+            0.004102848868221388
+          ],
+          "variances": [
+            0.9895728868434822,
+            1.0007905192626023,
+            1.015225376962657,
+            1.0145009087593475,
+            0.9883211022126418,
+            0.9869627511141751,
+            1.0032831277271823,
+            1.0022123707681214
+          ],
+          "tail_gt_2": 0.04512899355032248,
+          "max_off_diagonal_covariance": 0.01663039517473526
+        }
+      ]
+    },
+    {
+      "workload": "summarizer",
+      "numerical_reference": "numpy",
+      "rows": 401,
+      "dimensions": 6,
+      "passed": true
+    }
+  ],
+  "controller_runs": {
+    "initial-pca-quote-failure": {
+      "id": "e4a528d4-5d56-49f0-aa88-f1860d090215",
+      "state": "failed",
+      "applications": [
+        "application_1791359074600_0092",
+        "application_1791359074600_0093"
+      ],
+      "completed_phases": [
+        {
+          "workload": "ml.pca",
+          "phase": "prepare"
+        }
+      ]
+    },
+    "original-tiny": {
+      "id": "f0bdd038-9043-495d-aa41-949f52e29a38",
+      "state": "succeeded",
+      "applications": [
+        "application_1791359074600_0094",
+        "application_1791359074600_0095",
+        "application_1791359074600_0096",
+        "application_1791359074600_0097",
+        "application_1791359074600_0098",
+        "application_1791359074600_0099"
+      ],
+      "completed_phases": [
+        {
+          "workload": "ml.pca",
+          "phase": "prepare"
+        },
+        {
+          "workload": "ml.pca",
+          "phase": "run"
+        },
+        {
+          "workload": "ml.correlation",
+          "phase": "prepare"
+        },
+        {
+          "workload": "ml.correlation",
+          "phase": "run"
+        },
+        {
+          "workload": "ml.summarizer",
+          "phase": "prepare"
+        },
+        {
+          "workload": "ml.summarizer",
+          "phase": "run"
+        }
+      ]
+    },
+    "custom-parameters": {
+      "id": "2f16bab3-c5fa-431a-8a63-d8f5a6e612fe",
+      "state": "succeeded",
+      "applications": [
+        "application_1791359074600_0100",
+        "application_1791359074600_0101",
+        "application_1791359074600_0102",
+        "application_1791359074600_0103",
+        "application_1791359074600_0104",
+        "application_1791359074600_0105"
+      ],
+      "completed_phases": [
+        {
+          "workload": "ml.pca",
+          "phase": "prepare"
+        },
+        {
+          "workload": "ml.pca",
+          "phase": "run"
+        },
+        {
+          "workload": "ml.correlation",
+          "phase": "prepare"
+        },
+        {
+          "workload": "ml.correlation",
+          "phase": "run"
+        },
+        {
+          "workload": "ml.summarizer",
+          "phase": "prepare"
+        },
+        {
+          "workload": "ml.summarizer",
+          "phase": "run"
+        }
+      ]
+    }
+  },
+  "native_yarn_states": [
+    {
+      "id": "application_1791359074600_0105",
+      "name": "SummarizerExample with Params(hdfs://spark-cluster-master:9000/HiBench-Control/datasets/bb66b80193a55bbf4b5e3190-802bae36/Summarizer/normal-parquet-v1/Input/tiny)",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0104",
+      "name": "SummarizerDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0103",
+      "name": "Correlations with Params(hdfs://spark-cluster-master:9000/HiBench-Control/datasets/ceb280611ec8efe3e03508ef-bf63ff0d/Correlation/binary-gaussian-parquet-v1/Input/tiny,spearman)",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0102",
+      "name": "CorrelationDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0101",
+      "name": "PCAExample",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0100",
+      "name": "PCADataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0099",
+      "name": "SummarizerExample with Params(hdfs://spark-cluster-master:9000/HiBench-Control/datasets/51de2dd12bd85e4a81ba1c79-404f4dfd/Summarizer/normal-parquet-v1/Input/tiny)",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0098",
+      "name": "SummarizerDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0097",
+      "name": "Correlations with Params(hdfs://spark-cluster-master:9000/HiBench-Control/datasets/15395c6a43c6a9ac78abcea8-28d5022c/Correlation/binary-gaussian-parquet-v1/Input/tiny,pearson)",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0096",
+      "name": "CorrelationDataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0095",
+      "name": "PCAExample",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0094",
+      "name": "PCADataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0093",
+      "name": "PCAExample",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    },
+    {
+      "id": "application_1791359074600_0092",
+      "name": "PCADataGenerator",
+      "state": "FINISHED",
+      "finalStatus": "SUCCEEDED",
+      "diagnostics": ""
+    }
+  ],
+  "actual_generated_original_tiny": {
+    "pca": {
+      "rows": 10,
+      "features": 10,
+      "logical_feature_bytes": 800
+    },
+    "correlation": {
+      "rows": 50000,
+      "features": 1000,
+      "logical_feature_bytes": 400000000
+    },
+    "summarizer": {
+      "rows": 5000,
+      "features": 1000,
+      "logical_feature_bytes": 40000000
+    }
+  },
+  "custom_parameters": {
+    "all": {
+      "examples": 101,
+      "features": 8,
+      "seed": 17,
+      "partitions": 3
+    },
+    "pca_k": 2,
+    "correlation_method": "spearman",
+    "correlation_class_shift": 1.5
+  },
+  "corrections": [
+    "Historical PCA maxresultsize included literal quotes; first YARN benchmark failed before calculation. Removed quotes, retained size limits, rerun succeeded.",
+    "Historical PySpark normalVectorRDD test returns numpy arrays, not ML vectors; corrected test adapter and retained initial failure log.",
+    "Controller input verifier initially assumed workload.input in overrides; corrected it to resolve dataset root and versioned relative input path.",
+    "Historical wide presets remain inspectable; schema validation is not execution certification."
+  ],
+  "limits": [
+    "Only original tiny and explicit custom shapes were executed end-to-end; larger presets are definition/volume checks only.",
+    "Summarizer RNG is statistically comparable, not historical row-identical; partition count participates in reproducibility.",
+    "Parquet physical encoding and I/O cost differ from ObjectFile.",
+    "Local verifiers overlapped parts of the smoke campaign: timing is not a controlled performance comparison.",
+    "No cloud/serverless certification."
+  ],
+  "runtime_jar_sha256": "228583970ce54a2f1d908ec6c2e3746c2b879c66d91945d82bbacdb20bf2995d"
+}

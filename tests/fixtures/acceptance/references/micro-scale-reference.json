@@ -1,0 +1,60 @@
+{
+  "source": "Git baseline before HiBench Next micro migration",
+  "workloads": {
+    "micro.wordcount": {
+      "parameter": "datasize",
+      "presets": {
+        "tiny": 32000,
+        "small": 320000000,
+        "large": 3200000000,
+        "huge": 32000000000,
+        "gigantic": 320000000000,
+        "bigdata": 1600000000000
+      }
+    },
+    "micro.sort": {
+      "parameter": "datasize",
+      "presets": {
+        "tiny": 32000,
+        "small": 3200000,
+        "large": 320000000,
+        "huge": 3200000000,
+        "gigantic": 32000000000,
+        "bigdata": 300000000000
+      }
+    },
+    "micro.terasort": {
+      "parameter": "datasize",
+      "presets": {
+        "tiny": 32000,
+        "small": 3200000,
+        "large": 32000000,
+        "huge": 320000000,
+        "gigantic": 3200000000,
+        "bigdata": 6000000000
+      }
+    },
+    "micro.repartition": {
+      "parameter": "datasize",
+      "presets": {
+        "tiny": 3200,
+        "small": 3200000,
+        "large": 32000000,
+        "huge": 320000000,
+        "gigantic": 3200000000,
+        "bigdata": 6000000000
+      }
+    },
+    "micro.sleep": {
+      "parameter": "mapper.seconds",
+      "presets": {
+        "tiny": 3,
+        "small": 30,
+        "large": 90,
+        "huge": 90,
+        "gigantic": 90,
+        "bigdata": 10
+      }
+    }
+  }
+}

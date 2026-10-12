@@ -1,0 +1,35 @@
+# Copyright 2026 Mariano Garralda-Barrio (HiBench Next).
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Hadoop Home (HDInsight uses current client symlink)
+hibench.hadoop.home     /usr/hdp/current/hadoop-client
+
+# Path to hadoop executable
+hibench.hadoop.executable     ${hibench.hadoop.home}/bin/hadoop
+
+# Hadoop configuration directory
+hibench.hadoop.configure.dir  /etc/hadoop/conf
+
+# Root HDFS path
+hibench.hdfs.master           hdfs://mycluster
+
+# Hadoop release
+hibench.hadoop.release        apache
+
+# Hadoop Examples Jar (required for some workloads like Wordcount, Sleep, etc.)
+hibench.hadoop.examples.jar       /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar
+hibench.hadoop.examples.test.jar  /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar
+
+
