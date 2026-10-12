@@ -28,3 +28,6 @@
 sparkbench/sql/src/main/resources/org/hibench/sql/country_codes text eol=lf
 sparkbench/sql/src/main/resources/org/hibench/sql/search_keys text eol=lf
 sparkbench/sql/src/main/resources/org/hibench/sql/user_agents text eol=lf
+
+# The historical dictionary contract includes its original CRLF bytes.
+sparkbench/common/src/main/resources/hibench-words -text
