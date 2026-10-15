@@ -54,6 +54,7 @@ dist/
 # Local attachments and generated manuscript exports are not release sources.
 .codex-remote-attachments/
 output/
+tmp/
 
 # Keep the release build workflow in the public source.
 !.github/

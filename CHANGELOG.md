@@ -21,6 +21,8 @@ limitations under the License.
 
 Functional scope is frozen. Publication/tagging is separate from local validation.
 
+Software archive: [Zenodo DOI: 10.5281/zenodo.23400663](https://doi.org/10.5281/zenodo.23400663).
+
 ### Added
 
 - Individual namespaced PySpark implementations for all 24 batch workloads;

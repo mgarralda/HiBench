@@ -42,6 +42,11 @@ dependencies = [
 web = ["streamlit>=1.65,<2"]
 test = ["httpx2>=2.13.1,<3"]
 
+[project.urls]
+Repository = "https://github.com/mgarralda/HiBench-Next"
+Documentation = "https://github.com/mgarralda/HiBench-Next#readme"
+DOI = "https://doi.org/10.5281/zenodo.23400663"
+
 [project.scripts]
 hibench = "hibench.cli:main"
 hibench-serve = "hibench.launcher:main"

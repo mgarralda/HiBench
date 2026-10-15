@@ -29,6 +29,10 @@ authors:
 
 version: "2.5.0"
 
+doi: "10.5281/zenodo.23400663"
+
+url: "https://doi.org/10.5281/zenodo.23400663"
+
 repository-code: "https://github.com/mgarralda/HiBench-Next"
 
 license: Apache-2.0

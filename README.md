@@ -17,6 +17,8 @@ limitations under the License.
 
 # HiBench Next
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23400663.svg)](https://doi.org/10.5281/zenodo.23400663)
+
 ![HiBench Next â€” Reproducible benchmarks for Apache Spark](hibench/ui/assets/hibench-next-banner.png)
 
 ## Reproducible benchmarks for Apache Spark
@@ -443,6 +445,27 @@ no SoftwareX publication or universal scalability certification is claimed.
 Scientific campaign and evidence tools live in [tests/tools](tests/tools/README.md);
 `bin/` contains build scripts, maintained workload launchers and runtime/report
 helpers. They are separate from the installed `hibench` application package.
+
+## Citing HiBench Next
+
+If you use HiBench Next in research, please cite the archived **v2.5.0 software release**:
+
+> Garralda-Barrio, M. (2026). *HiBench Next: A Heterogeneous Benchmark Suite for Modern Apache Spark* (Version v2.5.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23400663
+
+```bibtex
+@software{garralda_barrio_hibench_next_2026,
+  author    = {Garralda-Barrio, Mariano},
+  title     = {HiBench Next: A Heterogeneous Benchmark Suite for Modern Apache Spark},
+  year      = {2026},
+  version   = {v2.5.0},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.23400663},
+  url       = {https://doi.org/10.5281/zenodo.23400663}
+}
+```
+
+Machine-readable citation metadata is provided in [CITATION.cff](CITATION.cff).
+This DOI identifies the software release, not a research article or individual benchmark results.
 
 ### Version history and local evidence
 
