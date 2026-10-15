@@ -23,6 +23,13 @@ Use Python 3.11+ for the controller, Java 11 and the documented Spark 3.5/Scala 
 
 Keep validation in domain/shared services; UI and API should call the same implementation. Add Pydantic contracts for new HTTP operations. Durable execution belongs in detached workers, not HTTP requests or Streamlit reruns. Document API/configuration compatibility and preserve existing saved records.
 
+Follow the [Python package organization](README.md#python-package-organization):
+parameter resolution and validation belong in `hibench/parameters`, web pages
+in `hibench/ui`, HTTP contracts in `hibench/api`, and target execution support
+in `hibench/adapters`. Use `python -m hibench.launcher --with-ui` for local
+API/web startup. Update runtime resources when relocating code used by the
+installed Bash launchers; targets do not install the full controller package.
+
 For workload changes, record seeds, distributions, dimensions, cardinalities, logical volume, format and algorithm semantics; distinguish exact references, structural checks and untested scaling. Preserve failing evidence. Update the migration record and report with links to tests and receipts. Never substitute reduced sizes and label them original presets.
 
 Retain upstream attribution and Apache-2.0 notices, and identify new dependencies/licenses. Open a focused pull request explaining behavior and validation; do not claim statistical performance improvements from single functional executions.

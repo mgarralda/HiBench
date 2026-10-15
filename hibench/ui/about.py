@@ -32,6 +32,6 @@ def render():
     with st.expander('Project notices'):
         st.code((repository_root() / 'NOTICE').read_text(encoding='utf-8'), language='text')
     st.subheader('Documentation and programmatic access')
-    st.markdown('[Project repository](https://github.com/mgarralda/HiBench) · [Original HiBench](https://github.com/Intel-bigdata/HiBench) · [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)')
+    st.markdown('[Project repository](https://github.com/mgarralda/HiBench-Next) · [Original HiBench](https://github.com/Intel-bigdata/HiBench) · [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)')
     st.markdown('[REST API / Swagger](http://127.0.0.1:8000/docs) · [OpenAPI schema](http://127.0.0.1:8000/openapi.json)')
-    st.caption('API links use the default local port. For a remote deployment, use the API host and port configured by your administrator. Cloud execution adapters marked soon are not implemented. Validation evidence and limitations are documented in docs/ and docs_internal/.')
+    st.caption('API links use the default local port. For a remote deployment, use the API host and port configured by your administrator. Cloud execution adapters marked soon are not implemented. Public validation scope is documented in README.md, pysparkbench/README.md and tests/README.md.')

@@ -16,11 +16,29 @@
 import unittest
 from pathlib import Path
 import yaml
-from hibench.backend import ARTIFACTS
+from hibench.adapters.runtime import ARTIFACTS
 from hibench.catalog import IDS
 
 
 class DeploymentTests(unittest.TestCase):
+    def test_installed_shell_resolver_uses_only_shipped_resources(self):
+        import shutil
+        import subprocess
+        import sys
+        import tempfile
+        from hibench.adapters.runtime import RUNTIME_RESOURCES
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            for name in (*RUNTIME_RESOURCES, 'bin/functions/spark_scale.py'):
+                target = root / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(name, target)
+            resolver = root / 'bin/functions/spark_scale.py'
+            script = "import runpy; m=runpy.run_path(" + repr(str(resolver)) + "); print(m['resolve_scale'](m['parse_spark']('[tiny]\\nspark.executor.memory 1g'), 'tiny')[0]['spark.executor.memory'])"
+            result = subprocess.run([sys.executable, '-I', '-c', script], cwd=folder,
+                                    capture_output=True, text=True, check=True)
+            self.assertEqual(result.stdout.strip(), '1g')
+
     def test_release_artifact_version_is_consistent(self):
         import tomllib
         import xml.etree.ElementTree as ET
@@ -41,13 +59,14 @@ class DeploymentTests(unittest.TestCase):
         jar = f'sparkbench-assembly-{version}-dist.jar'
         self.assertEqual(ARTIFACTS, ('sparkbench/assembly/target/' + jar,))
         self.assertIn(jar, Path('deployment/Dockerfile').read_text())
+        self.assertIn(jar, Path('.github/workflows/batch.yml').read_text())
         for path in Path('conf').glob('hibench.conf*'):
             self.assertIn(jar, path.read_text(), str(path))
 
     def test_stack_enables_ui_api_and_host_persistence(self):
         service = yaml.safe_load(Path('deployment/compose.yml').read_text())['services']['hibench']
-        self.assertIn('../conf:/opt/hibench/conf', service['volumes'])
-        self.assertIn('../report:/opt/hibench/report', service['volumes'])
+        self.assertIn('${HIBENCH_CONF_HOST_DIR:-../conf}:/opt/hibench/conf', service['volumes'])
+        self.assertIn('${HIBENCH_REPORT_HOST_DIR:-../report}:/opt/hibench/report', service['volumes'])
         self.assertEqual(len(service['ports']), 2)
         self.assertTrue(all(port.startswith('127.0.0.1:') for port in service['ports']))
         self.assertIn('HIBENCH_API_TOKEN', service['environment'])
@@ -65,7 +84,7 @@ class DeploymentTests(unittest.TestCase):
             self.assertNotIn(b'\r\n', path.read_bytes(), str(path))
 
     def test_source_has_license_and_data_has_adjacent_metadata(self):
-        for folder in ('hibench', 'bin', 'sparkbench', 'deployment'):
+        for folder in ('hibench', 'bin', 'sparkbench', 'pysparkbench', 'deployment'):
             for path in Path(folder).rglob('*'):
                 if not path.is_file() or 'target' in path.parts or '__pycache__' in path.parts:
                     continue

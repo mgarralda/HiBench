@@ -22,13 +22,15 @@ import sys
 import uuid
 
 
-def write_report(path, workload, scale, start, end, size, application_id="", run_id=""):
+def write_report(path, workload, scale, start, end, size, application_id="", run_id="",
+                 implementation="scala", deploy_mode="client"):
     start, end, size = int(start), int(end), int(size)
     if end < start or size < 0:
         raise ValueError("Invalid duration or input size")
     duration = (end - start) / 1000
     row = dict(schema_version=2, run_id=run_id or str(uuid.uuid4()),
-               application_id=application_id, workload=workload, scale=scale,
+               application_id=application_id, workload=workload, implementation=implementation,
+               deploy_mode=deploy_mode, scale=scale,
                started_at_ms=start, finished_at_ms=end, duration_s=duration,
                input_bytes=size, throughput_bytes_s=size / duration if duration else None)
     target = Path(path)
@@ -37,6 +39,10 @@ def write_report(path, workload, scale, start, end, size, application_id="", run
     import fcntl
     with target.open("a+", encoding="utf-8", newline="") as stream:
         fcntl.flock(stream, fcntl.LOCK_EX)
+        stream.seek(0)
+        header = next(csv.reader(stream), None)
+        if header is not None and header != list(row):
+            raise ValueError('Report columns differ; select a new report file and preserve the existing report: ' + str(target))
         stream.seek(0, 2)
         writer = csv.DictWriter(stream, fieldnames=list(row))
         if stream.tell() == 0:
@@ -48,6 +54,6 @@ def write_report(path, workload, scale, start, end, size, application_id="", run
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 9:
-        sys.exit("Usage: write_report.py <csv> <workload> <scale> <start> <end> <bytes> <app id> <run id>")
+    if len(sys.argv) != 11:
+        sys.exit("Usage: write_report.py <csv> <workload> <scale> <start> <end> <bytes> <app id> <run id> <implementation> <deploy mode>")
     write_report(*sys.argv[1:])

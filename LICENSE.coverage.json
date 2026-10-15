@@ -10,7 +10,7 @@
   ],
   "files": [
     {
-      "path": "hibench/backend.py",
+      "path": "hibench/adapters/runtime.py",
       "coverage": "Apache header"
     },
     {
@@ -42,11 +42,11 @@
       "coverage": "Apache header"
     },
     {
-      "path": "hibench/ml_parameters.py",
+      "path": "hibench/parameters/ml.py",
       "coverage": "Apache header"
     },
     {
-      "path": "hibench/nweight_parameters.py",
+      "path": "hibench/parameters/nweight.py",
       "coverage": "Apache header"
     },
     {
@@ -62,11 +62,11 @@
       "coverage": "Apache header"
     },
     {
-      "path": "hibench/server.py",
+      "path": "hibench/launcher.py",
       "coverage": "Apache header"
     },
     {
-      "path": "hibench/spark_configuration.py",
+      "path": "hibench/parameters/spark.py",
       "coverage": "Apache header"
     },
     {
@@ -74,11 +74,11 @@
       "coverage": "Apache header"
     },
     {
-      "path": "hibench/svd_parameters.py",
+      "path": "hibench/parameters/svd.py",
       "coverage": "Apache header"
     },
     {
-      "path": "hibench/web.py",
+      "path": "hibench/ui/app.py",
       "coverage": "Apache header"
     },
     {
@@ -86,7 +86,7 @@
       "coverage": "Apache header"
     },
     {
-      "path": "hibench/workload_parameters.py",
+      "path": "hibench/parameters/workloads.py",
       "coverage": "Apache header"
     },
     {
@@ -1850,7 +1850,7 @@
       "coverage": "Apache header"
     },
     {
-      "path": "hibench/spark_history.py",
+      "path": "hibench/services/spark_history.py",
       "coverage": "Apache header"
     },
     {
@@ -1866,27 +1866,11 @@
       "coverage": "Apache header"
     },
     {
-      "path": "docs/release-validation-2026-10-11.md",
-      "coverage": "SPDX header"
-    },
-    {
-      "path": "docs/release-validation-2026-10-11.json",
-      "coverage": "Adjacent .license sidecar"
-    },
-    {
-      "path": "docs/version-lineage.md",
-      "coverage": "SPDX header"
-    },
-    {
-      "path": "docs/version-alignment-2.0.0.json",
-      "coverage": "Adjacent .license sidecar"
-    },
-    {
       "path": "hibench/adapters/ssh.py",
       "coverage": "Apache header"
     },
     {
-      "path": "hibench/spark_scale.py",
+      "path": "hibench/parameters/scales.py",
       "coverage": "Apache header"
     },
     {
@@ -1898,14 +1882,6 @@
       "coverage": "SPDX sidecar"
     },
     {
-      "path": "docs/release-hardening-2026-10-11.md",
-      "coverage": "Apache header"
-    },
-    {
-      "path": "docs/release-hardening-2026-10-11.json",
-      "coverage": "SPDX sidecar"
-    },
-    {
       "path": "hibench/adapters/ssh_password.py",
       "coverage": "Apache header"
     },
@@ -1914,13 +1890,92 @@
       "coverage": "Apache sidecar"
     },
     {
-      "path": "docs/ssh-password-validation-2026-10-11.md",
+      "path": "hibench/parameters/__init__.py",
       "coverage": "Apache header"
     },
     {
-      "path": "docs/ssh-password-validation-2026-10-11.json",
-      "coverage": "Apache sidecar"
+      "path": "tests/tools/svd_phase_campaign.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "sparkbench/README.md",
+      "coverage": "SPDX header"
+    },
+    {
+      "path": "pysparkbench/README.md",
+      "coverage": "SPDX header"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "docs/configuration-model.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "docs/workload-scales.md",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "tests/test_workload_scales.py",
+      "coverage": "Apache header"
+    },
+    {
+      "path": "docs/HiBench-Next-2.5.0-Technical-Scientific-Manual-EN.pdf",
+      "coverage": "Adjacent Apache-2.0 metadata"
+    },
+    {
+      "path": "docs/HiBench-Next-2.5.0-Technical-Scientific-Manual-EN.pdf.license",
+      "coverage": "SPDX metadata"
     }
   ],
-  "reference_source_note": "Added source notices retain original license blocks; annotations change source file hashes and must not be interpreted as unchanged original source. Historical archives and raw dataset bytes are not rewritten."
+  "reference_source_note": "Added source notices retain original license blocks; annotations change source file hashes and must not be interpreted as unchanged original source. Historical archives and raw dataset bytes are not rewritten.",
+  "historical_inventory": [
+    {
+      "path": "docs/release-validation-2026-10-11.md",
+      "coverage": "SPDX header",
+      "status": "historical path; not a current release file"
+    },
+    {
+      "path": "docs/release-validation-2026-10-11.json",
+      "coverage": "Adjacent .license sidecar",
+      "status": "historical path; not a current release file"
+    },
+    {
+      "path": "docs/version-lineage.md",
+      "coverage": "SPDX header",
+      "status": "historical path; not a current release file"
+    },
+    {
+      "path": "docs/version-alignment-2.0.0.json",
+      "coverage": "Adjacent .license sidecar",
+      "status": "historical path; not a current release file"
+    },
+    {
+      "path": "docs/release-hardening-2026-10-11.md",
+      "coverage": "Apache header",
+      "status": "historical path; not a current release file"
+    },
+    {
+      "path": "docs/release-hardening-2026-10-11.json",
+      "coverage": "SPDX sidecar",
+      "status": "historical path; not a current release file"
+    },
+    {
+      "path": "docs/ssh-password-validation-2026-10-11.md",
+      "coverage": "Apache header",
+      "status": "historical path; not a current release file"
+    },
+    {
+      "path": "docs/ssh-password-validation-2026-10-11.json",
+      "coverage": "Apache sidecar",
+      "status": "historical path; not a current release file"
+    },
+    {
+      "path": "docs_internal/workload-scales-review.md",
+      "coverage": "Apache header",
+      "status": "Local historical review; excluded from the public release"
+    }
+  ]
 }

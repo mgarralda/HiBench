@@ -19,7 +19,7 @@ from pathlib import Path
 import subprocess
 import sys
 from hibench.catalog import workloads
-from hibench.workload_parameters import typed_value
+from hibench.parameters.workloads import typed_value
 
 
 def verify(destination):
@@ -81,7 +81,7 @@ def verify(destination):
             '--master', 'yarn', '--deploy-mode', 'client', '--num-executors', '2',
             '--executor-cores', '2', '--executor-memory', '2g', '--driver-memory', '2g',
             '--conf', 'spark.sql.shuffle.partitions=4', '--conf', 'spark.dynamicAllocation.enabled=false',
-            '--jars', target['workspace'] + '/sparkbench/assembly/target/sparkbench-assembly-2.0.0-dist.jar']
+            '--jars', target['workspace'] + '/sparkbench/assembly/target/sparkbench-assembly-2.5.0-dist.jar']
     cases = [('actual', scripts[0], 'plans', [remote + '/actual-results.json']),
              ('svd', scripts[1], 'svd', []),
              ('nweight', scripts[2], 'nweight', [target['workspace'] + '/sparkbench/graph/src/main/resources/nweight-user-features'])]

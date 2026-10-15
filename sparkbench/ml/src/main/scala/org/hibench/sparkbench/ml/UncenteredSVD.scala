@@ -30,7 +30,8 @@ import org.apache.spark.sql.expressions.Aggregator
 object UncenteredSVD {
   case class Input(id: Long, features: Vector)
   case class Gram(rows: Long, upper: Array[Double])
-  case class Result(rows: Long, singularValues: Array[Double], rightVectors: Array[Array[Double]])
+  case class Result(rows: Long, singularValues: Array[Double], rightVectors: Array[Array[Double]],
+                    phaseSeconds: Map[String, Double] = Map.empty)
 
   class GramSum(dimensions: Int) extends Aggregator[Input, Gram, Gram] {
     private val packed = (dimensions.toLong * (dimensions + 1L) / 2).toInt
@@ -63,7 +64,11 @@ object UncenteredSVD {
     require(matrixBudgetBytes > 0 && estimate <= matrixBudgetBytes,
       s"SVD matrix array estimate $estimate exceeds configured budget $matrixBudgetBytes")
     import data.sparkSession.implicits._
+    val timings = scala.collection.mutable.LinkedHashMap.empty[String, Double]
+    var started = System.nanoTime()
     val gram = data.select("id", "features").as[Input].select(new GramSum(dimensions).toColumn).head()
+    timings("gram_action_s") = (System.nanoTime() - started) / 1e9
+    started = System.nanoTime()
     require(gram.rows > 0, "SVD input is empty")
     require(gram.upper.forall(java.lang.Double.isFinite), "Gram aggregation overflow")
     val matrix = DenseMatrix.zeros[Double](dimensions, dimensions)
@@ -73,14 +78,19 @@ object UncenteredSVD {
       while (i <= j) { val value = gram.upper(offset); matrix(i,j)=value; matrix(j,i)=value; offset+=1; i+=1 }
       j+=1
     }
+    timings("matrix_construction_s") = (System.nanoTime() - started) / 1e9
+    started = System.nanoTime()
     val eigen = eigSym(matrix)
+    timings("eigendecomposition_s") = (System.nanoTime() - started) / 1e9
+    started = System.nanoTime()
     val largest = math.max(0.0, eigen.eigenvalues(dimensions - 1))
     val cutoff = largest * math.max(rCond * rCond, dimensions * math.ulp(1.0))
     val retained = (0 until dimensions).reverse.filter(i => eigen.eigenvalues(i) > cutoff)
       .take(math.min(requested.toLong, gram.rows).toInt)
     val values = retained.map(i => math.sqrt(eigen.eigenvalues(i))).toArray
     val vectors = retained.map(i => Array.tabulate(dimensions)(row => eigen.eigenvectors(row,i))).toArray
-    Result(gram.rows, values, vectors)
+    timings("result_assembly_s") = (System.nanoTime() - started) / 1e9
+    Result(gram.rows, values, vectors, timings.toMap)
   }
 
   /** As in the original workload, computing U constructs a lazy distributed plan.

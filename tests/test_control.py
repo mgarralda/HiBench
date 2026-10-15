@@ -18,9 +18,21 @@ from pathlib import Path
 from unittest.mock import patch
 from concurrent.futures import ThreadPoolExecutor
 from hibench import config, store
-from hibench.backend import ClassicBackend
+from hibench.adapters.runtime import ClassicBackend
 
 class ControlTests(unittest.TestCase):
+    def test_target_validation_failure_reports_output_without_full_command(self):
+        target = config.default_experiment()['target']
+        backend = ClassicBackend(target)
+        message = 'Missing runtime file: sparkbench/assembly/target/sparkbench-assembly-2.5.0-dist.jar. Update the target.'
+        failure = subprocess.CalledProcessError(1, ['bash', '-lc', 'large configuration hash inventory'], output=message)
+        with patch.object(backend, 'command', side_effect=failure):
+            with self.assertRaises(subprocess.CalledProcessError) as caught:
+                backend.doctor()
+        self.assertEqual(message, caught.exception.output)
+        self.assertIn('target runtime validation', str(caught.exception))
+        self.assertNotIn('large configuration hash inventory', str(caught.exception))
+
     def setUp(self):
         self.spec=config.default_experiment()
         self.tmp=tempfile.TemporaryDirectory()
@@ -94,14 +106,14 @@ class ControlTests(unittest.TestCase):
         self.assertEqual(meta['returncode'],7); self.assertEqual(meta['application_id'],'application_123_0042')
     def test_streamlit_loads_without_exception(self):
         from streamlit.testing.v1 import AppTest
-        app=AppTest.from_file(str(Path('hibench/web.py').resolve())).run(timeout=20)
+        app=AppTest.from_file(str(Path('hibench/ui/app.py').resolve())).run(timeout=20)
         self.assertFalse(app.exception)
         app.multiselect[0].set_value(['ml.kmeans']).run()
         self.assertFalse(app.exception)
     def test_streamlit_repeated_run_does_not_duplicate_submission(self):
         from streamlit.testing.v1 import AppTest
         with patch('hibench.worker.launch') as submit:
-            app=AppTest.from_file(str(Path('hibench/web.py').resolve())).run(timeout=20)
+            app=AppTest.from_file(str(Path('hibench/ui/app.py').resolve())).run(timeout=20)
             next(button for button in app.button if button.label == 'Run').click().run()
             next(button for button in app.button if button.label == 'Run').click().run()
             self.assertFalse(app.exception)
@@ -109,10 +121,12 @@ class ControlTests(unittest.TestCase):
             self.assertEqual(len(store.recent()),1)
     def test_destination_selection_and_independent_connection_check(self):
         from streamlit.testing.v1 import AppTest
-        app=AppTest.from_file(str(Path('hibench/web.py').resolve())).run(timeout=20)
-        self.assertEqual(app.selectbox[0].label, 'Execution adapter')
-        app.selectbox[0].set_value('local').run()
+        app=AppTest.from_file(str(Path('hibench/ui/app.py').resolve())).run(timeout=20)
+        app.button(key='nav-General').click().run()
+        next(widget for widget in app.selectbox if widget.label == 'Execution adapter').set_value('local').run()
         self.assertFalse(any(field.label == 'Master container' for field in app.text_input))
+        next(button for button in app.button if button.label == 'Apply target settings').click().run()
+        app.button(key='nav-Experiments').click().run()
         app.multiselect[0].set_value([]).run()
         with patch('hibench.adapters.classic.LocalAdapter.doctor', return_value='Runtime comprobado') as doctor:
             next(button for button in app.button if button.label == 'Check connection').click().run()

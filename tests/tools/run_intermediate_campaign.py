@@ -49,7 +49,7 @@ def main():
         'method': 'One preparation, one excluded initial execution, three measured executions per workload. Serial fresh Spark applications; OS/HDFS caches uncontrolled.',
         'artifact_sha256': {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                             for p in ROOT.glob('**/target/*.jar') if p.name in (
-                                'sparkbench-assembly-2.0.0-dist.jar',
+                                'sparkbench-assembly-2.5.0-dist.jar',
                                 )}}
 
     def save():

@@ -14,14 +14,14 @@
 # limitations under the License.
 
 """Shared Spark defaults, explicit experiment overrides and auditable resolution."""
-from .catalog import repository_root
+from ..catalog import repository_root
 import hashlib
 import os
 import re
 import shutil
 import tempfile
 from pathlib import Path
-from .spark_scale import parse_spark, resolve_scale
+from .scales import parse_spark, resolve_scale
 
 # These values belong to dedicated target/resources fields or launcher internals.
 MANAGED = {'spark.extraListeners', 'spark.master', 'spark.app.name', 'spark.submit.deployMode',
@@ -36,7 +36,7 @@ def scale_values(properties, scale):
 
 
 def configuration(path=None, scale='small'):
-    from .catalog import read_properties
+    from ..catalog import read_properties
     path = Path(path or repository_root() / 'conf/spark.conf')
     return scale_values({**parse_spark(path.read_text(encoding='utf-8')), **read_properties(path.parent / 'hibench.conf')}, scale)
 
@@ -57,7 +57,7 @@ def resolve(overrides, path=None, scale='small'):
 
 
 def shared(scale=None):
-    from . import config
+    from .. import config
     path = repository_root() / 'conf/spark.conf'
     raw = path.read_bytes()
     return {'configuration_file': str(path), 'text': raw.decode('utf-8'),
@@ -68,7 +68,7 @@ def shared(scale=None):
 
 def save_shared(text, expected_sha256, benchmark_text=None, benchmark_sha256=None):
     """Validate a candidate base before atomically replacing the single Spark file."""
-    from . import config, store
+    from .. import config, store
     state = shared()
     path = repository_root() / 'conf/spark.conf'
     if state['sha256'] != expected_sha256:
@@ -91,7 +91,7 @@ def save_shared(text, expected_sha256, benchmark_text=None, benchmark_sha256=Non
             if not re.fullmatch(r'(hibench|sparkbench)\.[\w.]+', key) or key in seen or '\x00' in line:
                 raise ValueError('Invalid or duplicate benchmark property: ' + key)
             seen.add(key)
-    from .catalog import SCALES
+    from ..catalog import SCALES
     with tempfile.TemporaryDirectory() as folder:
         candidate = Path(folder)
         for source in path.parent.glob('*.conf'):

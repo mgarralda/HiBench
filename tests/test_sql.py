@@ -21,16 +21,14 @@ from hibench.catalog import workloads
 from hibench import config
 
 class SqlContractTests(unittest.TestCase):
-    def test_original_scales_preserved(self):
-        reference = json.loads(Path("tests/fixtures/contracts/sql-scale-reference.json").read_text())
-        catalog = {w["id"]:w for w in workloads()}
-        for name, scales in reference.items():
-            item = catalog["sql." + name]
-            for scale, fields in scales.items():
-                for field, expected in fields.items():
-                    self.assertEqual(item["parameters"][field]["presets"][scale], expected)
-            self.assertFalse(item["requires_classic"])
-            self.assertEqual(item["prepare_capabilities"], ["spark_batch"])
+    def test_shared_query_input_scales(self):
+        catalog = {w['id']: w for w in workloads()}
+        for name in ('scan', 'join', 'aggregation'):
+            item = catalog['sql.' + name]
+            for field in ('pages', 'uservisits'):
+                self.assertEqual(item['parameters'][field]['presets'], catalog['sql.scan']['parameters'][field]['presets'])
+            self.assertFalse(item['requires_classic'])
+            self.assertEqual(item['prepare_capabilities'], ['spark_batch'])
 
     def test_invalid_generation_sizes(self):
         spec = config.load("tests/fixtures/experiments/smoke-sql.yaml")

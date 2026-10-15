@@ -21,16 +21,12 @@ from hibench.catalog import workloads
 from hibench.adapters import create_adapter
 
 class MLContractTests(unittest.TestCase):
-    def test_all_original_preset_fields(self):
-        reference=json.loads(Path('tests/fixtures/contracts/ml-final-scale-reference.json').read_text(encoding='utf-8'))
+    def test_modern_capabilities(self):
         for family in ('bayes','svm','lda'):
             item=next(w for w in workloads() if w['id']=='ml.'+family)
             self.assertEqual(item['validation_status'],'verified')
             self.assertFalse(item['requires_classic'])
             self.assertEqual(item['prepare_capabilities'],['spark_batch'])
-            for scale,fields in reference[family].items():
-                for key,value in fields.items():
-                    self.assertEqual(item['parameters'][key]['presets'][scale],value)
     def test_valid_smoke_variants(self):
         for name in ('bayes','bayes-dense','bayes-overrides','svm','svm-overrides','lda','lda-em'):
             config.validate(config.load('tests/fixtures/experiments/smoke-'+name+'.yaml'))

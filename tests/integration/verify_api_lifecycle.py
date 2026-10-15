@@ -44,7 +44,7 @@ def get(path):
 
 
 def start():
-    p = subprocess.Popen([sys.executable, '-m', 'hibench.server', '--port', '8003'], env=env,
+    p = subprocess.Popen([sys.executable, '-m', 'hibench.launcher', '--port', '8003'], env=env,
                          stdout=log, stderr=log,
                          **({'creationflags': subprocess.CREATE_NO_WINDOW} if os.name == 'nt' else {}))
     for _ in range(30):

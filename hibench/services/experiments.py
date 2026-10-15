@@ -23,11 +23,11 @@ import zipfile
 from importlib.metadata import version, PackageNotFoundError
 from hibench import config, store, worker
 from hibench.catalog import repository_root, workloads
-from hibench.workload_parameters import typed_value
+from hibench.parameters.workloads import typed_value
 
 
 def snapshot(spec):
-    from hibench.spark_configuration import resolve
+    from hibench.parameters.spark import resolve
     spark_properties, spark_sources = resolve(spec['spark_conf'], scale=spec['scale'])
     catalog = {w['id']: w for w in workloads()}
     effective = {}
@@ -44,7 +44,7 @@ def snapshot(spec):
         for relative in ('bin/functions/monitor.py', 'bin/functions/chart-template.html',
                          'bin/functions/workload_functions.sh', 'hibench/services/monitoring.py'):
             files[relative] = hashlib.sha256((root / relative).read_bytes()).hexdigest()
-    for relative in ('sparkbench/assembly/target/sparkbench-assembly-2.0.0-dist.jar',):
+    for relative in ('sparkbench/assembly/target/sparkbench-assembly-2.5.0-dist.jar',):
         path = root / relative
         if path.exists():
             digest = hashlib.sha256()
@@ -52,6 +52,12 @@ def snapshot(spec):
                 for chunk in iter(lambda: stream.read(1024 * 1024), b''):
                     digest.update(chunk)
             files[relative] = digest.hexdigest()
+    for path in sorted((root / 'bin').rglob('*')):
+        if path.is_file() and '__pycache__' not in path.parts and path.suffix != '.pyc':
+            files[path.relative_to(root).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    if spec.get('implementation', 'scala') != 'scala':
+        for path in sorted((root / 'pysparkbench').rglob('*.py')):
+            files[path.relative_to(root).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
     packages = {}
     for package in ('fastapi', 'pydantic', 'streamlit'):
         try:
@@ -140,7 +146,7 @@ def compare(left_id, right_id):
         elif a != b:
             differences.append({'field': path, 'left': a, 'right': b})
 
-    for field in ('target', 'resources', 'scale', 'mode', 'monitoring'):
+    for field in ('target', 'resources', 'scale', 'mode', 'monitoring', 'implementation'):
         walk(left['run']['spec'].get(field), right['run']['spec'].get(field), field)
     walk(left['provenance'].get('resolved_spark_properties', left['run']['spec'].get('spark_conf')),
          right['provenance'].get('resolved_spark_properties', right['run']['spec'].get('spark_conf')), 'spark_conf')

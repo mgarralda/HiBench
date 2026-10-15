@@ -15,6 +15,7 @@
 
 """Pydantic v2 request and response contracts."""
 from typing import Any, Literal
+from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from hibench import config
 
@@ -52,9 +53,9 @@ class Target(Model):
     workspace: str
     spark_home: str
     hadoop_home: str
-    master: str
+    master: str = Field(description='Spark master: yarn, spark://host:port for a Standalone cluster, or local[2] for two threads on the submission host.')
     hdfs_uri: str
-    deploy_mode: Literal['client', 'cluster'] = 'client'
+    deploy_mode: Literal['client', 'cluster'] = Field(default='client', description='HiBench supports cluster deployment only on YARN for Scala. PySpark-only experiments, Standalone and Local require client; both uses client for PySpark.')
     workers: list[str] = Field(default_factory=list)
     container: str | None = None
     host: str | None = None
@@ -88,6 +89,7 @@ class Experiment(Model):
     name: str
     execution_group: str = Field(default='', max_length=128)
     target: Target
+    implementation: Literal['scala', 'pyspark', 'both'] = 'scala'
     mode: Literal['prepare', 'run', 'prepare_and_run']
     scale: Literal['tiny', 'small', 'large', 'huge', 'gigantic', 'bigdata']
     repetitions: int = Field(ge=1, le=100)
@@ -197,6 +199,37 @@ class MonitoringSamples(Model):
     samples: list[ResourceSample]
 
 
+class ComparisonSelection(Model):
+    left: str
+    right: str
+    left_implementation: Literal['scala', 'pyspark'] | None = None
+    right_implementation: Literal['scala', 'pyspark'] | None = None
+    workload: str | None = None
+
+    @model_validator(mode='after')
+    def validate_ids(self):
+        self.left = str(UUID(self.left))
+        self.right = str(UUID(self.right))
+        return self
+
+
+class ComparativeAnalysis(Model):
+    schema_version: int
+    analysis_version: int
+    created_at: float
+    selection: ComparisonSelection
+    source_sha256: list[str]
+    source_states: list[str]
+    source_errors: list[list[dict[str, Any]]]
+    conditions: list[dict[str, Any]]
+    observations: dict[str, list[dict[str, Any]]]
+    summary: list[dict[str, Any]]
+    phase_summary: list[dict[str, Any]] = Field(default_factory=list,
+        description='Explicit instrumented workload timers grouped by workload, protocol and phase. Missing measurements are not zero; these are not Spark SQL durations.')
+    scope: str
+    comparison_id: str | None = None
+
+
 class Comparison(Model):
     left: str
     right: str
@@ -231,6 +264,7 @@ class CatalogItem(Model):
     requires_classic: bool
     validation_status: str
     execution_available: bool
+    implementations: list[Literal['scala', 'pyspark']]
     prepare_capabilities: list[str]
     preset_table: list[dict[str, str]]
     configuration_properties: list[dict[str, str]]
@@ -302,6 +336,7 @@ class ExperimentPreset(Model):
     name: str | None = None
     execution_group: str | None = None
     target: Target | None = None
+    implementation: Literal['scala', 'pyspark', 'both'] | None = None
     mode: Literal['prepare', 'run', 'prepare_and_run'] | None = None
     scale: Literal['tiny', 'small', 'large', 'huge', 'gigantic', 'bigdata'] | None = None
     repetitions: int | None = None

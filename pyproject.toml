@@ -20,8 +20,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "hibench-next"
 authors = [{name = "Mariano Garralda-Barrio"}]
-version = "2.0.0"
-description = "Reproducible batch experiments and Streamlit control for HiBench"
+version = "2.5.0"
+description = "Apache Spark batch benchmarks with Scala/PySpark workloads and shared Web UI, REST API and CLI experiment control"
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE"]
@@ -29,10 +29,13 @@ requires-python = ">=3.11"
 dependencies = [
     "PyYAML>=6.0,<7",
     "paramiko>=5.0,<6",
-    "streamlit (>=1.65.0,<2.0.0)",
+    "streamlit (>=1.65.0,<2.5.0)",
     "fastapi>=0.143.0,<0.144",
     "pydantic>=2.14.0,<3",
-    "uvicorn>=0.54.0,<1"
+    "uvicorn>=0.54.0,<1",
+    "numpy==1.26.4",
+    "pandas==2.2.3",
+    "pyarrow==12.0.1"
 ]
 
 [project.optional-dependencies]
@@ -41,10 +44,11 @@ test = ["httpx2>=2.13.1,<3"]
 
 [project.scripts]
 hibench = "hibench.cli:main"
-hibench-serve = "hibench.server:main"
+hibench-serve = "hibench.launcher:main"
 
 [tool.setuptools.packages.find]
-include = ["hibench*"]
+include = ["hibench*", "pysparkbench*"]
 
 [tool.setuptools.package-data]
 hibench = ["*.json", "ui/assets/*.png", "ui/assets/*.ico", "ui/assets/*.license"]
+pysparkbench = ["README.md"]

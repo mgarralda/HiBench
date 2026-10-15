@@ -28,8 +28,9 @@ services:
       - "127.0.0.1:${HIBENCH_UI_PORT:-8501}:8501"
     environment:
       HIBENCH_API_TOKEN: ${HIBENCH_API_TOKEN:?Set HIBENCH_API_TOKEN in deployment/.env}
-      HIBENCH_STATE_DIR: /opt/hibench/report/control
-      HIBENCH_UI_HOST: 0.0.0.0
+      HIBENCH_REPOSITORY: /opt/hibench
+      HIBENCH_STATE_DIR: ${HIBENCH_STATE_DIR:-/opt/hibench/report/control}
+      HIBENCH_UI_HOST: ${HIBENCH_UI_HOST:-0.0.0.0}
       HIBENCH_SSH_HOST: ${HIBENCH_SSH_HOST:-}
       HIBENCH_SSH_USERNAME: ${HIBENCH_SSH_USERNAME:-}
       HIBENCH_SSH_PORT: ${HIBENCH_SSH_PORT:-22}
@@ -37,9 +38,9 @@ services:
       HIBENCH_SSH_KNOWN_HOSTS_FILE: ${HIBENCH_SSH_KNOWN_HOSTS_FILE:-}
       HIBENCH_SSH_PASSWORD: ${HIBENCH_SSH_PASSWORD:-}
     volumes:
-      - ../conf:/opt/hibench/conf
-      - ../report:/opt/hibench/report
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HIBENCH_CONF_HOST_DIR:-../conf}:/opt/hibench/conf
+      - ${HIBENCH_REPORT_HOST_DIR:-../report}:/opt/hibench/report
+      - ${HIBENCH_DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     healthcheck:
       test: ["CMD", "python", "-c", "import os, urllib.request; urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8000/health', headers={'Authorization': 'Bearer '+os.environ['HIBENCH_API_TOKEN']})).read(); urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health').read()"]
       interval: 15s

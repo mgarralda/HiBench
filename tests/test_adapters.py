@@ -29,6 +29,18 @@ from hibench.adapters.classic import DockerAdapter, LocalAdapter
 from hibench.adapters.base import ExecutionAdapter
 
 class AdapterTests(unittest.TestCase):
+    def test_native_driver_thread_limits_apply_to_client_and_reject_invalid_values(self):
+        import shlex
+        adapter = create_adapter(config.default_experiment()['target'])
+        argv = adapter.script_argv('run', '/tmp/override.conf', '/tmp/run.sh', '/tmp/report',
+            spark_properties={'spark.yarn.appMasterEnv.OPENBLAS_NUM_THREADS': '4',
+                              'spark.executorEnv.OPENBLAS_NUM_THREADS': '1'})
+        self.assertIn('OPENBLAS_NUM_THREADS=4', shlex.split(argv[-1]))
+        self.assertNotIn('OPENBLAS_NUM_THREADS=1', shlex.split(argv[-1]))
+        with self.assertRaises(ValueError):
+            adapter.script_argv('run', '/tmp/override.conf', '/tmp/run.sh', '/tmp/report',
+                spark_properties={'spark.yarn.appMasterEnv.OPENBLAS_NUM_THREADS': '0'})
+
     def setUp(self):
         self.spec = config.default_experiment()
 
@@ -158,6 +170,25 @@ class AdapterTests(unittest.TestCase):
             with patch.object(adapter, "command", return_value="Final-State : FAILED"):
                 with self.assertRaisesRegex(RuntimeError, "did not finish SUCCEEDED"):
                     adapter.wait(reference, 10, lambda: False, events.append, directory / "output.log")
+
+    def test_workload_measurement_is_bound_to_matching_application(self):
+        adapter = create_adapter({**self.spec['target'], 'kind': 'local'})
+        for application in ('application_123_0001', 'application_123_9999'):
+            with tempfile.TemporaryDirectory() as tmp:
+                directory = Path(tmp)
+                job = PhaseJob('test-run', self.spec, self.spec['workloads'][0], 'run', 0, 'hdfs://test', directory)
+                measurement = {'schema_version': 1, 'protocol': 'svd-phases-v1',
+                    'application_id': application, 'phase_seconds': {'eigendecomposition_s': 2}}
+                lines = ['HIBENCH_WORKLOAD_MEASUREMENT=' + json.dumps(measurement),
+                         'HIBENCH_RESULT=' + json.dumps({'duration_s': 4, 'application_id': 'application_123_0001'})]
+                code = ';'.join('print(' + repr(line) + ')' for line in lines)
+                staged = dict(job=job, argv=[sys.executable, '-c', code], pidfile='/tmp/test.pid', remote_dir='/tmp')
+                events = []
+                reference = adapter.submit(staged)
+                with patch.object(adapter, 'command', return_value='Final-State : SUCCEEDED'):
+                    adapter.wait(reference, 10, lambda: False, events.append, directory / 'output.log')
+                metrics = next(e['metrics'] for e in events if e['kind'] == 'result')
+                self.assertEqual('workload_measurement' in metrics, application == 'application_123_0001')
 
     def test_cancel_and_timeout_use_adapter_cancellation(self):
         adapter = create_adapter({**self.spec["target"], "kind": "local", "master": "local[2]"})

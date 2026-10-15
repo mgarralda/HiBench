@@ -31,6 +31,6 @@ jobs:
       - run: python -m pip install -e ".[test]" build
       - run: python -m unittest discover -s tests -v
       - run: python -m build
-      - run: python -m hibench.server --help
+      - run: python -m hibench.launcher --help
       - run: mvn -B clean package
-      - run: test -f sparkbench/assembly/target/sparkbench-assembly-2.0.0-dist.jar
+      - run: test -f sparkbench/assembly/target/sparkbench-assembly-2.5.0-dist.jar

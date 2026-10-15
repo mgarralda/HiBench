@@ -19,8 +19,8 @@ import hashlib
 import os
 import re
 import tempfile
-from . import config
-from .catalog import SCALES, read_properties, repository_root, workloads
+from .. import config
+from ..catalog import SCALES, read_properties, repository_root, workloads
 
 MEANINGS = {
     "seed": "Random seed for reproducible data generation.",
@@ -180,7 +180,7 @@ def customize(experiment, workload_id, scale, values):
 
 def save_defaults(workload_id, scale, values, expected_sha256):
     """Edit the actual workload conf, preserving expressions, comments and other scales."""
-    from . import store
+    from .. import store
     item, _, _, path = details(workload_id)
     if scale not in SCALES:
         raise ValueError('Unknown scale')

@@ -19,8 +19,8 @@ import streamlit as st
 from hibench.services import configuration
 
 
-def render():
-    with st.expander('Infrastructure profiles'):
+def render(manage=True):
+    with st.container():
         st.caption('Profiles store the execution target, storage, resources and Spark properties. Workload parameters stay in the experiment. Loading a profile replaces infrastructure settings; submitted runs retain their snapshots.')
         profiles = configuration.profiles()
         if profiles:
@@ -32,9 +32,11 @@ def render():
                     if key.startswith('general-'):
                         del st.session_state[key]
                 st.rerun()
-            if st.button('Delete infrastructure profile'):
+            if manage and st.button('Delete infrastructure profile'):
                 configuration.delete_profile(selected)
                 st.rerun()
+        if not manage:
+            return
         name = st.text_input('Profile name', help='Save applied settings. This does not submit a benchmark.')
         if st.button('Save infrastructure profile', disabled=not name.strip()):
             try:

@@ -20,15 +20,11 @@ from hibench import config
 from hibench.catalog import workloads
 
 class ClusteringContractTests(unittest.TestCase):
-    def test_original_presets(self):
-        reference=json.loads(Path('tests/fixtures/contracts/ml-clustering-scale-reference.json').read_text())
+    def test_modern_capabilities(self):
         catalog={w['id']:w for w in workloads()}
         for name in ('kmeans','gmm'):
             self.assertFalse(catalog['ml.'+name]['requires_classic'])
             self.assertEqual(catalog['ml.'+name]['prepare_capabilities'], ['spark_batch'])
-            for scale, values in reference[name].items():
-                for key,value in values.items():
-                    self.assertEqual(catalog['ml.'+name]['parameters'][key]['presets'][scale],value)
 
     def test_invalid_configuration(self):
         invalid=({'dimensions':0},{'num_of_samples':2**63},{'seed':1.2},

@@ -55,7 +55,7 @@ def main():
             files[name] = hashlib.sha256(data).hexdigest()
             output.writestr('source/' + relative.as_posix(), data)
         artifacts = {}
-        for name in ('sparkbench/assembly/target/sparkbench-assembly-2.0.0-dist.jar',):
+        for name in ('sparkbench/assembly/target/sparkbench-assembly-2.5.0-dist.jar',):
             path = ROOT / name
             if path.is_file():
                 artifacts[name] = hashlib.sha256(path.read_bytes()).hexdigest()

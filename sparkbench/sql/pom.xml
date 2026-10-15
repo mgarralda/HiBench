@@ -24,13 +24,13 @@ limitations under the License.
   <parent>
     <groupId>org.hibench</groupId>
     <artifactId>sparkbench</artifactId>
-    <version>2.0.0</version>
+    <version>2.5.0</version>
   </parent>
 
   <groupId>org.hibench.sparkbench</groupId>
   <artifactId>sparkbench-sql</artifactId>
   <packaging>jar</packaging>
-  <version>2.0.0</version>
+  <version>2.5.0</version>
   <name>sparkbench-sql</name>
 
   <dependencies>

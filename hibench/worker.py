@@ -101,23 +101,29 @@ def work(run_id):
             if spec["mode"] == "run" and requires_input and not available:
                 raise ValueError(f"No completed matching dataset for {item['id']}; choose preparation first")
             dataset_root = manifest["root"] if available else backend.dataset_root(key)
-            phases = ([] if available or spec["mode"] == "run" else ["prepare"])
+            phases = ([] if available or spec["mode"] == "run" else [("prepare", "scala")])
             if spec["mode"] != "prepare":
-                phases += ["run"] * spec["repetitions"]
+                implementations = ["scala", "pyspark"] if spec.get("implementation") == "both" else [spec.get("implementation", "scala")]
+                phases += [("run", implementation) for _ in range(spec["repetitions"]) for implementation in implementations]
             if available:
                 append(run_id, {"kind": "dataset_reused", "workload": item["id"], "manifest": manifest})
-            for phase_index, phase in enumerate(phases):
+            for phase_index, (phase, implementation) in enumerate(phases):
                 if store.get(run_id)["cancel"]:
                     raise InterruptedError("Cancelled between phases")
-                label = f"{item['id']}/{phase}/{phase_index}"
+                label = f"{item['id']}/{phase}/{implementation}/{phase_index}"
                 store.update(run_id, detail=label)
-                append(run_id, {"kind": "phase_started", "workload": item["id"], "phase": phase, "index": phase_index})
-                job = PhaseJob(run_id, spec, item, phase, phase_index, dataset_root, directory)
+                append(run_id, {"kind": "phase_started", "workload": item["id"], "phase": phase, "implementation": implementation, "index": phase_index})
+                job = PhaseJob(run_id, spec, item, phase, phase_index, dataset_root, directory, implementation)
                 staged = backend.stage(job)
                 reference = backend.submit(staged)
                 append(run_id, {"kind": "job_reference", "reference": reference.snapshot()})
+                def emit_phase(event):
+                    if event.get("kind") == "result":
+                        event["metrics"] = {**event["metrics"], "implementation": implementation,
+                                            "deploy_mode": "client" if implementation == "pyspark" else spec["target"]["deploy_mode"]}
+                    append(run_id, {**event, "implementation": implementation})
                 backend.wait(reference, spec["timeout_s"], lambda: bool(store.get(run_id)["cancel"]),
-                             lambda event: append(run_id, event), directory / "output.log")
+                             emit_phase, directory / "output.log")
                 if phase == "prepare":
                     inputs = [x["path"] for x in events(run_id) if x["kind"] == "input"]
                     if not inputs and requires_input:
@@ -136,7 +142,7 @@ def work(run_id):
                     last_start = max(i for i, e in enumerate(phase_events) if e["kind"] == "phase_started")
                     if not any(e["kind"] == "result" for e in phase_events[last_start:]):
                         raise RuntimeError("Job exited successfully but did not produce benchmark metrics")
-                append(run_id, {"kind": "phase_finished", "workload": item["id"], "phase": phase, "index": phase_index})
+                append(run_id, {"kind": "phase_finished", "workload": item["id"], "phase": phase, "implementation": implementation, "index": phase_index})
         store.update(run_id, "succeeded", "All requested phases completed")
     except InterruptedError as exc:
         store.update(run_id, "cancelled", str(exc))

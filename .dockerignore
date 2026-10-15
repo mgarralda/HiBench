@@ -22,7 +22,6 @@
 **/__pycache__
 *.egg-info
 report
-docs
 docs_internal
 tests
 jupyter
@@ -31,7 +30,8 @@ deployment/.env
 build
 dist
 
-# Maintainer-only documentation.
-docs
+# Local scientific artifacts and attachments.
+output
+.codex-remote-attachments
 docs.zip
 docs_internal.zip

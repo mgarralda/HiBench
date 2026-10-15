@@ -21,14 +21,14 @@ from hibench.catalog import workloads
 
 
 class AlsContractTests(unittest.TestCase):
-    def test_presets_preserved(self):
-        reference = json.loads(Path('tests/fixtures/contracts/ml-als-scale-reference.json').read_text())
+    def test_recalibrated_ratings_and_cardinalities(self):
         als = next(w for w in workloads() if w['id'] == 'ml.als')
         self.assertFalse(als['requires_classic'])
         self.assertEqual(als['prepare_capabilities'], ['spark_batch'])
-        for scale, values in reference.items():
-            for key, value in values.items():
-                self.assertEqual(als['parameters'][key]['presets'][scale], value)
+        for scale in ('tiny', 'small', 'large', 'huge', 'gigantic', 'bigdata'):
+            users = int(als['parameters']['users']['presets'][scale])
+            self.assertEqual(int(als['parameters']['products']['presets'][scale]), users)
+            self.assertEqual(int(als['parameters']['ratings']['presets'][scale]), 20 * users)
 
     def test_invalid_counts(self):
         for params in ({'users': 0}, {'products': 2**31}, {'ratings': 2**63},

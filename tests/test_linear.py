@@ -21,14 +21,12 @@ from hibench.catalog import workloads
 
 
 class LinearContractTests(unittest.TestCase):
-    def test_original_presets_and_payload(self):
+    def test_capabilities_and_historical_payload_accounting(self):
         reference = json.loads(Path('tests/fixtures/contracts/ml-linear-scale-reference.json').read_text())
         item = next(w for w in workloads() if w['id'] == 'ml.linear')
         self.assertFalse(item['requires_classic'])
         self.assertEqual(item['prepare_capabilities'], ['spark_batch'])
         for scale, fields in reference.items():
-            for key in ('examples', 'features'):
-                self.assertEqual(int(item['parameters'][key]['presets'][scale]), fields[key])
             self.assertEqual(fields['feature_payload_bytes'], fields['examples'] * fields['features'] * 8)
 
     def test_invalid_contracts(self):

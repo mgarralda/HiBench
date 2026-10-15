@@ -6,7 +6,7 @@ from the installed `hibench` package and deployment image.
 
 Run from the repository root with the development environment:
 
-For a new current-default campaign, build the 2.0.0 runtime (or use the Compose
+For a new current-default campaign, build the 2.5.0 runtime (or use the Compose
 image), then generate and review an experiment:
 
 ```sh
@@ -42,3 +42,9 @@ certification for a new revision. The three date-bound preparation/recording/fol
 scripts were retired into the verified archive
 `docs_internal/test-tools-retired-2026-10-11.zip` with a SHA-256 inventory.
 Historical receipts retain original paths and hashes; they are not rewritten.
+
+`python -m tests.tools.svd_phase_campaign` runs the explicit SVD phase confirmation
+protocol through the controller services. Use `--plan-only` first. Preparation
+and infrastructure warmup are separate from measured pairs; order alternates and
+each run keeps its own evidence. See [SVD phase confirmation](../README.md#svd-phase-confirmation)
+for timer boundaries, numerical acceptance and limitations.

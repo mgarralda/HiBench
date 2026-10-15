@@ -20,14 +20,15 @@ from pathlib import Path
 import shlex
 import subprocess
 import re
-from .catalog import repository_root, workloads
-from .config import scalar
+from ..catalog import repository_root, workloads
+from ..config import scalar
 
 ARTIFACTS = (
-    "sparkbench/assembly/target/sparkbench-assembly-2.0.0-dist.jar",
+    "sparkbench/assembly/target/sparkbench-assembly-2.5.0-dist.jar",
 )
 RUNTIME_RESOURCES = ("sparkbench/graph/src/main/resources/nweight-user-features",
-                     "hibench/__init__.py", "hibench/spark_scale.py")
+                     "hibench/__init__.py", "hibench/parameters/__init__.py",
+                     "hibench/parameters/scales.py")
 
 
 class ClassicBackend:
@@ -54,13 +55,14 @@ class ClassicBackend:
         script += shlex.quote(target["spark_home"] + "/bin/spark-submit") + " --version; "
         script += shlex.quote(target["hadoop_home"] + "/bin/hadoop") + " version; "
         for artifact in ARTIFACTS + RUNTIME_RESOURCES:
-            script += "test -f " + shlex.quote(self.root + "/" + artifact) + "; "
+            missing = "Missing runtime file: " + artifact + ". Update the target with Save and update target or hibench install."
+            script += "test -f " + shlex.quote(self.root + "/" + artifact) + " || { printf '%s\\n' " + shlex.quote(missing) + "; exit 1; }; "
             expected = hashlib.sha256((repository_root() / artifact).read_bytes()).hexdigest()
             script += "actual=$(sha256sum " + shlex.quote(self.root + "/" + artifact) + " | cut -d' ' -f1); "
             script += "test \"$actual\" = " + shlex.quote(expected) + " || { echo 'Artifact mismatch: run hibench install'; exit 1; }; "
         repo = repository_root()
         files = {path.relative_to(repo).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
-                 for folder in ("bin", "conf") for path in (repo / folder).rglob("*")
+                 for folder in ("bin", "conf", "pysparkbench") for path in (repo / folder).rglob("*")
                  if path.is_file() and "__pycache__" not in path.parts and path.suffix != ".pyc"}
         probe = ("import hashlib,json,sys; from pathlib import Path; root=Path(sys.argv[1]); "
                  "expected=json.loads(sys.argv[2]); "
@@ -73,7 +75,10 @@ class ClassicBackend:
         if target["master"] == "yarn":
             script += shlex.quote(target["hadoop_home"] + "/bin/yarn") + " node -list; "
         script += "echo HIBENCH_DOCTOR_OK"
-        output = self.command(["bash", "-lc", script], timeout=120)
+        try:
+            output = self.command(["bash", "-lc", script], timeout=120)
+        except subprocess.CalledProcessError as exc:
+            raise subprocess.CalledProcessError(exc.returncode, 'target runtime validation', output=exc.output) from exc
         java = re.search(r'(?:openjdk|java) version "(\d+)', output)
         python = re.search(r"Python 3\.(\d+)\.", output)
         if (not re.search(r"version 3\.5\.\d+", output) or "Using Scala version 2.12." not in output
@@ -95,7 +100,7 @@ class ClassicBackend:
         # Docker named volumes and docker cp can create root-owned directories.
         subprocess.run(["docker", "exec", "--user", "root", container, "mkdir", "-p", self.root], check=True)
         # Install only runtime sources/config and built JARs; do not copy .git or datasets.
-        for directory in ("bin", "conf"):
+        for directory in ("bin", "conf", "pysparkbench"):
             subprocess.run(["docker", "cp", str(repo / directory), container + ":" + self.root + "/"], check=True)
         for artifact in ARTIFACTS + RUNTIME_RESOURCES:
             destination = self.root + "/" + artifact
@@ -124,13 +129,22 @@ class ClassicBackend:
         except subprocess.CalledProcessError:
             return False
 
-    def script_argv(self, run_id, config_path, script, report_dir, monitoring=None):
+    def script_argv(self, run_id, config_path, script, report_dir, monitoring=None, spark_properties=None):
         # A pid file lets cancellation terminate the actual remote process group,
         # rather than merely closing the Docker client connection.
         pidfile = report_dir + "/process.pid"
         command = "mkdir -p " + shlex.quote(report_dir) + "; cd " + shlex.quote(report_dir)
         command += "; echo $$ > " + shlex.quote(pidfile)
-        command += "; exec env " + shlex.join([
+        # Apply declared native driver limits to Client submission processes too.
+        driver_env = []
+        for name in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS', 'MKL_NUM_THREADS',
+                     'VECLIB_MAXIMUM_THREADS', 'BLIS_NUM_THREADS'):
+            value = (spark_properties or {}).get('spark.yarn.appMasterEnv.' + name)
+            if value is not None:
+                if not str(value).isdigit() or int(value) < 1:
+                    raise ValueError(name + ' must be a positive thread count')
+                driver_env.append(name + '=' + str(value))
+        command += "; exec env " + shlex.join(driver_env + [
             "HIBENCH_PYTHON=python3", "HIBENCH_MONITOR_ENABLED=" + ("1" if (monitoring or {}).get("enabled") else "0"),
             "HIBENCH_MONITOR_INTERVAL=" + str((monitoring or {}).get("interval_s", 5)), "HIBENCH_RUN_ID=" + run_id,
             "HIBENCH_CONF_FOLDER=" + self.root + "/conf", "HIBENCH_OVERRIDE_FILE=" + config_path,
@@ -199,6 +213,7 @@ def properties(spec, item, run_id, dataset_root, report_dir, output_path):
         "hibench.generator.partitions": resources["generation_partitions"],
         "hibench.generator.shuffle.partitions": resources["generation_shuffle_partitions"],
         "hibench.yarn.deploy.mode": target["deploy_mode"],
+        "hibench.workload.implementation": spec.get("implementation", "scala"),
         "hibench.masters.hostnames": target["container"] if target["kind"] == "docker" else "localhost",
         "hibench.slaves.hostnames": " ".join(target.get("workers", [])) or "localhost",
         "spark.executor.instances": resources["executor_instances"],
@@ -210,7 +225,7 @@ def properties(spec, item, run_id, dataset_root, report_dir, output_path):
         "spark.yarn.submit.waitAppCompletion": True,
         "spark.extraListeners": "org.hibench.sparkbench.common.BenchmarkListener",
     }
-    from .spark_configuration import resolve
+    from ..parameters.spark import resolve
     resolved, _ = resolve(spec['spark_conf'], scale=spec['scale'])
     # Resource fields and launcher identifiers take priority over the common base.
     values = {**resolved, **values}

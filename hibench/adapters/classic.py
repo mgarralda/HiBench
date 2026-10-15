@@ -22,7 +22,7 @@ import time
 import uuid
 import json
 from .base import ExecutionAdapter, JobReference
-from ..backend import ClassicBackend, properties, dataset_key
+from .runtime import ClassicBackend, properties, dataset_key
 
 APP_ID = re.compile(r"(?:application_\d+_\d+|app-\d+-\d+|local-\d+)")
 
@@ -41,7 +41,7 @@ class ClassicAdapter(ClassicBackend, ExecutionAdapter):
         if target["deploy_mode"] not in ("client", "cluster"):
             raise ValueError("deploy_mode must be client or cluster")
         if target["deploy_mode"] == "cluster" and target["master"] != "yarn":
-            raise ValueError("MVP cluster deploy mode is supported on YARN only")
+            raise ValueError("HiBench supports cluster deploy mode on YARN only; Standalone and Local require client")
         if not re.fullmatch(r"(?:hdfs://[\w.-]+(?::\d+)?|wasbs?://[\w.@-]+)", target.get("hdfs_uri", "")):
             raise ValueError("This classic adapter requires an HDFS or WASB/WASBS endpoint")
         for key in ("dataset_base", "output_base"):
@@ -82,12 +82,17 @@ class ClassicAdapter(ClassicBackend, ExecutionAdapter):
         remote_dir = self.target.get("report_base", self.root + "/report/control") + f"/{job.run_id}/{job.workload['id']}/{job.index}"
         output = self.target.get("output_base", self.target["hdfs_uri"] + "/HiBench-Control/runs") + f"/{job.run_id}/{job.workload['id']}/{job.index}"
         conf = job.directory / (job.workload['id'] + f"-{job.index}.conf")
-        conf.write_text(properties(job.spec, job.workload, job.run_id, job.dataset_root, remote_dir, output), encoding="utf-8")
+        phase_spec = {**job.spec, "implementation": job.implementation}
+        if job.implementation == "pyspark":
+            phase_spec["target"] = {**job.spec["target"], "deploy_mode": "client"}
+        conf.write_text(properties(phase_spec, job.workload, job.run_id, job.dataset_root, remote_dir, output), encoding="utf-8")
         remote_conf = remote_dir + "/override.conf"
         self.write_file(conf, remote_conf)
         category, name = job.workload["id"].split(".")
         script = self.root + f"/bin/workloads/{category}/{name}/" + ("prepare/prepare.sh" if job.phase == "prepare" else "spark/run.sh")
-        return dict(job=job, argv=self.script_argv(job.run_id, remote_conf, script, remote_dir, job.spec.get('monitoring')),
+        from ..parameters.spark import resolve
+        spark_properties, _ = resolve(job.spec['spark_conf'], scale=job.spec['scale'])
+        return dict(job=job, argv=self.script_argv(job.run_id, remote_conf, script, remote_dir, job.spec.get('monitoring'), spark_properties),
                     remote_dir=remote_dir, pidfile=remote_dir + "/process.pid")
 
     def submit(self, staged):
@@ -96,7 +101,7 @@ class ClassicAdapter(ClassicBackend, ExecutionAdapter):
                                 text=True, encoding="utf-8", errors="replace", bufsize=1)
         return JobReference(self.target["kind"], job.run_id, job.phase, str(proc.pid),
                             dict(pidfile=staged["pidfile"], argv=staged["argv"], application_ids=[],
-                                 workload=job.workload["id"], index=job.index,
+                                 workload=job.workload["id"], implementation=job.implementation, index=job.index,
                                  remote_dir=staged['remote_dir'], monitoring=job.spec.get('monitoring', {}),
                                  expected_nodes=job.spec['target'].get('workers') or ['localhost'],
                                  log_path=str(job.directory / "output.log")), proc)
@@ -150,6 +155,7 @@ class ClassicAdapter(ClassicBackend, ExecutionAdapter):
         deadline = time.monotonic() + timeout
         ended = False
         stopped = False
+        measurement = None
         with log_path.open("a", encoding="utf-8") as log:
             try:
                 while not ended or proc.poll() is None:
@@ -165,8 +171,13 @@ class ClassicAdapter(ClassicBackend, ExecutionAdapter):
                                 reference.metadata["application_ids"] = sorted(app_ids)
                                 emit({"kind": "job_reference", "reference": reference.snapshot()})
                             stripped = line.strip()
+                            if stripped.startswith('HIBENCH_WORKLOAD_MEASUREMENT='):
+                                measurement = json.loads(stripped.split('=', 1)[1])
                             if stripped.startswith("HIBENCH_RESULT="):
-                                emit({"kind": "result", "metrics": json.loads(stripped.split("=", 1)[1])})
+                                metrics = json.loads(stripped.split("=", 1)[1])
+                                if measurement and measurement.get('application_id') == metrics.get('application_id'):
+                                    metrics['workload_measurement'] = measurement
+                                emit({"kind": "result", "metrics": metrics})
                             if stripped.startswith("HIBENCH_INPUT_PATH="):
                                 emit({"kind": "input", "path": stripped.split("=", 1)[1]})
                     except queue.Empty:

@@ -14,7 +14,7 @@
 # limitations under the License.
 
 """Browser links to Spark's application UI and original event-log archive."""
-from hibench.spark_history import links, application_links
+from hibench.services.spark_history import links, application_links
 import streamlit as st
 
 

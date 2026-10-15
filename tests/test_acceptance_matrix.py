@@ -67,6 +67,18 @@ class AcceptanceMatrixTests(unittest.TestCase):
             shutil.copytree(fixture, root, dirs_exist_ok=True)
             shutil.copytree(fixture / 'references', root / 'docs', dirs_exist_ok=True)
             ledger = json.loads((root / 'docs/reproducibility/migrations.json').read_text())
+            # The frozen ledger keeps historical paths. This temporary ledger
+            # assesses current source files after package reorganization.
+            relocated = {
+                'hibench/backend.py': 'hibench/adapters/runtime.py',
+                'hibench/workload_parameters.py': 'hibench/parameters/workloads.py',
+                'hibench/ml_parameters.py': 'hibench/parameters/ml.py',
+                'hibench/svd_parameters.py': 'hibench/parameters/svd.py',
+                'hibench/nweight_parameters.py': 'hibench/parameters/nweight.py',
+            }
+            for record in ledger['records']:
+                record['implementation'] = [relocated.get(name, name) for name in record.get('implementation', [])]
+            (root / 'docs/reproducibility/migrations.json').write_text(json.dumps(ledger), encoding='utf-8')
             required = set()
             for record in ledger['records']:
                 if record['workload'] not in matrix.IDS:

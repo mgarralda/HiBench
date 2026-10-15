@@ -18,7 +18,8 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from hibench import spark_configuration, config
+from hibench import config
+from hibench.parameters import spark as spark_configuration
 from hibench.catalog import repository_root
 
 
@@ -31,7 +32,7 @@ class SparkBaseTests(unittest.TestCase):
         for file in (repository_root() / 'conf').glob('*'):
             if file.is_file() and (file.suffix == '.conf' or file.name == 'benchmarks.lst'):
                 shutil.copyfile(file, self.root / 'conf' / file.name)
-        mock = patch('hibench.spark_configuration.repository_root', return_value=self.root)
+        mock = patch('hibench.parameters.spark.repository_root', return_value=self.root)
         mock.start()
         self.addCleanup(mock.stop)
         idle = patch('hibench.store.has_active_runs', return_value=False)
@@ -40,7 +41,7 @@ class SparkBaseTests(unittest.TestCase):
         self.state = spark_configuration.shared()
 
     def test_resources_and_event_logs_change_the_shared_base(self):
-        text = self.state['text'].replace('spark.executor.memory         1g', 'spark.executor.memory         3g')
+        text = self.state['text'].replace('spark.executor.memory         '+self.state['defaults']['resources']['executor_memory'], 'spark.executor.memory         3g')
         text = text.replace('hdfs://spark-cluster-master:9000/shared/spark-logs', 'wasbs://hdp/events')
         result = spark_configuration.save_shared(text, self.state['sha256'])
         self.assertEqual(result['defaults']['resources']['executor_memory'], '3g')
@@ -63,7 +64,7 @@ class SparkBaseTests(unittest.TestCase):
         app = AppTest.from_string('from hibench.ui.spark_settings import render\nrender()')
         app.session_state['experiment'] = draft
         app.run()
-        text = self.state['text'].replace('spark.executor.memory         1g', 'spark.executor.memory         3g')
+        text = self.state['text'].replace('spark.executor.memory         '+self.state['defaults']['resources']['executor_memory'], 'spark.executor.memory         3g')
         app.text_area[0].set_value(spark_configuration.sections(text)['small'])
         # Resolve against the test conf after writing, while catalog validation stays real.
         original_default = config.default_experiment
@@ -81,7 +82,7 @@ class SparkBaseTests(unittest.TestCase):
             app = AppTest.from_string('from hibench.ui.spark_settings import render\nrender()')
             app.session_state['experiment'] = config.default_experiment()
             app.run()
-            app.text_area[0].set_value(app.text_area[0].value.replace('1g', '3g'))
+            app.text_area[0].set_value(app.text_area[0].value.replace(app.session_state.experiment['resources']['executor_memory'], '3g'))
             adapter.return_value.install.side_effect = RuntimeError('Target offline')
             next(b for b in app.button if b.label == 'Save and update target').click().run()
             self.assertFalse(app.exception)

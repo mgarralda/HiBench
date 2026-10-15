@@ -18,7 +18,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from hibench.workload_parameters import details, save_defaults
+from hibench.parameters.workloads import details, save_defaults
 
 
 class WorkloadDefaultsTests(unittest.TestCase):
@@ -30,7 +30,7 @@ class WorkloadDefaultsTests(unittest.TestCase):
         self.path.write_bytes(source.read_bytes())
         self.original = self.path.read_bytes()
         self.digest = hashlib.sha256(self.original).hexdigest()
-        self.patcher = patch('hibench.workload_parameters.details', return_value=(self.item, rows, other, self.path))
+        self.patcher = patch('hibench.parameters.workloads.details', return_value=(self.item, rows, other, self.path))
         self.patcher.start()
         self.addCleanup(self.patcher.stop)
         active = patch('hibench.store.has_active_runs', return_value=False)

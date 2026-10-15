@@ -20,10 +20,10 @@ from pathlib import Path
 from unittest.mock import patch
 from hibench import config
 from hibench.adapters import create_adapter, PhaseJob
-from hibench.backend import dataset_key
+from hibench.adapters.runtime import dataset_key
 
 class GeneralSettingsTests(unittest.TestCase):
-    @patch('hibench.backend.ARTIFACTS', ())
+    @patch('hibench.adapters.runtime.ARTIFACTS', ())
     def test_storage_and_runtime_settings_reach_staging_and_dataset_identity(self):
         original=config.default_experiment()
         spec=copy.deepcopy(original)
@@ -51,7 +51,7 @@ class GeneralSettingsTests(unittest.TestCase):
 
     def test_general_ui_saves_and_preserves_custom_paths(self):
         from streamlit.testing.v1 import AppTest
-        app=AppTest.from_file(str(Path("hibench/web.py").resolve())).run(timeout=20)
+        app=AppTest.from_file(str(Path("hibench/ui/app.py").resolve())).run(timeout=20)
         app.button(key="nav-General").click().run()
         self.assertFalse(app.exception)
         next(w for w in app.text_input if w.label=="Dataset base URI").set_value("hdfs://spark-cluster-master:9000/custom/data")
@@ -67,7 +67,7 @@ class GeneralSettingsTests(unittest.TestCase):
 
     def test_general_no_longer_duplicates_shared_spark_settings(self):
         from streamlit.testing.v1 import AppTest
-        app=AppTest.from_file(str(Path("hibench/web.py").resolve())).run(timeout=20)
+        app=AppTest.from_file(str(Path("hibench/ui/app.py").resolve())).run(timeout=20)
         app.button(key="nav-General").click().run()
         self.assertFalse(any(w.label == 'Event log URI' for w in app.text_input))
         app.button(key='nav-SparkConfiguration').click().run()
@@ -78,7 +78,7 @@ class GeneralSettingsTests(unittest.TestCase):
 
     def test_wasbs_dataset_storage_can_be_applied(self):
         from streamlit.testing.v1 import AppTest
-        app=AppTest.from_file(str(Path("hibench/web.py").resolve())).run(timeout=20)
+        app=AppTest.from_file(str(Path("hibench/ui/app.py").resolve())).run(timeout=20)
         app.button(key="nav-General").click().run()
         next(w for w in app.selectbox if w.label=="Dataset storage backend").set_value("Azure Blob Storage (WASB/WASBS)").run()
         endpoint="wasbs://hdp@account.blob.core.windows.net"
@@ -92,7 +92,7 @@ class GeneralSettingsTests(unittest.TestCase):
 
     def test_provider_switch_replaces_uri_prefixes_without_saving(self):
         from streamlit.testing.v1 import AppTest
-        app=AppTest.from_file(str(Path("hibench/web.py").resolve())).run(timeout=20)
+        app=AppTest.from_file(str(Path("hibench/ui/app.py").resolve())).run(timeout=20)
         app.button(key="nav-General").click().run()
         original={label:next(w for w in app.text_input if w.label==label).value for label in ("Storage endpoint","Dataset base URI","Output base URI")}
         next(w for w in app.selectbox if w.label=="Dataset storage backend").set_value("Azure Blob Storage (WASB/WASBS)").run()
@@ -107,7 +107,7 @@ class GeneralSettingsTests(unittest.TestCase):
     def test_general_fields_follow_a_replaced_experiment_target(self):
         from streamlit.testing.v1 import AppTest
         import copy
-        app = AppTest.from_file(str(Path('hibench/web.py').resolve())).run(timeout=20)
+        app = AppTest.from_file(str(Path('hibench/ui/app.py').resolve())).run(timeout=20)
         app.button(key='nav-General').click().run()
         draft = copy.deepcopy(app.session_state.experiment)
         endpoint = 'wasbs://benchmark@account.blob.core.windows.net'

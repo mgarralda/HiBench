@@ -28,13 +28,14 @@ COPY --from=dockercli /usr/local/libexec/docker/cli-plugins/docker-compose /usr/
 WORKDIR /opt/hibench
 COPY pyproject.toml README.md LICENSE NOTICE ./
 COPY hibench ./hibench
+COPY pysparkbench ./pysparkbench
 COPY .streamlit ./.streamlit
 COPY bin ./bin
 COPY conf ./conf
-COPY --from=workloads /build/sparkbench/assembly/target/sparkbench-assembly-2.0.0-dist.jar ./sparkbench/assembly/target/
+COPY --from=workloads /build/sparkbench/assembly/target/sparkbench-assembly-2.5.0-dist.jar ./sparkbench/assembly/target/
 COPY sparkbench/graph/src/main/resources/nweight-user-features ./sparkbench/graph/src/main/resources/
 RUN find bin -name '*.sh' -exec sed -i 's/\r$//' {} +
 RUN python -m pip install --no-cache-dir -e .
 ENV PYTHONUNBUFFERED=1 HIBENCH_STATE_DIR=/opt/hibench/report/control HIBENCH_UI_HOST=0.0.0.0
 EXPOSE 8000 8501
-CMD ["python", "-m", "hibench.server", "--host", "0.0.0.0", "--with-ui"]
+CMD ["python", "-m", "hibench.launcher", "--host", "0.0.0.0", "--with-ui"]

@@ -18,7 +18,7 @@ import hashlib
 import streamlit as st
 from hibench.catalog import SCALES, workloads
 from hibench.ui.spark_settings import SAVE_HELP, update_saved_target, target_update_status
-from hibench.workload_parameters import details, save_defaults, typed_value, MEANINGS
+from hibench.parameters.workloads import details, save_defaults, typed_value, MEANINGS
 
 
 def render():

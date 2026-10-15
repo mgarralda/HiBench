@@ -19,7 +19,7 @@ from pathlib import Path
 from unittest.mock import patch
 from hibench import config
 from hibench.catalog import IDS, SCALES
-from hibench.workload_parameters import customize, details, typed_value
+from hibench.parameters.workloads import customize, details, typed_value
 
 class WorkloadParameterTests(unittest.TestCase):
     def test_every_workload_and_scale_can_be_inspected_and_applied(self):
@@ -52,7 +52,7 @@ class WorkloadParameterTests(unittest.TestCase):
 
     def test_all_workload_pages_render_without_execution(self):
         from streamlit.testing.v1 import AppTest
-        app=AppTest.from_file(str(Path("hibench/web.py").resolve())).run(timeout=20)
+        app=AppTest.from_file(str(Path("hibench/ui/app.py").resolve())).run(timeout=20)
         with patch("hibench.worker.launch") as launch:
             app.button(key="nav-Workloads").click().run()
             for workload in IDS:
@@ -65,7 +65,7 @@ class WorkloadParameterTests(unittest.TestCase):
 
     def test_ui_saves_shared_defaults_without_changing_experiment(self):
         from streamlit.testing.v1 import AppTest
-        app=AppTest.from_file(str(Path("hibench/web.py").resolve())).run(timeout=20)
+        app=AppTest.from_file(str(Path("hibench/ui/app.py").resolve())).run(timeout=20)
         app.button(key="nav-Workloads").click().run()
         next(w for w in app.selectbox if w.label=="Workload family").set_value("sql").run()
         next(w for w in app.selectbox if w.label=="Workload").set_value("sql.scan").run()
@@ -85,7 +85,7 @@ class WorkloadParameterTests(unittest.TestCase):
 
     def test_experiment_draft_survives_navigation_without_submission(self):
         from streamlit.testing.v1 import AppTest
-        app=AppTest.from_file(str(Path("hibench/web.py").resolve())).run(timeout=20)
+        app=AppTest.from_file(str(Path("hibench/ui/app.py").resolve())).run(timeout=20)
         with patch("hibench.worker.launch") as launch:
             next(w for w in app.text_input if w.label=="Name").set_value("Unsubmitted draft").run()
             app.button(key="nav-Workloads").click().run()

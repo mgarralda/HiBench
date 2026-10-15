@@ -141,16 +141,18 @@ class ApiTests(TestCase):
             cancel.assert_not_called()
 
     def test_lifespan_owns_only_its_ui_process(self):
+        from hibench.ui import app as ui_app
         process = mock.Mock()
         process.poll.return_value = None
         with mock.patch.dict(os.environ, {'HIBENCH_START_UI': '1'}), \
-                mock.patch('hibench.api.app.subprocess.Popen', return_value=process), \
+                mock.patch('hibench.api.app.subprocess.Popen', return_value=process) as start_ui, \
                 mock.patch('hibench.api.app.asyncio.sleep', new_callable=mock.AsyncMock), \
                 mock.patch('hibench.store.cancel') as cancel:
             with TestClient(create_app()) as client:
                 self.assertEqual(client.get('/health').status_code, 200)
             process.terminate.assert_called_once()
             process.wait.assert_called_once()
+            self.assertEqual(Path(start_ui.call_args.args[0][4]), Path(ui_app.__file__).resolve())
             cancel.assert_not_called()
 
     def test_launch_failure_is_recorded_instead_of_left_queued(self):

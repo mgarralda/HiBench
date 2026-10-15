@@ -16,7 +16,8 @@
 """Canonical benchmark/controller settings, kept separate from Spark properties."""
 import uuid
 import streamlit as st
-from hibench import config, spark_configuration
+from hibench import config
+from hibench.parameters import spark as spark_configuration
 from hibench.ui.spark_settings import SAVE_HELP, update_saved_target, target_update_status
 
 

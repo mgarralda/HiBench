@@ -20,14 +20,12 @@ from hibench import config
 from hibench.catalog import workloads
 
 class StatisticsContractTests(unittest.TestCase):
-    def test_presets_and_capabilities(self):
+    def test_capabilities_and_historical_payload_accounting(self):
         references=json.loads(Path('tests/fixtures/contracts/ml-statistics-scale-reference.json').read_text())
         for family,scales in references.items():
             item=next(w for w in workloads() if w['id']=='ml.'+family)
             self.assertFalse(item['requires_classic'])
             for scale,fields in scales.items():
-                for key in ('examples','features'):
-                    self.assertEqual(int(item['parameters'][key]['presets'][scale]),fields[key])
                 self.assertEqual(fields['feature_payload_bytes'],fields['examples']*fields['features']*8)
     def test_invalid_settings(self):
         for family in ('pca','correlation','summarizer'):

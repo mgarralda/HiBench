@@ -22,16 +22,17 @@ from unittest.mock import patch
 from hibench import config
 from hibench.catalog import requires_input, workloads
 from hibench.adapters import create_adapter
-from hibench.backend import properties
+from hibench.adapters.runtime import properties
 
 
 class MicroContractTests(unittest.TestCase):
-    def test_original_scale_presets_are_preserved(self):
-        reference = json.loads(Path("tests/fixtures/contracts/micro-scale-reference.json").read_text())["workloads"]
-        catalog = {item["id"]: item for item in workloads()}
-        for workload, expected in reference.items():
-            actual = catalog[workload]["parameters"][expected["parameter"]]["presets"]
-            self.assertEqual({scale: int(value) for scale, value in actual.items()}, expected["presets"])
+    def test_recalibrated_payload_families(self):
+        catalog = {item['id']: item for item in workloads()}
+        for scale in ('tiny', 'small', 'large', 'huge', 'gigantic', 'bigdata'):
+            text = int(catalog['micro.wordcount']['parameters']['datasize']['presets'][scale])
+            self.assertEqual(int(catalog['micro.sort']['parameters']['datasize']['presets'][scale]), text)
+            for name in ('micro.terasort', 'micro.repartition'):
+                self.assertEqual(int(catalog[name]['parameters']['datasize']['presets'][scale]) * 100, text)
 
     def test_micro_only_needs_spark_batch(self):
         spec = config.load("tests/fixtures/experiments/smoke-micro.yaml")

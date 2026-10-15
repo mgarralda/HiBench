@@ -40,6 +40,17 @@ function enter_bench(){		# declare the entrance of a workload
     local CONF_FILE
     CONF_FILE=$("$HIBENCH_PYTHON" "${workload_func_bin}/load_config.py" "$HIBENCH_CONF_FOLDER" "$workload_config_file" "$workload_folder" "$patching_args") || return $?
     . "$CONF_FILE"
+    if [[ "$workload_folder" == */spark ]]; then
+        case "${WORKLOAD_IMPLEMENTATION:-scala}" in
+            scala|pyspark) ;;
+            both) echo 'Direct shell runs require scala or pyspark; use the controller for both.' >&2; return 1 ;;
+            *) echo 'Invalid workload implementation; choose scala or pyspark.' >&2; return 1 ;;
+        esac
+    fi
+    if [[ "$workload_folder" == */spark && "${WORKLOAD_IMPLEMENTATION:-scala}" == pyspark ]]; then
+        HIBENCH_CUR_WORKLOAD_NAME=${HIBENCH_CUR_WORKLOAD_NAME/ScalaSpark/PySpark}
+        HIBENCH_CUR_WORKLOAD_NAME=${HIBENCH_CUR_WORKLOAD_NAME/Scala/PySpark}
+    fi
     export HIBENCH_MONITOR_ENABLED=${HIBENCH_MONITOR_ENABLED:-$HIBENCH_MONITOR_DEFAULT}
     export HIBENCH_MONITOR_INTERVAL=${HIBENCH_MONITOR_INTERVAL:-$HIBENCH_MONITOR_INTERVAL_DEFAULT}
     echo "HIBENCH_INPUT_PATH=$INPUT_HDFS"
@@ -95,7 +106,8 @@ function get_field_name() {	# print report column header
 function gen_report() {
     "$HIBENCH_PYTHON" "${workload_func_bin}/write_report.py" \
       "${HIBENCH_REPORT}/${HIBENCH_REPORT_NAME}" "$HIBENCH_CUR_WORKLOAD_NAME" \
-      "$SCALE_PROFILE" "$1" "$2" "$3" "${APPLICATION_ID:-}" "${HIBENCH_RUN_ID:-}"
+      "$SCALE_PROFILE" "$1" "$2" "$3" "${APPLICATION_ID:-}" "${HIBENCH_RUN_ID:-}" \
+      "${EFFECTIVE_IMPLEMENTATION:-scala}" "${SPARK_YARN_DEPLOY_MODE:-client}"
 }
 
 function rmr_hdfs(){		# rm -r for hdfs
@@ -192,6 +204,23 @@ function run_spark_job() {
     done
 
     CLS=$1
+    EFFECTIVE_IMPLEMENTATION=scala
+    PYTHON_FILES=""
+    if [[ "${WORKLOAD_IMPLEMENTATION:-scala}" == pyspark && "$workload_folder" == */spark ]]; then
+        PYTHON_MODULE=$("$HIBENCH_PYTHON" "${HIBENCH_HOME}/pysparkbench/registry.py" "$CLS" "${2:-}") || return $?
+        if [[ "$CLS" == org.hibench.sparkbench.sql.ScalaSparkSQLBench ]]; then
+            shift 2 # SQL dispatch selects its individual module; input/output arguments remain.
+        else
+            shift
+        fi
+        set -- "${HIBENCH_HOME}/pysparkbench/runner.py" "$PYTHON_MODULE" "$@"
+        CLS=$1
+        PYTHON_BUNDLE="${WORKLOAD_RESULT_FOLDER}/pysparkbench.zip"
+        "$HIBENCH_PYTHON" "${workload_func_bin}/package_pyspark.py" "${HIBENCH_HOME}/pysparkbench" "$PYTHON_BUNDLE" || return $?
+        PYTHON_FILES="--py-files ${PYTHON_BUNDLE}"
+        SPARK_YARN_DEPLOY_MODE=client
+        EFFECTIVE_IMPLEMENTATION=pyspark
+    fi
     WORKLOAD=$2
     ARGS=${3:-""} # default to empty string if not provided
     shift
@@ -252,7 +281,7 @@ function run_spark_job() {
 #  --properties-file /home/sparker/shared/HiBench2/report/correlation/spark/conf/sparkbench/spark.conf \
 #  --conf spark.executorEnv.SPARKBENCH_PROPERTIES_FILES=sparkbench.conf \
 #  --class org.hibench.sparkbench.ml.CorrelationExample \
-#  /home/sparker/shared/HiBench2/sparkbench/assembly/target/sparkbench-assembly-2.0.0-dist.jar \
+#  /home/sparker/shared/HiBench2/sparkbench/assembly/target/sparkbench-assembly-2.5.0-dist.jar \
 #  --corrType pearson \
 #  hdfs://172.18.0.20:9000/HiBench/Correlation/Input/tiny
 #
@@ -265,15 +294,15 @@ function run_spark_job() {
 
     if [[ "$CLS" == *.py ]]; then
         LIB_JARS="$LIB_JARS --jars ${SPARKBENCH_JAR}"
-        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} \
+        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} ${PYTHON_FILES} \
           --files ${FILES} \
           --properties-file ${SPARK_PROP_CONF} \
           --conf spark.extraListeners=org.hibench.sparkbench.common.BenchmarkListener \
           --conf spark.executorEnv.SPARKBENCH_PROPERTIES_FILES=${SPARKBENCH_BASENAME} \
           --conf spark.yarn.appMasterEnv.SPARKBENCH_PROPERTIES_FILES=${SPARKBENCH_BASENAME} \
-          --master ${SPARK_MASTER} ${YARN_OPTS} ${CLS} ${FINAL_ARGS}"
+          --master ${SPARK_MASTER} ${YARN_OPTS} --deploy-mode client ${CLS} ${FINAL_ARGS}"
     else
-        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} \
+        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} ${PYTHON_FILES} \
           --files ${FILES} \
           --properties-file ${SPARK_PROP_CONF} \
           --conf spark.extraListeners=org.hibench.sparkbench.common.BenchmarkListener \

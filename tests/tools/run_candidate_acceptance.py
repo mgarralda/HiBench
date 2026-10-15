@@ -49,7 +49,7 @@ def main():
                'purpose': 'Functional bounded acceptance, not performance study',
                'runs': [], 'artifact_sha256': {}}
     for path in ROOT.glob('**/target/*jar'):
-        if path.name in ('sparkbench-assembly-2.0.0-dist.jar',
+        if path.name in ('sparkbench-assembly-2.5.0-dist.jar',
                          ):
             summary['artifact_sha256'][path.relative_to(ROOT).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
     for name in IDS:

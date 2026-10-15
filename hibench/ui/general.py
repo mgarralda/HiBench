@@ -17,10 +17,11 @@
 import copy
 import hashlib
 import json
+import os
 import uuid
 import streamlit as st
 from hibench import config, store
-from hibench.adapters import create_adapter
+from hibench.adapters import create_adapter, REGISTRY
 
 
 def _change_storage_prefix():
@@ -37,13 +38,65 @@ def _change_storage_prefix():
                 break
 
 
+def target_settings(target):
+    """Edit the existing draft target; permanent connection controls live here."""
+    kinds = [entry.kind for entry in REGISTRY]
+    target['kind'] = st.selectbox('Execution adapter', kinds, index=kinds.index(target['kind']),
+        format_func=lambda kind: next(entry.label + (' (soon)' if not entry.implemented else '') for entry in REGISTRY if entry.kind == kind))
+    implemented = next(entry.implemented for entry in REGISTRY if entry.kind == target['kind'])
+    if not implemented:
+        st.info('This adapter is coming soon. Connection and execution are not implemented yet.')
+        return False
+    if target["kind"] == "docker":
+        target["container"] = st.text_input("Master container", target.get("container", "spark-cluster-master"))
+    elif target['kind'] == 'ssh':
+        from hibench.adapters.ssh import connection_defaults
+        for key, value in connection_defaults().items():
+            target.setdefault(key, value)
+        target.pop('container', None)
+        target['host'] = st.text_input('SSH host', target.get('host', ''), help='Linux submission host. For the companion Docker cluster from the host machine, use 127.0.0.1 and its published SSH port.')
+        target['username'] = st.text_input('SSH username', target.get('username', ''), help='Account with access to Spark, Hadoop and the target HiBench directory.')
+        target['port'] = int(st.number_input('SSH port', min_value=1, max_value=65535, value=target.get('port', 22)))
+        for key, label in (('identity_file', 'SSH private key path'), ('known_hosts_file', 'SSH known hosts path')):
+            value = st.text_input(label, target.get(key, ''), help='File on the controller machine/container. Leave blank to use OpenSSH defaults or your agent. Private keys are never uploaded or included in run bundles. The server host key must already be trusted.')
+            if value.strip():
+                target[key] = value.strip()
+            else:
+                target.pop(key, None)
+        password_auth = bool(os.environ.get('HIBENCH_SSH_PASSWORD')) and not target.get('identity_file')
+        st.caption(('Authentication: password from the controller environment (HIBENCH_SSH_PASSWORD). ' if password_auth
+                    else 'Authentication: OpenSSH key or agent. ')
+                   + 'Server host keys must be verified. An explicit private key path takes precedence over the environment password. Spark runs on the remote Linux host.')
+    else:
+        target.pop("container", None)
+        st.caption("The controller and runtime must run on the same Linux machine.")
+    for key, label in (("workspace", "HiBench directory on the target"), ("spark_home", "Spark home"),
+                       ("hadoop_home", "Hadoop home")):
+        target[key] = st.text_input(label, target[key])
+    target["workers"] = st.text_input("Workers (space-separated)", " ".join(target.get("workers", []))).split()
+    return True
+
+
 def render():
-    st.title("General settings")
-    st.caption("Cluster connection and storage settings for the current experiment. Shared Spark settings are under Parametrization → Spark configuration.")
+    st.title("Target & storage")
+    st.caption("Configure the submission target once, then use Experiments to select workloads and run. Shared benchmark and Spark defaults are under Parametrization.")
     from hibench.ui import profiles
-    profiles.render()
+    with st.expander('Manage infrastructure profiles'):
+        profiles.render()
     base = copy.deepcopy(st.session_state.experiment)
     target = base["target"]
+    with st.expander("Target connection and runtime", expanded=True):
+        supported_target = target_settings(target)
+        if st.button("Apply target settings", type="primary", disabled=not supported_target):
+            try:
+                st.session_state.experiment = config.validate(base)
+                st.session_state.request_key = str(uuid.uuid4())
+                st.success("Target settings applied. Return to Experiments to check or update the target.")
+            except (ValueError, TypeError) as exc:
+                st.error(str(exc))
+    # Storage edits always start from applied settings, not unapplied connection fields.
+    base = copy.deepcopy(st.session_state.experiment)
+    target = base['target']
     target_revision = hashlib.sha256(json.dumps(target, sort_keys=True).encode()).hexdigest()
     if st.session_state.get('general-target-revision') != target_revision:
         endpoint = target.get('hdfs_uri', '')

@@ -19,11 +19,12 @@ recursive-include conf *.conf *.info *.lst
 recursive-include sparkbench/common/src/main/resources *
 recursive-include sparkbench/sql/src/main/resources *
 recursive-include sparkbench/graph/src/main/resources *
+recursive-include pysparkbench *.py *.md
 recursive-include bin *.py *.sh *.ps1 *.html
 recursive-include sparkbench *.java *.scala *.xml nweight-user-features
 recursive-include tests *.py *.json *.yaml *.java *.scala *.conf *.info *.md
 prune report
-prune docs
+recursive-include docs *.md *.pdf *.license
 prune docs_internal
 global-exclude __pycache__ *.pyc *.class *.jar
 recursive-include deployment *.yml *.md *.py Dockerfile .env.example
@@ -35,3 +36,4 @@ include LICENSE.coverage.json LICENSE.coverage.json.license .dockerignore
 recursive-include hibench/ui/assets *.png *.ico *.license
 
 include .streamlit/config.toml
+include CHANGELOG.md AGENTS.md

@@ -13,7 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Check actual CLI-prepared clustering inputs against the new data contract."""
+"""Verify historical 30,000-row, three-dimensional clustering fixtures.
+
+These frozen references are not the active v2.5.0 Tiny presets."""
 import json
 import sys
 from pyspark.sql import SparkSession, DataFrame
@@ -24,7 +26,7 @@ try:
     gen=spark._jvm.org.hibench.sparkbench.ml.GaussianDataGenerator
     profile=DataFrame(gen.profiles(spark._jsparkSession,30000,5,3,1234,0.,1000.,.01,100.),spark)
     expected=DataFrame(gen.dataset(spark._jsparkSession,profile._jdf,6000,2,1234),spark)
-    # This verifier intentionally uses only the bounded tiny fixture (30,000 rows).
+    # This verifier intentionally uses only the bounded historical fixture (30,000 rows).
     expected_rows={r.id:tuple(r.features) for r in expected.select('id',vector_to_array('features').alias('features')).collect()}
     assert len(expected_rows)==30000
     def metadata_rows(frame):

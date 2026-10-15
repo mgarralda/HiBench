@@ -29,6 +29,7 @@ class PhaseJob:
     index: int
     dataset_root: str
     directory: Path
+    implementation: str = "scala"
 
 @dataclass
 class JobReference:

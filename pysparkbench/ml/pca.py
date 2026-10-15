@@ -1,0 +1,34 @@
+# Copyright 2026 Mariano Garralda-Barrio (HiBench Next).
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""PCA fit with a deliberately lazy projection, as in Scala."""
+from pyspark.ml.feature import PCA
+from pysparkbench.common import arguments, require
+
+
+def parse(args):
+    return arguments(args, [('input', str)], [('k', int, 2), ('maxResultSize', str, '1g')])
+
+
+def run(spark, p):
+    data = spark.read.parquet(p.input).select('features')
+    require(p.k > 0, 'PCA k must be positive')
+    dimensions = len(data.first()[0])
+    require(p.k <= dimensions, 'PCA k must not exceed the feature dimension')
+    model = PCA(inputCol='features', outputCol='pcaFeatures', k=p.k).fit(data)
+    model.transform(data).select('pcaFeatures')  # keep the Scala projection lazy
+    explained = model.explainedVariance.toArray().tolist()
+    print(f'PCA dimensions={dimensions} k={p.k} explainedVariance={explained}')
+    return {'dimensions': dimensions, 'k': p.k, 'explained_variance': explained}

@@ -77,7 +77,7 @@ def default_experiment(conf_dir=None, scale=None, selected_workloads=None):
     values = {}
     for path in sorted(conf_dir.glob('*.conf')):
         if path.name == 'spark.conf':
-            from .spark_configuration import parse_spark
+            from .parameters.spark import parse_spark
             values.update(parse_spark(path.read_text(encoding='utf-8')))
             continue
         for line in path.read_text(encoding='utf-8').splitlines():
@@ -87,7 +87,7 @@ def default_experiment(conf_dir=None, scale=None, selected_workloads=None):
                 if len(parts) == 2:
                     values[parts[0]] = parts[1].strip()
     selected_scale = scale or values['hibench.scale.profile']
-    from .spark_configuration import scale_values
+    from .parameters.spark import scale_values
     values, _ = scale_values(values, selected_scale)
     def required(key):
         if key not in values:
@@ -120,6 +120,7 @@ def default_experiment(conf_dir=None, scale=None, selected_workloads=None):
                 if line.strip() and not line.strip().startswith('#')]
     return validate(dict(schema_version=1, name='Batch experiment', target=target,
                          resources=resources, spark_conf={}, scale=selected_scale,
+                         implementation=required('hibench.workload.implementation'),
                          mode=required('hibench.controller.mode'),
                          repetitions=int(required('hibench.controller.repetitions')),
                          timeout_s=int(required('hibench.controller.timeout.seconds')),
@@ -133,7 +134,7 @@ def validate(data):
         raise ValueError("Experiment must be an object")
     data = copy.deepcopy(data)
     allowed = {"schema_version", "name", "target", "mode", "scale", "repetitions", "timeout_s",
-               "resources", "spark_conf", "workloads", "monitoring", "execution_group"}
+               "resources", "spark_conf", "workloads", "monitoring", "execution_group", "implementation"}
     if set(data) - allowed:
         raise ValueError("Unknown experiment fields: " + ", ".join(sorted(set(data) - allowed)))
     if data.get("schema_version") != 1:
@@ -142,11 +143,16 @@ def validate(data):
     if not isinstance(group, str) or len(group) > 128 or any(ord(char) < 32 or ord(char) == 127 for char in group):
         raise ValueError("execution_group must be a string of up to 128 characters without control characters")
     data["execution_group"] = group.strip()
+    implementation = data.setdefault("implementation", "scala")
+    if implementation not in ("scala", "pyspark", "both"):
+        raise ValueError("implementation must be scala, pyspark or both")
     target = data.get("target", {})
     if not isinstance(target, dict):
         raise ValueError("target must be an object")
     adapter_info(target.get("kind"))
     create_adapter(target).validate_target()
+    if implementation == "pyspark" and target["deploy_mode"] != "client":
+        raise ValueError("PySpark-only experiments require client deploy mode")
     monitoring = data.setdefault("monitoring", {})
     if not isinstance(monitoring, dict) or set(monitoring) - {"enabled", "interval_s"}:
         raise ValueError("monitoring accepts enabled and interval_s only")
@@ -248,13 +254,13 @@ def validate(data):
                 raise ValueError("PageRank slot seed exceeds Int range")
             if type(iterations) is not int or not 0 <= iterations <= 2**31 - 1:
                 raise ValueError("Invalid PageRank iteration count")
-        from .ml_parameters import validate_pending_ml
+        from .parameters.ml import validate_pending_ml
         validate_pending_ml(item["id"], parameters, schema, data["scale"], resources)
         if item["id"] == "ml.svd":
-            from .svd_parameters import validate_svd
+            from .parameters.svd import validate_svd
             validate_svd(parameters, schema, data["scale"])
         if item["id"] == "graph.nweight":
-            from .nweight_parameters import validate_nweight
+            from .parameters.nweight import validate_nweight
             validate_nweight(parameters, schema, data["scale"], resources)
         if item["id"] in ("ml.pca", "ml.correlation", "ml.summarizer"):
             values = {key: parameters.get(key, int(schema[key]["presets"][data["scale"]]))

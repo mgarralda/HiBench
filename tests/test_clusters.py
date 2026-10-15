@@ -64,7 +64,7 @@ class ClusterTests(unittest.TestCase):
             with self.assertRaises(ValueError): clusters.start(self.profile, "stop")
     def test_navigation_pages_do_not_change_cluster_automatically(self):
         from streamlit.testing.v1 import AppTest
-        app = AppTest.from_file(str(Path("hibench/web.py").resolve())).run(timeout=20)
+        app = AppTest.from_file(str(Path("hibench/ui/app.py").resolve())).run(timeout=20)
         with patch("hibench.services.clusters.subprocess.run") as command:
             for page in ("Runs", "Clusters", "Workloads", "Help", "Experiments"):
                 app.button(key="nav-" + page).click().run()

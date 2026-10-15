@@ -58,6 +58,7 @@ HiBenchEnvPropMapping=dict(
 
     SPARK_YARN_DRIVER_MEMORY="spark.driver.memory",
     SPARK_YARN_DRIVER_CORES="spark.driver.cores",
+    WORKLOAD_IMPLEMENTATION="hibench.workload.implementation",
     SPARK_YARN_DEPLOY_MODE="hibench.yarn.deploy.mode",
 
     DATA_HDFS="hibench.hdfs.data.dir",

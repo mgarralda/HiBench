@@ -16,9 +16,9 @@
 import tempfile
 import unittest
 from pathlib import Path
-from hibench.spark_configuration import resolve
+from hibench.parameters.spark import resolve
 from hibench import config
-from hibench.backend import properties
+from hibench.adapters.runtime import properties
 from hibench.catalog import repository_root
 from hibench.services.experiments import snapshot
 

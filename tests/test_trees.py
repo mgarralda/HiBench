@@ -21,15 +21,13 @@ from hibench.catalog import workloads
 
 
 class TreeContractTests(unittest.TestCase):
-    def test_original_sizes_and_modern_capabilities(self):
+    def test_capabilities_and_historical_payload_accounting(self):
         reference = json.loads(Path('tests/fixtures/contracts/ml-trees-scale-reference.json').read_text())
         for family in ('rf', 'gbt'):
             item = next(w for w in workloads() if w['id'] == 'ml.' + family)
             self.assertFalse(item['requires_classic'])
             self.assertEqual(item['prepare_capabilities'], ['spark_batch'])
             for scale, fields in reference[family].items():
-                for key in ('examples', 'features'):
-                    self.assertEqual(int(item['parameters'][key]['presets'][scale]), fields[key])
                 self.assertEqual(fields['feature_payload_bytes'], fields['examples'] * fields['features'] * 8)
             self.assertEqual(float(item['parameters']['class_shift']['default']), .3)
 

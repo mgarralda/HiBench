@@ -14,4 +14,4 @@
 # limitations under the License.
 
 """HiBench batch control plane. Workloads run independently of the web session."""
-__version__ = "2.0.0"
+__version__ = "2.5.0"

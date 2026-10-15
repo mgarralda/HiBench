@@ -21,8 +21,9 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch, Mock
-from hibench import config, spark_configuration
-from hibench.backend import properties
+from hibench import config
+from hibench.parameters import spark as spark_configuration
+from hibench.adapters.runtime import properties
 from hibench.catalog import repository_root
 
 
@@ -60,7 +61,7 @@ class SparkScalesTests(unittest.TestCase):
 
     def test_import_export_and_submission_use_selected_scale(self):
         original = config.default_experiment
-        with patch('hibench.config.default_experiment', side_effect=lambda conf_dir=None, **kwargs: original(conf_dir or self.root / 'conf', **kwargs)), patch('hibench.spark_configuration.repository_root', return_value=self.root):
+        with patch('hibench.config.default_experiment', side_effect=lambda conf_dir=None, **kwargs: original(conf_dir or self.root / 'conf', **kwargs)), patch('hibench.parameters.spark.repository_root', return_value=self.root):
             spec = config.resolve({'scale': 'tiny', 'resources': {'executor_memory': '3g'}, 'spark_conf': {'spark.sql.adaptive.enabled': True}})
             self.assertEqual(spec['resources']['shuffle_partitions'], 17)
             self.assertEqual(config.resolve(config.overrides(spec)), spec)
@@ -77,7 +78,7 @@ class SparkScalesTests(unittest.TestCase):
                 spark_configuration.scale_values({key: '2'}, 'tiny')
 
     def test_shared_save_validates_every_scale(self):
-        with patch('hibench.spark_configuration.repository_root', return_value=self.root), patch('hibench.store.has_active_runs', return_value=False):
+        with patch('hibench.parameters.spark.repository_root', return_value=self.root), patch('hibench.store.has_active_runs', return_value=False):
             state = spark_configuration.shared()
             with self.assertRaises(ValueError):
                 spark_configuration.save_shared(state['text'].replace('spark.executor.memory         1g', 'spark.executor.memory         0g'), state['sha256'])
@@ -86,7 +87,7 @@ class SparkScalesTests(unittest.TestCase):
     def test_ui_previews_scale_without_changing_experiment(self):
         from streamlit.testing.v1 import AppTest
         original = config.default_experiment
-        with patch('hibench.config.default_experiment', side_effect=lambda conf_dir=None, **kwargs: original(conf_dir or self.root / 'conf', **kwargs)), patch('hibench.spark_configuration.repository_root', return_value=self.root):
+        with patch('hibench.config.default_experiment', side_effect=lambda conf_dir=None, **kwargs: original(conf_dir or self.root / 'conf', **kwargs)), patch('hibench.parameters.spark.repository_root', return_value=self.root):
             draft = config.default_experiment()
             app = AppTest.from_string('from hibench.ui.spark_settings import render\nrender()')
             app.session_state['experiment'] = draft
@@ -118,14 +119,14 @@ class SparkScalesTests(unittest.TestCase):
             if line.strip() and not line.lstrip().startswith(('#', '[')):
                 self.assertTrue(line.split()[0].startswith('spark.'))
         original = config.default_experiment
-        with patch('hibench.config.default_experiment', side_effect=lambda conf_dir=None, **kwargs: original(conf_dir or self.root / 'conf', **kwargs)), patch('hibench.spark_configuration.repository_root', return_value=self.root):
+        with patch('hibench.config.default_experiment', side_effect=lambda conf_dir=None, **kwargs: original(conf_dir or self.root / 'conf', **kwargs)), patch('hibench.parameters.spark.repository_root', return_value=self.root):
             spec = config.resolve({'scale': 'tiny', 'resources': {'executor_memory': '3g'}, 'workloads': [{'id': 'micro.wordcount', 'parameters': {}}, {'id': 'micro.sort', 'parameters': {}}]})
             self.assertNotIn('default_parallelism', spec['resources'])
             with patch('hibench.services.experiments.duplicate', return_value=spec):
                 self.assertEqual(config.resolve(experiments.preset('test')), spec)
 
     def test_pair_update_preserves_revision_guards(self):
-        with patch('hibench.spark_configuration.repository_root', return_value=self.root), patch('hibench.store.has_active_runs', return_value=False):
+        with patch('hibench.parameters.spark.repository_root', return_value=self.root), patch('hibench.store.has_active_runs', return_value=False):
             state = spark_configuration.shared()
             changed = state['benchmark_text'].replace('hibench.generator.partitions       14', 'hibench.generator.partitions       15')
             with self.assertRaises(ValueError):
@@ -147,7 +148,7 @@ class SparkScalesTests(unittest.TestCase):
 
     def test_navigation_has_separate_configuration_pages(self):
         from streamlit.testing.v1 import AppTest
-        app = AppTest.from_file(str(repository_root() / 'hibench/web.py'))
+        app = AppTest.from_file(str(repository_root() / 'hibench/ui/app.py'))
         app.session_state['ui_page'] = 'HiBenchConfiguration'
         app.run()
         self.assertFalse(app.exception)
@@ -160,18 +161,19 @@ class SparkScalesTests(unittest.TestCase):
 
     def test_selected_scale_edit_preserves_other_sizes_and_extends_properties(self):
         original = self.spark.read_text(encoding='utf-8')
+        original_small = spark_configuration.configuration(self.spark, 'small')[0]
         blocks = spark_configuration.sections(original)
         changed = blocks['tiny'].replace('spark.executor.memory         2g', 'spark.executor.memory         4g') + '\nspark.sql.adaptive.coalescePartitions.enabled false\n'
         updated = spark_configuration.replace_sections(original, {'tiny': changed})
         after = spark_configuration.sections(updated)
         for scale in ('small', 'large', 'huge', 'gigantic', 'bigdata'):
             self.assertEqual(after[scale].strip(), blocks[scale].strip())
-        with patch('hibench.spark_configuration.repository_root', return_value=self.root), patch('hibench.store.has_active_runs', return_value=False):
+        with patch('hibench.parameters.spark.repository_root', return_value=self.root), patch('hibench.store.has_active_runs', return_value=False):
             state = spark_configuration.shared()
             spark_configuration.save_shared(updated, state['sha256'])
             tiny = spark_configuration.configuration(self.spark, 'tiny')[0]
             small = spark_configuration.configuration(self.spark, 'small')[0]
             self.assertEqual(tiny['spark.executor.memory'], '4g')
             self.assertEqual(tiny['spark.sql.adaptive.coalescePartitions.enabled'], 'false')
-            self.assertEqual(small['spark.executor.memory'], '1g')
+            self.assertEqual(small['spark.executor.memory'], original_small['spark.executor.memory'])
             self.assertNotIn('spark.sql.adaptive.coalescePartitions.enabled', small)

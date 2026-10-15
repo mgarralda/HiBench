@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Original pair-count profiles and explicit modern recurrence controls."""
+"""Pair-count limits and explicit modern recurrence controls."""
 def validate_nweight(parameters,schema,scale,resources):
     for key,maximum in [('edges',4250000000),('degree',2**31-1),('max_out_edges',2**31-1),('seed',2**63-2)]:
         value=parameters.get(key,int(schema[key]['presets'][scale]))

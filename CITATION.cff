@@ -25,8 +25,9 @@ authors:
   - family-names: Garralda-Barrio
     given-names: Mariano
     affiliation: Independent Researcher
+    orcid: https://orcid.org/0009-0008-0201-2984
 
-version: "2.0.0"
+version: "2.5.0"
 
 repository-code: "https://github.com/mgarralda/HiBench-Next"
 
@@ -51,6 +52,7 @@ abstract: >
   seeds and scale parameters, and workload-specific input formats.
   The software integrates a web interface, REST API, persistent
   experiment configurations, execution management, and historical
-  reporting. It supports controlled experiments across heterogeneous
+  reporting, Scala and PySpark workload implementations, and comparative
+  analysis with downloadable evidence. It supports controlled experiments across heterogeneous
   Spark workloads. The scope of implementation and experimental
   validation is documented in the repository.

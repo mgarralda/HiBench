@@ -21,9 +21,9 @@ from hibench import config
 from hibench.catalog import workloads
 
 class NWeightContractTests(unittest.TestCase):
-    def test_original_pair_sizes(self):
+    def test_recalibrated_pair_sizes(self):
         item=next(w for w in workloads() if w['id']=='graph.nweight')
-        for scale,count in zip(('tiny','small','large','huge','gigantic','bigdata'),(100000,1000000,10000000,100000000,425000000,4250000000)):
+        for scale,count in zip(('tiny','small','large','huge','gigantic','bigdata'),(10000,100000,1000000,10000000,100000000,1000000000)):
             self.assertEqual(int(item['parameters']['edges']['presets'][scale]),count)
     def test_no_production_legacy_variants(self):
         root=Path('sparkbench/graph/src/main/scala/org/hibench/sparkbench/graph/nweight')
@@ -44,16 +44,16 @@ class NWeightContractTests(unittest.TestCase):
         self.assertEqual(len(data),2401080*4)
         self.assertEqual(len(list(struct.iter_unpack('>f',data))),2401080)
     def test_model_is_installed_and_hash_checked(self):
-        from hibench.backend import ClassicBackend,RUNTIME_RESOURCES
+        from hibench.adapters.runtime import ClassicBackend,RUNTIME_RESOURCES
         model='sparkbench/graph/src/main/resources/nweight-user-features'
         self.assertIn(model,RUNTIME_RESOURCES)
         backend=ClassicBackend(config.load('tests/fixtures/experiments/smoke-nweight.yaml')['target'])
-        with patch('hibench.backend.ARTIFACTS',()),patch('hibench.backend.subprocess.run') as run,patch.object(backend,'command',return_value='1000'):
+        with patch('hibench.adapters.runtime.ARTIFACTS',()),patch('hibench.adapters.runtime.subprocess.run') as run,patch.object(backend,'command',return_value='1000'):
             backend.install()
             copies=[call.args[0] for call in run.call_args_list if call.args[0][:2]==['docker','cp']]
             self.assertTrue(any(model in ' '.join(args).replace('\\','/') for args in copies))
         runtime='openjdk version "11.0.23"\nPython 3.11.9\nversion 3.5.9\nUsing Scala version 2.12.18\n'
-        with patch('hibench.backend.ARTIFACTS',()),patch.object(backend,'command',return_value=runtime) as command:
+        with patch('hibench.adapters.runtime.ARTIFACTS',()),patch.object(backend,'command',return_value=runtime) as command:
             backend.doctor()
             self.assertIn(model,command.call_args.args[0][-1])
     def test_invalid_parameters(self):
@@ -62,6 +62,7 @@ class NWeightContractTests(unittest.TestCase):
             with self.assertRaises(ValueError):config.validate(spec)
     def test_big_profile_partition_budget(self):
         spec=config.load('tests/fixtures/experiments/smoke-nweight.yaml');spec['scale']='bigdata'
+        spec['workloads'][0]['parameters']['edges']=4250000000
         with self.assertRaises(ValueError):config.validate(spec)
         spec['resources']['generation_shuffle_partitions']=4
         config.validate(spec)

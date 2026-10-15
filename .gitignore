@@ -39,7 +39,6 @@ __pycache__/
 deployment/.env
 deployment/data/
 # Documentation and scientific archives remain local.
-docs/
 docs_internal/
 docs.zip
 docs_internal.zip
@@ -51,6 +50,10 @@ poetry.lock.license
 # Python distribution build outputs are generated artifacts.
 build/
 dist/
+
+# Local attachments and generated manuscript exports are not release sources.
+.codex-remote-attachments/
+output/
 
 # Keep the release build workflow in the public source.
 !.github/

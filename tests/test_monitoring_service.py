@@ -116,7 +116,7 @@ class MonitoringServiceTests(unittest.TestCase):
         from streamlit.testing.v1 import AppTest
         app = AppTest.from_string('from hibench.ui.executions import render\nrender()').run()
         self.assertFalse(any(item.label == 'Open run' for item in app.selectbox))
-        self.assertTrue(next(b for b in app.button if b.label.startswith('Compare configurations')).disabled)
+        self.assertTrue(next(b for b in app.button if b.label == 'Compare selected runs').disabled)
         key = 'run-history-' + app.dataframe[-1].proto.id.split('run-history-')[-1]
         app.session_state[key] = {'selection': {'rows': [0], 'columns': [], 'cells': []}}
         app.session_state['runs-tab'] = 'History'

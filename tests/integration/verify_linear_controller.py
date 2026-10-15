@@ -13,7 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Check actual full tiny preparation: cardinality, dimensions, profile and selected rows."""
+"""Verify the historical 50,000 x 1,000, two-partition Linear fixture.
+
+This frozen reference is not the active v2.5.0 Tiny preset."""
 import json
 import math
 import sys

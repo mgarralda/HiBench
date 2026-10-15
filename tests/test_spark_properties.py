@@ -15,7 +15,7 @@
 
 import unittest
 from hibench import config
-from hibench.backend import properties
+from hibench.adapters.runtime import properties
 
 class SparkPropertyTests(unittest.TestCase):
     def test_advanced_properties_are_saved_and_emitted_for_submission(self):

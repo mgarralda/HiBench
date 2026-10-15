@@ -24,7 +24,7 @@ import tarfile
 import tempfile
 import sys
 from .classic import ClassicAdapter
-from ..backend import ARTIFACTS, RUNTIME_RESOURCES
+from .runtime import ARTIFACTS, RUNTIME_RESOURCES
 from ..catalog import repository_root
 
 
@@ -94,7 +94,7 @@ class SSHAdapter(ClassicAdapter):
             return None if '__pycache__' in Path(member.name).parts or member.name.endswith('.pyc') else member
         with tempfile.SpooledTemporaryFile(max_size=8 * 1024 * 1024) as stream:
             with tarfile.open(fileobj=stream, mode='w') as archive:
-                for name in ('bin', 'conf', *ARTIFACTS, *RUNTIME_RESOURCES):
+                for name in ('bin', 'conf', 'pysparkbench', *ARTIFACTS, *RUNTIME_RESOURCES):
                     archive.add(repo / name, arcname=name, filter=filtered)
             stream.seek(0)
             self._send(['tar', '--no-same-owner', '-xf', '-', '-C', self.root], stream)

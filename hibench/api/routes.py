@@ -20,6 +20,8 @@ from typing import Literal
 from fastapi import APIRouter, Query, Response
 from fastapi.responses import FileResponse
 from .models import MonitoringResults, MonitoringSamples
+from .models import ComparisonSelection, ComparativeAnalysis
+from hibench.services import comparisons
 from .models import WorkloadDefaultsUpdate, WorkloadDefaultsResult
 from .models import SparkBaseUpdate, SparkBase, ConfigurationUpdate, BenchmarkBase, ExperimentPreset, SparkHistoryLinks, ApiError
 from .models import (Adapter, CatalogItem, ClusterAction, ClusterOperationStatus,
@@ -38,13 +40,13 @@ router = APIRouter(prefix='/api/v1', responses={401: {'model': ApiError}, 404: {
 
 @router.get('/configuration/spark', response_model=SparkBase, response_model_exclude_none=True, tags=['Configuration'])
 def shared_spark_configuration(scale: Literal['tiny', 'small', 'large', 'huge', 'gigantic', 'bigdata'] | None = Query(default=None)):
-    from hibench.spark_configuration import shared
+    from hibench.parameters.spark import shared
     return shared(scale=scale)
 
 
 @router.put('/configuration/spark', response_model=SparkBase, response_model_exclude_none=True, tags=['Configuration'])
 def save_spark_configuration(request: SparkBaseUpdate):
-    from hibench.spark_configuration import save_shared
+    from hibench.parameters.spark import save_shared
     return save_shared(request.text, request.expected_sha256, request.benchmark_text, request.benchmark_sha256)
 
 
@@ -62,7 +64,7 @@ def adapters():
 @router.get('/workloads', response_model=list[CatalogItem], response_model_exclude_none=True, tags=['Configuration'])
 def catalog():
     import hashlib
-    from hibench.workload_parameters import details
+    from hibench.parameters.workloads import details
     items = []
     for workload in workloads():
         item, presets, properties, path = details(workload['id'])
@@ -74,7 +76,7 @@ def catalog():
 
 @router.put('/workloads/{workload_id}/defaults', response_model=WorkloadDefaultsResult, tags=['Configuration'])
 def save_workload_defaults(workload_id: str, request: WorkloadDefaultsUpdate):
-    from hibench.workload_parameters import save_defaults
+    from hibench.parameters.workloads import save_defaults
     return save_defaults(workload_id, request.scale, request.parameters, request.expected_sha256)
 
 
@@ -177,6 +179,39 @@ def compare(left: UUID, right: UUID):
     return experiments.compare(str(left), str(right))
 
 
+@router.post('/comparisons/analyze', response_model=ComparativeAnalysis, response_model_exclude_none=True, tags=['Comparisons'])
+def analyze_comparison(selection: ComparisonSelection):
+    return comparisons.analyze(**selection.model_dump(mode='json'))
+
+
+@router.post('/comparisons', response_model=ComparativeAnalysis, response_model_exclude_none=True, tags=['Comparisons'])
+def save_comparison(selection: ComparisonSelection):
+    return comparisons.save(comparisons.analyze(**selection.model_dump(mode='json')))
+
+
+@router.get('/comparisons', tags=['Comparisons'])
+def list_comparisons():
+    return comparisons.recent()
+
+
+@router.get('/comparisons/{comparison_id}', response_model=ComparativeAnalysis, response_model_exclude_none=True, tags=['Comparisons'])
+def get_comparison(comparison_id: UUID):
+    return comparisons.load(str(comparison_id))
+
+
+@router.get('/comparisons/{comparison_id}/export', tags=['Comparisons'])
+def export_comparison(comparison_id: UUID, format: Literal['zip', 'json', 'html', 'observations.csv', 'summary.csv'] = 'zip'):
+    analysis = comparisons.load(str(comparison_id))
+    names = {'json': ('comparison.json', 'application/json'), 'html': ('report.html', 'text/html'),
+             'observations.csv': ('observations.csv', 'text/csv'), 'summary.csv': ('summary.csv', 'text/csv')}
+    if format == 'zip':
+        name, mime, content = 'comparison.zip', 'application/zip', comparisons.export(analysis)
+    else:
+        name, mime = names[format]
+        content = comparisons.artifacts(analysis)[name]
+    return Response(content, media_type=mime, headers={'Content-Disposition': 'attachment; filename="' + name + '"'})
+
+
 @router.post('/diagnostics/doctor', response_model=Diagnostic, tags=['Infrastructure'])
 def doctor(experiment: Experiment):
     return {'output': create_adapter(experiment.target.model_dump(exclude_none=True)).doctor()}
@@ -222,14 +257,14 @@ def run_preset(run_id: UUID):
 
 @router.get('/configuration/hibench', response_model=BenchmarkBase, response_model_exclude_none=True, tags=['Configuration'])
 def benchmark_configuration():
-    from hibench.spark_configuration import shared
+    from hibench.parameters.spark import shared
     state = shared()
     return {'configuration_file': 'conf/hibench.conf', 'text': state['benchmark_text'], 'sha256': state['benchmark_sha256'], 'defaults': state['defaults']}
 
 
 @router.put('/configuration/hibench', response_model=BenchmarkBase, response_model_exclude_none=True, tags=['Configuration'])
 def save_benchmark_configuration(request: ConfigurationUpdate):
-    from hibench.spark_configuration import shared, save_shared
+    from hibench.parameters.spark import shared, save_shared
     state = shared()
     save_shared(state['text'], state['sha256'], request.text, request.expected_sha256)
     return benchmark_configuration()
@@ -242,5 +277,5 @@ def spark_history(run_id: UUID, base_url: str = Query(description='Browser-acces
     Downloads come directly from the History Server; availability depends on
     retained Spark event logs and ingestion delay. No server-side URL fetch.
     """
-    from hibench.spark_history import application_links
+    from hibench.services.spark_history import application_links
     return application_links(base_url, experiments.results(str(run_id))['events'])

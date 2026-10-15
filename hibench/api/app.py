@@ -20,11 +20,11 @@ import os
 import secrets
 import subprocess
 import sys
+from pathlib import Path
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.responses import JSONResponse
 from hibench.services import configuration
-from hibench.catalog import repository_root
 from hibench import __version__
 from .models import Health
 from .routes import router
@@ -49,7 +49,7 @@ async def lifespan(app):
             log = (store.home() / 'streamlit.log').open('a', encoding='utf-8')
             port = int(os.environ.get('HIBENCH_UI_PORT', '8501'))
             kwargs = {'creationflags': subprocess.CREATE_NO_WINDOW} if os.name == 'nt' else {}
-            process = subprocess.Popen([sys.executable, '-m', 'streamlit', 'run', str(repository_root() / 'hibench/web.py'),
+            process = subprocess.Popen([sys.executable, '-m', 'streamlit', 'run', str(Path(__file__).resolve().parents[1] / 'ui/app.py'),
                                         '--server.address=' + os.environ.get('HIBENCH_UI_HOST', '127.0.0.1'), f'--server.port={port}', '--server.headless=true'],
                                        stdin=subprocess.DEVNULL, stdout=log, stderr=log, **kwargs)
             await asyncio.sleep(1)
@@ -82,7 +82,7 @@ def create_app():
 
     @app.exception_handler(ValueError)
     async def value_error(request, exc):
-        return JSONResponse(status_code=404 if str(exc) == 'Unknown run' else 422, content={'detail': str(exc)})
+        return JSONResponse(status_code=404 if str(exc) in ('Unknown run', 'Unknown comparison') else 422, content={'detail': str(exc)})
 
     @app.exception_handler(KeyError)
     async def not_found(request, exc):

@@ -20,13 +20,30 @@ from hibench import config
 from hibench.catalog import workloads
 
 class SVDContractTests(unittest.TestCase):
-    def test_preserved_sizes(self):
-        reference=json.loads(Path('tests/fixtures/contracts/ml-final-scale-reference.json').read_text(encoding='utf-8'))['svd']
-        item=next(w for w in workloads() if w['id']=='ml.svd')
-        for scale,fields in reference.items():
-            for key,value in fields.items():
-                expected=value.strip('"') if key=='maxresultsize' else value
-                self.assertEqual(item['parameters'][key]['presets'][scale],expected)
+    def test_confirmation_campaign_balances_order_and_excludes_warmup(self):
+        from tests.tools.svd_phase_campaign import plan
+        base = config.default_experiment(scale='small', selected_workloads=['ml.svd'])
+        jobs = plan(base, ['small', 'large'], 10)
+        self.assertEqual(len(jobs), 46)
+        for scale in ('small', 'large'):
+            selected = [(role, pair, spec) for role, pair, spec in jobs if spec['scale'] == scale]
+            self.assertEqual(sum(role == 'prepare' for role, _, _ in selected), 1)
+            self.assertEqual(sum(role == 'warmup' for role, _, _ in selected), 2)
+            measured = [spec['implementation'] for role, _, spec in selected if role == 'measurement']
+            self.assertEqual(measured.count('scala'), 10)
+            self.assertEqual(measured.count('pyspark'), 10)
+            self.assertEqual(measured[:4], ['scala', 'pyspark', 'pyspark', 'scala'])
+            for _, _, spec in selected:
+                config.validate(spec)
+                self.assertEqual(spec['target']['deploy_mode'], 'client')
+                self.assertEqual(spec['repetitions'], 1)
+
+    def test_requested_components_fit_recalibrated_shapes(self):
+        item = next(w for w in workloads() if w['id'] == 'ml.svd')
+        for scale in ('tiny', 'small', 'large', 'huge', 'gigantic', 'bigdata'):
+            p = item['parameters']
+            self.assertLessEqual(int(p['singularvalues']['presets'][scale]),
+                                 min(int(p['features']['presets'][scale]), int(p['examples']['presets'][scale])))
     def test_spark_only_boundaries(self):
         item=next(w for w in workloads() if w['id']=='ml.svd')
         self.assertFalse(item['requires_classic'])

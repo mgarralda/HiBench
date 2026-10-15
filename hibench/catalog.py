@@ -103,6 +103,7 @@ def workloads(root=None):
                       "requires_classic": not modern,
                       "validation_status": "verified" if verified else "pending",
                       "execution_available": True,
+                      "implementations": ["scala", "pyspark"],
                       "prepare_capabilities": prepare_capabilities,
                       "description": ("Corrected weighted-path-topk-v1: Docker/YARN, Spark 3.5.9 smoke tests." if workload_id == "graph.nweight" else
                                       "Small-data smoke test: Docker/YARN, Spark 3.5.9." if verified
