@@ -42,8 +42,7 @@ REST API. Dataset generators remain Scala.
 
 Intel's latest official release, [HiBench v7.1.1](https://github.com/Intel-bigdata/HiBench/releases/tag/v7.1.1),
 and the final archived repository contain no PySpark workload implementations.
-Earlier releases, including [HiBench 4.0](https://github.com/Intel-bigdata/HiBench/tree/HiBench-4.0/src/sparkbench/src/main/python),
-did include Python workloads. HiBench Next's contribution is modern PySpark
+HiBench Next's contribution is modern PySpark
 coverage of its 24-workload catalog and integration with shared configuration,
 execution records and comparative analysis; it is not the first historical
 appearance of PySpark in HiBench.
@@ -446,7 +445,13 @@ Scientific campaign and evidence tools live in [tests/tools](tests/tools/README.
 `bin/` contains build scripts, maintained workload launchers and runtime/report
 helpers. They are separate from the installed `hibench` application package.
 
+The [paper evidence archive](docs/paper-evidence/README.md) provides original
+Spark event logs, configurations, parsed metrics, final figures and offline
+regeneration scripts for the four-case Scala/PySpark study on v2.5.0.
+
 ## Citing HiBench Next
+
+**Author and maintainer:** Mariano Garralda-Barrio, PhD
 
 If you use HiBench Next in research, please cite the archived **v2.5.0 software release**:
 
